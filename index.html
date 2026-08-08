@@ -138,7 +138,7 @@ const WARMUP=[
 ["קפיצות פוגו","ברכיים כמעט ישרות · הקרסול עובד, לא הברך","2×10"]];
 
 const EX={
-sq:{g:"רגליים",n:"סקוואט גובלט",e:"GOBLET SQUAT",s:3,r:10,rest:120,v:"TN7mk5BdoGI",ch:"Squat University",d:55,
+sq:{g:"רגליים",n:"סקוואט גובלט",e:"GOBLET SQUAT",s:3,r:10,rest:120,v:"lRYBbchqxtI",ch:"SquatCouple",d:0,
 cue:"דמבל צמוד לחזה · מרפקים פנימה · חזה פתוח",
 how:["דמבל אחד אנכית צמוד לחזה, שתי הידיים תומכות בפלטה העליונה. מרפקים פנימה.","רגליים ברוחב כתפיים, כפות מעט החוצה. יורדים כמו לכיסא נמוך, ברכיים נפתחות לכיוון האצבעות.","יורדים עד שהירכיים מקבילות לרצפה, ודוחפים דרך כל כף הרגל למעלה."],
 feel:"לחץ בקדמת הירך ובישבן, במיוחד בתחתית וברגע שאתה עולה. הליבה נעולה כל הזמן.\n\nמרגיש בעיקר בגב התחתון? הירכיים ברחו אחורה והחזה נפל. תרד במשקל, תחשוב \"חזה למעלה\".\nהעקבים מתרוממים? הקרסוליים תפוסים — שים צלחת דקה מתחתיהם.",
@@ -473,7 +473,7 @@ ${e.v?`<button class="big" onclick="vid('${e.v}')">▶ טכניקה · ${e.ch}${
 /* ---------- personal ---------- */
 function dayList(key,def){if(S[key].d!==today()){S[key]={d:today(),done:[],w:S[key].w||def};save()}return S[key]}
 function vPers(){const f=dayList('foot'),h=dayList('hand');
-if(S.shoot.d!==today()){S.shoot={d:today(),w:S.shoot.w==='A'?'B':'A',done:[]};save()}
+if(S.shoot.d!==today()){S.shoot={d:today(),w:S.shoot.d?(S.shoot.w==='A'?'B':'A'):'A',done:[]};save()}
 const sh=S.shoot,list=sh.w==='A'?SHA:SHB;
 return `<div class="wrap">
 <div class="h1" style="font-size:26px">הכנה אישית</div>
@@ -486,7 +486,9 @@ return `<div class="wrap">
 <p>בבלימה ובנחיתה על רגל אחת — <b>אם שמעת את הנחיתה, נכשלת.</b> רעש אומר שהגוף לא בלם אלא נחבט. תרד בעוצמה עד שזה שקט, ורק אז תעלה.<br><br>
 הנחיתה על רגל אחת היא גם <b>התרגיל הכי מוכח למניעת פציעות ברך</b> אצל מתבגרים, ואתה בדיוק בפרופיל: גבוה, גדל מהר, קל, על פרקט קשה. שתי דקות ביום שמגנות על העונה.</p></div>
 
-<div class="sec">קליעה ${sh.w} · ${sh.w==='A'?'טכניקה ומקבלה':'מתנועה'} · 35 דקות</div>
+<div class="sec" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span>קליעה ${sh.w} · ${sh.w==='A'?'טכניקה ומקבלה':'מתנועה'} · 35 דקות</span>
+<button onclick="flipShoot()" style="border:1px solid var(--c3);border-radius:8px;padding:5px 11px;font-size:11px;font-weight:500;color:var(--t2);letter-spacing:0">הצג ${sh.w==='A'?'B':'A'}</button></div>
 <div class="list">${list.map((x,i)=>ck('shoot',i,x)).join('')}</div>
 
 <div class="sec">כדרור · 10 דקות</div>
@@ -500,6 +502,7 @@ return `<div class="wrap">
 function ck(key,i,x){const on=S[key].done.includes(i);
 return `<div class="chk ${on?'on':''}" onclick="tg('${key}',${i})"><div class="box">${on?'\u2713':''}</div>
 <div class="ct">${x[0]}<div class="cue">${x[1]}</div></div><div class="qw"><div class="cq">${x[2]}</div>${x[3]?`<button class="vi" onclick="event.stopPropagation();vid('${x[3]}')">\u25B6</button>`:''}</div></div>`}
+function flipShoot(){S.shoot={d:today(),w:S.shoot.w==='A'?'B':'A',done:[]};save();draw()}
 function tg(key,i){const a=S[key].done,k=a.indexOf(i);k<0?a.push(i):a.splice(k,1);save();draw()}
 
 /* ---------- food ---------- */
