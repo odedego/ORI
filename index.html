@@ -120,6 +120,14 @@ font-size:11px;color:var(--t2);margin:0 0 0 5px}
 .warnbox{border:1px solid var(--red);border-radius:12px;padding:13px;margin-top:12px}
 .warnbox b{color:var(--red)}
 .warnbox p{font-size:13.5px;color:#D8D8DC;line-height:1.55}
+.two2{display:flex;gap:9px;margin-top:18px}
+.mini{flex:1;border:1px solid var(--c3);border-radius:12px;padding:14px 8px;font-size:13px;font-weight:500;color:var(--t2)}
+.mini:active{background:var(--c1)}
+.toast{position:fixed;bottom:calc(var(--nav) + 14px);right:16px;left:16px;max-width:520px;margin:0 auto;
+background:var(--c2);border:1px solid var(--c3);border-radius:12px;padding:13px;text-align:center;
+font-size:14px;font-weight:500;z-index:95;opacity:0;transform:translateY(12px);
+transition:opacity .2s,transform .2s;pointer-events:none}
+.toast.on{opacity:1;transform:none}
 </style>
 </head>
 <body>
@@ -127,15 +135,17 @@ font-size:11px;color:var(--t2);margin:0 0 0 5px}
 <div class="timer" id="tm" onclick="stopT()"></div>
 <div id="app"></div>
 <div class="nav" id="nav"></div>
+<div class="toast" id="toast"></div>
 <div class="sheet" id="sh" onclick="if(event.target===this)closeSheet()"><div class="sc" id="shc"></div></div>
 
 <script>
 const WARMUP=[
-["אופניים או הליכון","קצב קל · רק להעלות דופק","3 דק׳"],
-["לאנג׳ צידי","צעד רחב לצד · רגל אחת מתכופפת, השנייה ישרה","8 לצד"],
-["Dead bug","שכיבה על הגב · הגב התחתון צמוד לרצפה","8 לצד"],
-["סיבובי כתף","זרועות ישרות · מעגלים גדולים","10"],
-["קפיצות פוגו","ברכיים כמעט ישרות · הקרסול עובד, לא הברך","2×10"]];
+["אופניים או הליכון","קצב קל · רק להעלות דופק","3 דק׳",""],
+["לאנג׳ צידי","צעד רחב לצד · רגל אחת מתכופפת, השנייה ישרה","8 לצד","urgvwNBjvBc&t=9"],
+["Dead bug","שכיבה על הגב · הגב התחתון צמוד לרצפה","8 לצד","DqLL45uk2Tk&t=3"],
+["סיבובי כתף","זרועות ישרות · מעגלים גדולים","10",""],
+["קפיצות פוגו","ברכיים כמעט ישרות · הקרסול עובד, לא הברך","2×10","SjHRwhGXBl8&t=2"],
+["קפיצה אנכית מעצירה","רק בימי אימון A · כל חזרה בכוונה מקסימלית · ירידה מהירה ורדודה, לא עמוקה · זרועות זורקות למעלה · נחיתה שקטה · מנוחה 60 שנ׳","2 × 5","09yR5a4u-6A"]];
 
 const EX={
 sq:{g:"רגליים",n:"סקוואט גובלט",e:"GOBLET SQUAT",s:3,r:10,rest:120,v:"lRYBbchqxtI",ch:"SquatCouple",d:0,
@@ -264,28 +274,32 @@ const FOOT=[
 ["בלימה","ריצה 5 מטר · עצירה על שתי רגליים · להחזיק 2 שניות · בשקט, בלי רעש","6 פעמים","yvd79yzgnOg"],
 ["החלקה הגנתית עם פתיחת אגן","5 מטר החלקה · פתיחת ירך ורוץ · חזרה להחלקה · האגן נפתח, לא הכתפיים","6 פעמים","MIPpxnp9Zgw"],
 ["סגירה על זורק","ריצה 4 מטר · צעדים קטנים ומהירים בסוף · יד למעלה · לעצור מאוזן","6 פעמים","CS6x2CF2pKI"],
-["נחיתה על רגל אחת","קפיצה קדימה מרגל אחת · נחיתה על אותה רגל · הקפאה 2 שניות · הברך לא נופלת פנימה","6 לכל רגל","3sGe3UiwrVY&t=47"]];
+["נחיתה על רגל אחת","קפיצה קדימה מרגל אחת · נחיתה על אותה רגל · הקפאה 2 שניות · הברך לא נופלת פנימה","6 לכל רגל","3sGe3UiwrVY&t=47"],
+["שני כדורים","במקביל ואז לסירוגין · הכלי הכי יעיל ליד החלשה · תתחיל ברמות 1-3 בלבד","2 × 30 שניות","z1RRCS5FoIY"]];
 
 const SHA=[
 ["זריקת יד אחת ממטר","יד תומכת מאחורי הגב · שחרור גבוה · 10 קליעות נקיות, רק רשת","10","sY69C_V8MOo"],
-["יד אחת עם יד תומכת צמודה","היד התומכת נוגעת ולא דוחפת · 3 עמדות מהצבע","5 מכל עמדה","ECNOZQI89bQ"],
-["קליעה מקבלה · 5 תחנות","שתי פינות · שתי כנפיים · אמצע · בכל תחנה: 3 עם רגל ימין מובילה · 3 עם רגל שמאל · 3 בעצירת קפיצה על שתיים","9 מכל תחנה","6FDfFYXoEBs"],
-["קליעה מקבלה בעייפות","ריצה לחצי מגרש וחזרה · מיד לזריקה · זו הזריקה שקורית במשחק","6","yUiV2VjoCiU"],
+["יד אחת עם יד תומכת צמודה","היד התומכת נוגעת ולא דוחפת · 3 עמדות מהצבע","3 מכל עמדה","ECNOZQI89bQ"],
+["קליעה מקבלה · 4 תחנות","פינה · כנף · אמצע · כנף · בכל תחנה: 3 עם רגל ימין מובילה · 3 עם רגל שמאל · 3 בעצירת קפיצה","9 מכל תחנה","6FDfFYXoEBs"],
+["לייאפ יד ימין","קפיצה מרגל שמאל · סיום גבוה בלוח · בלי למהר","8 נקיות","waAUqIlvP68"],
+["לייאפ יד שמאל","קפיצה מרגל ימין · הצד החלש — כאן הרווח הגדול · טכניקה לפני עוצמה","8 נקיות","waAUqIlvP68"],
+["סיום משתי רגליים","עצירת קפיצה מתחת לסל ואז עלייה · מאפשר לסיים לשני הצדדים","6 לכל צד","SvIJ4jPyJmo"],
+["יורו־סטפ","שני צעדים בכיוונים מנוגדים · הצעד הראשון רחב, השני חוצה","5 לכל כיוון","Fowg-gNQ92Q"],
 ["עונשין","אם החטאת 2 ברצף — 10 שכיבות סמיכה וממשיכים","10","iAOgQS3Ug6M&t=11"]];
 
 const SHB=[
-["חימום טכניקה","יד אחת ממטר · אותה טכניקה בדיוק","10 נקיות","sY69C_V8MOo"],
-["כדרור אחד ימינה","הטעיית זריקה · כדרור מהיר · עצירת קפיצה על שתי רגליים · נחיתה שקטה ומאוזנת","10","gjqRJTAniWM"],
+["כדרור אחד ימינה","הטעיית זריקה · כדרור מהיר · עצירת קפיצה על שתי רגליים · נחיתה שקטה","10","gjqRJTAniWM"],
 ["כדרור אחד שמאלה","הצד החלש · הכדור צמוד לגוף · אם מרגיש מגושם — זה בדיוק למה זה כאן","10","gjqRJTAniWM"],
 ["קרוסאובר בין הרגליים","חילוף מהיר · עלייה מיידית בלי צעד מיותר","10","jQFk1d7igyI"],
 ["סטפ־באק","לדחוף את הרצפה אחורה · לנחות מאוזן","10","t10_57jMiIo"],
+["כדרור נמוך ומהיר, שתי ידיים","מתחת לגובה הברך · העיניים על נקודה רחוקה, לא על הכדור","2 × 30 שניות","xbaUs6cyaLg"],
+["מסירה לקיר — חזה וקרקע","מסירה חדה, לא דחיפה · הכדור חוזר לאותו גובה","20 לכל יד","DnZqx1K7eS4&t=18"],
+["מסירה מהכדרור ביד אחת","מול קיר, יד אחת בלבד · בלי לעצור את הכדרור · זו המסירה שהראייה שלך רואה","10 לכל יד","tHUNQbZEdMc&t=202"],
+["מסירת פתיחה ארוכה","אחרי ריבאונד · מעל הראש או ביד אחת · לקיר · דיוק לפני עוצמה · ככל שתתרחק מהקיר זה נהיה קשה יותר","10 לכל יד","yqf5YUq2BKY&t=4"],
+["קליעה מקבלה בעייפות","ריצה לחצי מגרש וחזרה · מיד לזריקה · זו הזריקה שקורית במשחק","6","yUiV2VjoCiU"],
 ["עונשין","אותו כלל בדיוק","10","iAOgQS3Ug6M&t=11"]];
 
-const HAND=[
-["כדרור נמוך ומהיר, שתי ידיים","מתחת לגובה הברך · העיניים על נקודה רחוקה, לא על הכדור","2 × 30 שניות","xbaUs6cyaLg"],
-["שני כדורים","במקביל ואז לסירוגין · הכלי הכי יעיל ליד החלשה · תתחיל ברמות 1-3 בלבד, ותתקדם רק אחרי שליטה מלאה","2 × 30 שניות","z1RRCS5FoIY"],
-["שינוי כיוון בתנועה","קרוסאובר · בין הרגליים · מאחורי הגב · עם בלימה אמיתית בכל שינוי","6 לכל אחד","AS-5POtQH1g&t=6"],
-["כדרור ומסירה בעיוורון","מסירה חדה לקיר בלי להסתכל על היעד","10 לכל יד","DnZqx1K7eS4&t=18"]];
+
 
 const MEALS=[
 ["07:00","ארוחת בוקר","3 ביצים · 2 פרוסות לחם מלא · גבינה צהובה · כוס חלב"],
@@ -347,7 +361,7 @@ const K='uri1';
 let S=load(),tab='home',tint=null;
 
 function load(){try{const r=localStorage.getItem(K);if(r)return JSON.parse(r)}catch(e){}
-return{sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},hand:{d:'',done:[]},bw:[],tests:{},shop:[]}}
+return{sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},bw:[],tests:{},shop:[]}}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function today(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function fmt(d){const x=new Date(d);return x.getDate()+'.'+(x.getMonth()+1)}
@@ -385,9 +399,11 @@ const PLAN=[['אימון קבוצה + כוח','ולפני זה: רגליים 12 
 function vHome(){const d=new Date(),p=PLAN[d.getDay()];
 const left=Math.max(0,Math.ceil((GOAL-d)/864e5));
 const bw=S.bw.length?S.bw[S.bw.length-1].kg:'—';
+const open=S.cur?Object.values(S.cur.log).flat().filter(Boolean).length:0;
+const last=S.sessions.length?S.sessions[S.sessions.length-1]:null;
 return `<div class="wrap">
 <div class="hero">
-<div class="tiny" style="letter-spacing:3px">תוכנית כוח · 12 שבועות</div>
+<div class="tiny" style="letter-spacing:3px">תוכנית כוח · 3 אימונים בשבוע</div>
 <div class="h1" style="margin-top:6px">אורי<span style="color:var(--red)">.</span></div>
 <div class="bar"></div>
 <div style="font-size:17px;font-weight:800">${p[0]}</div>
@@ -397,13 +413,35 @@ return `<div class="wrap">
 <div><div class="v ltr">${S.sessions.length}</div><div class="k">אימוני כוח</div></div>
 <div><div class="v ltr">${bw}</div><div class="k">משקל ק״ג</div></div>
 </div></div>
-<button class="big" onclick="go('gym')">התחל אימון ${nextW()}</button>
+${S.cur?`<div class="card" style="border:1px solid var(--red)">
+<div class="row"><div><div class="nm">אימון ${S.cur.w} בתהליך</div>
+<div class="cue">${open} סטים נרשמו · התחלת ב-${fmt(S.cur.date)}</div></div></div>
+<div class="acts" style="margin-top:11px">
+<button class="act solid" onclick="go('gym')">המשך אימון</button>
+<button class="act" onclick="askDrop()">בטל</button></div></div>`
+:`<button class="big" onclick="go('gym')">התחל אימון ${nextW()}</button>`}
 <button class="ghost" onclick="go('pers')">הכנה אישית</button>
-<div class="sec">טיפים מקצועיים</div>
-<div class="list">${TIPS.map((t,i)=>`<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">${t[0]}</b>${t[1]}</div>`).join('')}</div>
-<div class="sec">עשרת חוקי הזהב</div>
-<div class="list">${RULES.map((r,i)=>`<div class="q"><span style="color:var(--red);font-weight:800">${i+1}.</span> ${r}</div>`).join('')}</div>
+${last?`<div class="tiny" style="text-align:center;margin-top:10px">האימון האחרון: ${fmt(last.date)} · אימון ${last.w}</div>`:''}
+<div class="two2">
+<button class="mini" onclick="openRules()">עשרת חוקי הזהב</button>
+<button class="mini" onclick="openTips()">טיפים מקצועיים</button>
+</div>
 </div>`}
+
+function openRules(){openSheet(`<div class="grab"></div><div class="h2">עשרת חוקי הזהב</div>
+<div class="sub">תלה את זה על הקיר. שווה יותר מכל תוכנית.</div><div style="height:12px"></div>
+${RULES.map((r,i)=>`<div class="q"><span style="color:var(--red);font-weight:800">${i+1}.</span> ${r}</div>`).join('')}`)}
+
+function openTips(){openSheet(`<div class="grab"></div><div class="h2">טיפים מקצועיים</div>
+<div class="sub">מה שמאמן אומר בצד ואף אחד לא כותב</div><div style="height:12px"></div>
+${TIPS.map(t=>`<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">${t[0]}</b>${t[1]}</div>`).join('')}`)}
+
+function askDrop(){openSheet(`<div class="grab"></div><div class="h2">לבטל את האימון?</div>
+<div class="sub">כל הסטים שרשמת באימון הזה יימחקו.</div>
+<div style="height:16px"></div>
+<button class="big" onclick="dropCur()">כן, בטל</button>
+<button class="ghost" onclick="closeSheet()">לא, תחזור</button>`)}
+function dropCur(){S.cur=null;save();closeSheet();draw();toast('האימון בוטל')}
 
 /* ---------- gym ---------- */
 function curW(){return S.cur?S.cur.w:nextW()}
@@ -451,15 +489,37 @@ function saveSet(){const{id,k}=sheetCtx;const kg=parseFloat(document.getElementB
 const rp=parseInt(document.getElementById('irp').value)||0;
 ensure();if(!S.cur.log[id])S.cur.log[id]=[];S.cur.log[id][k]=[kg,rp];save();closeSheet();draw();startT(EX[id].rest)}
 function clrSet(){const{id,k}=sheetCtx;if(S.cur.log[id])delete S.cur.log[id][k];save();closeSheet();draw()}
-function finish(){if(!S.cur||!Object.keys(S.cur.log).length){alert('לא רשמת אף סט');return}
+function finish(){if(!S.cur||!Object.values(S.cur.log).flat().filter(Boolean).length){toast('לא רשמת אף סט');return}
 S.cur.log=Object.fromEntries(Object.entries(S.cur.log).map(([k,v])=>[k,v.filter(Boolean)]));
-S.sessions.push(S.cur);S.cur=null;save();go('nums')}
+const sets=Object.values(S.cur.log).flat();
+const vol=Math.round(sets.reduce((a,b)=>a+b[0]*b[1],0));
+const w=S.cur.w;S.sessions.push(S.cur);S.cur=null;save();
+const n=S.sessions.length,st=streak();
+openSheet(`<div class="grab"></div>
+<div style="text-align:center;padding:6px 0 4px">
+<div style="font-size:44px;font-weight:900;color:var(--red);line-height:1" class="ltr">${n}</div>
+<div class="sub" style="margin-top:4px">האימון ה-${n} שלך</div>
+<div class="h2" style="margin-top:14px">אימון ${w} הושלם</div></div>
+<div class="stat" style="margin:16px 0 4px">
+<div><div class="v ltr">${sets.length}</div><div class="k">סטים</div></div>
+<div><div class="v ltr">${vol}</div><div class="k">נפח ק״ג</div></div>
+<div><div class="v ltr">${st}</div><div class="k">רצף</div></div></div>
+<div class="tiny" style="text-align:center;margin:14px 0 4px">בפעם הבאה: אימון ${w==='A'?'B':'A'}</div>
+<button class="big" style="margin-top:12px" onclick="closeSheet();go('nums')">לראות את המספרים</button>
+<button class="ghost" onclick="closeSheet();go('home')">סגור</button>`)}
 
-function openWarm(){openSheet(`<div class="grab"></div><div class="h2">חימום קבוע · 6 דקות</div>
-<div class="sub">זהה בכל אימון</div><div style="height:14px"></div>
+
+function openWarm(){openSheet(`<div class="grab"></div><div class="h2">חימום קבוע · 6-8 דקות</div>
+<div class="sub">זהה בכל אימון · הקפיצות רק בימי A</div><div style="height:14px"></div>
 ${WARMUP.map(w=>`<div class="chk"><div class="ct"><b>${w[0]}</b><div class="cue">${w[1]}</div></div>
-<div class="cq">${w[2]}</div></div>`).join('')}
-<div class="warnbox" style="margin-top:16px"><b>אל תדלג</b><p>כאן נמצאת כל העבודה שמגנה על הברכיים, הקרסוליים והמפשעות.</p></div>`)}
+<div class="qw"><div class="cq">${w[2]}</div>${w[3]?`<button class="vi" onclick="vid('${w[3]}')">\u25B6</button>`:''}</div></div>`).join('')}
+<div class="warnbox" style="margin-top:16px"><b>אל תדלג</b><p>כאן נמצאת כל העבודה שמגנה על הברכיים, הקרסוליים והמפשעות.</p></div>
+<div class="warnbox" style="margin-top:10px"><b>הקפיצה האנכית — חמישה כללים שאסור לשבור</b>
+<p><b>1. כל חזרה בכוונה מקסימלית.</b> חמש חזרות זו לא סדרת כושר. כל אחת היא ניסיון לגעת בנקודה הכי גבוהה שאתה יכול. אם החמישית נמוכה מהראשונה — עצור.<br><br>
+<b>2. ירידה מהירה ורדודה.</b> חצי סקוואט זריז, לא צלילה עמוקה ואיטית. עומק הורג את הקפיץ.<br><br>
+<b>3. הזרועות זורקות אותך.</b> סוויינג חזק לאחור ואז קדימה־למעלה מוסיף כעשירית מהגובה. רוב הילדים שוכחים מהידיים.<br><br>
+<b>4. נחיתה שקטה.</b> אותו מדד בדיוק כמו בבלימה ובנחיתה על רגל אחת.<br><br>
+<b>5. אחרי החימום, לפני הסקוואט — לעולם לא בסוף אימון.</b> ואם הברך כואבת, עוצרים. בגיל הזה לא דוחפים דרך כאב.</p></div>`)}
 
 function openEx(id){const e=EX[id];openSheet(`<div class="grab"></div>
 <div class="h2">${e.n}</div><div class="sub">${e.e} · <span class="ltr">${e.s} × ${e.r}</span> · מנוחה ${e.rest} שנ׳</div>
@@ -472,14 +532,14 @@ ${e.v?`<button class="big" onclick="vid('${e.v}')">▶ טכניקה · ${e.ch}${
 
 /* ---------- personal ---------- */
 function dayList(key,def){if(S[key].d!==today()){S[key]={d:today(),done:[],w:S[key].w||def};save()}return S[key]}
-function vPers(){const f=dayList('foot'),h=dayList('hand');
+function vPers(){const f=dayList('foot');
 if(S.shoot.d!==today()){S.shoot={d:today(),w:S.shoot.d?(S.shoot.w==='A'?'B':'A'):'A',done:[]};save()}
 const sh=S.shoot,list=sh.w==='A'?SHA:SHB;
 return `<div class="wrap">
 <div class="h1" style="font-size:26px">הכנה אישית</div>
-<div class="sub">40 דקות. שלושה דברים. כל יום.</div><div class="bar"></div>
+<div class="sub">45 דקות ביום מלא · 13 דקות בימי קבוצה</div><div class="bar"></div>
 
-<div class="sec">רגליים · 12 דקות · השער</div>
+<div class="sec">רגליים · 13 דקות · השער</div>
 <div class="list">${FOOT.map((x,i)=>ck('foot',i,x)).join('')}</div>
 
 <div class="warnbox" style="margin-top:10px"><b>המדד כאן הוא רעש, לא מאמץ</b>
@@ -487,12 +547,9 @@ return `<div class="wrap">
 הנחיתה על רגל אחת היא גם <b>התרגיל הכי מוכח למניעת פציעות ברך</b> אצל מתבגרים, ואתה בדיוק בפרופיל: גבוה, גדל מהר, קל, על פרקט קשה. שתי דקות ביום שמגנות על העונה.</p></div>
 
 <div class="sec" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-<span>קליעה ${sh.w} · ${sh.w==='A'?'טכניקה ומקבלה':'מתנועה'} · 35 דקות</span>
+<span>בלוק ${sh.w} · ${sh.w==='A'?'קליעה וסיום':'תנועה ומסירה'} · 32 דקות</span>
 <button onclick="flipShoot()" style="border:1px solid var(--c3);border-radius:8px;padding:5px 11px;font-size:11px;font-weight:500;color:var(--t2);letter-spacing:0">הצג ${sh.w==='A'?'B':'A'}</button></div>
 <div class="list">${list.map((x,i)=>ck('shoot',i,x)).join('')}</div>
-
-<div class="sec">כדרור · 10 דקות</div>
-<div class="list">${HAND.map((x,i)=>ck('hand',i,x)).join('')}</div>
 
 <div class="warnbox" style="margin-top:20px"><b>יום שנכשל הוא לא שבוע שנכשל</b>
 <p>אם היה מבחן, אם חזרת גמור — תעשה 12 דקות רגליים וזהו. זה נחשב יום מלא.</p></div>
@@ -553,20 +610,74 @@ return `<button class="set ${v?'on':''}" onclick="setTest(${i},${j})">${v?`<span
 ${S.sessions.length?`<div class="list">${[...S.sessions].reverse().slice(0,15).map(s=>
 `<div class="bwrow"><span>${fmt(s.date)} · אימון ${s.w}</span><span class="ltr" style="color:var(--t2)">${Object.values(s.log).flat().length} סטים</span></div>`).join('')}</div>`
 :'<div class="card"><div class="cue">אין עדיין אימונים רשומים.</div></div>'}
-<button class="ghost" style="margin-top:18px" onclick="wipe()">מחק את כל הנתונים</button>
+<button class="ghost" style="margin-top:18px" onclick="delLast()">מחק את האימון האחרון</button>
+<button class="ghost" onclick="wipe()">מחק את כל הנתונים</button>
 </div>`}
-function addBw(){const v=prompt('משקל היום בק״ג');const n=parseFloat(v);if(!n)return;
-S.bw.push({d:today(),kg:n});save();draw()}
-function setTest(i,j){const v=prompt('תוצאה');if(v===null)return;
-if(!S.tests[i])S.tests[i]=[];S.tests[i][j]=v;save();draw()}
-function wipe(){if(confirm('למחוק הכל? אין דרך חזרה.')){localStorage.removeItem(K);S=load();draw()}}
+function addBw(){const last=S.bw.length?S.bw[S.bw.length-1].kg:'';
+openSheet(`<div class="grab"></div><div class="h2">משקל גוף</div>
+<div class="sub">בוקר, לפני אוכל, פעם בשבוע</div>
+<div class="num"><div><label>קילוגרם</label>
+<input id="ibw" type="number" inputmode="decimal" step="0.1" value="${last}"></div></div>
+<button class="big" onclick="saveBw()">שמור</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`);
+setTimeout(()=>{const e=document.getElementById('ibw');if(e)e.select()},60)}
+function saveBw(){const n=parseFloat(document.getElementById('ibw').value);
+if(!n){toast('לא הוזן משקל');return}
+S.bw.push({d:today(),kg:n});save();closeSheet();draw();toast('נרשם '+n+' ק״ג')}
+let testCtx=null;
+function setTest(i,j){testCtx={i,j};const cur=(S.tests[i]||[])[j]||'';
+openSheet(`<div class="grab"></div><div class="h2">${TESTS[i][0]}</div>
+<div class="sub">${TESTS[i][1]} · ${['היום','עוד 6 שבועות','עוד 12 שבועות'][j]}</div>
+<div class="num"><div><label>תוצאה</label>
+<input id="itst" type="text" inputmode="decimal" value="${cur}"></div></div>
+<button class="big" onclick="saveTest()">שמור</button>
+<button class="ghost" onclick="clrTest()">נקה</button>`);
+setTimeout(()=>{const e=document.getElementById('itst');if(e)e.select()},60)}
+function saveTest(){const{i,j}=testCtx;const v=document.getElementById('itst').value.trim();
+if(!v){toast('לא הוזנה תוצאה');return}
+if(!S.tests[i])S.tests[i]=[];S.tests[i][j]=v;save();closeSheet();draw()}
+function clrTest(){const{i,j}=testCtx;if(S.tests[i])S.tests[i][j]=undefined;save();closeSheet();draw()}
+function wipe(){openSheet(`<div class="grab"></div><div class="h2">למחוק את כל הנתונים?</div>
+<div class="sub">כל האימונים, המשקלים והמבחנים. אין דרך חזרה.</div><div style="height:16px"></div>
+<button class="big" onclick="doWipe()">כן, מחק הכל</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`)}
+function doWipe(){localStorage.removeItem(K);S=load();closeSheet();draw();toast('הכל נמחק')}
+function delLast(){if(!S.sessions.length){toast('אין אימונים');return}
+const l=S.sessions[S.sessions.length-1];
+openSheet(`<div class="grab"></div><div class="h2">למחוק את האימון האחרון?</div>
+<div class="sub">אימון ${l.w} מ-${fmt(l.date)} · ${Object.values(l.log).flat().length} סטים</div>
+<div style="height:16px"></div>
+<button class="big" onclick="doDelLast()">כן, מחק</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`)}
+function doDelLast(){S.sessions.pop();save();closeSheet();draw();toast('האימון נמחק')}
+
+/* ---------- toast + audio ---------- */
+let TT=null;
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');
+if(TT)clearTimeout(TT);TT=setTimeout(()=>t.classList.remove('on'),2400)}
+let AC=null;
+function unlockAudio(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+if(AC.state==='suspended')AC.resume()}catch(e){}}
+function beep(){try{if(!AC)return;const t0=AC.currentTime;
+[0,0.28,0.56].forEach((off,k)=>{const o=AC.createOscillator(),g=AC.createGain();
+o.type='sine';o.frequency.value=k===2?1180:880;o.connect(g);g.connect(AC.destination);
+g.gain.setValueAtTime(0.0001,t0+off);
+g.gain.exponentialRampToValueAtTime(0.35,t0+off+0.02);
+g.gain.exponentialRampToValueAtTime(0.0001,t0+off+0.22);
+o.start(t0+off);o.stop(t0+off+0.25)})}catch(e){}}
+try{const mf={name:"אורי",short_name:"אורי",display:"standalone",orientation:"portrait",
+background_color:"#08080A",theme_color:"#08080A",start_url:".",scope:".",
+icons:[{src:document.querySelector('link[rel="apple-touch-icon"]').href,sizes:"any",type:"image/svg+xml",purpose:"any"}]};
+const lk=document.createElement('link');lk.rel='manifest';
+lk.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}));
+document.head.appendChild(lk)}catch(e){}
 
 /* ---------- sheet + timer ---------- */
 function openSheet(h){document.getElementById('shc').innerHTML=h;document.getElementById('sh').classList.add('on')}
 function closeSheet(){document.getElementById('sh').classList.remove('on')}
-function startT(sec){stopT();let n=sec;const el=document.getElementById('tm');el.classList.add('on');
+function startT(sec){stopT();unlockAudio();let n=sec;const el=document.getElementById('tm');el.classList.add('on');
 const up=()=>{el.textContent='מנוחה · '+Math.floor(n/60)+':'+String(n%60).padStart(2,'0')+'  ·  לחץ לעצור';
-if(n<=0){stopT();if(navigator.vibrate)navigator.vibrate([200,100,200]);return}n--};up();tint=setInterval(up,1000)}
+if(n<=0){stopT();beep();if(navigator.vibrate)navigator.vibrate([200,100,200]);toast('סיימת מנוחה');return}n--};up();tint=setInterval(up,1000)}
 function stopT(){if(tint)clearInterval(tint);tint=null;document.getElementById('tm').classList.remove('on')}
 
 draw();
