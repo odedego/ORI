@@ -123,6 +123,15 @@ font-size:11px;color:var(--t2);margin:0 0 0 5px}
 .two2{display:flex;gap:9px;margin-top:18px}
 .mini{flex:1;border:1px solid var(--c3);border-radius:12px;padding:14px 8px;font-size:13px;font-weight:500;color:var(--t2)}
 .mini:active{background:var(--c1)}
+.trk-row{margin-bottom:11px}
+.trk-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.trk-top .n{font-size:13px;font-weight:700}
+.trk-top .c{font-size:11px;color:var(--t3);direction:ltr;unicode-bidi:bidi-override}
+.strip{display:grid;grid-template-columns:repeat(35,1fr);gap:2px;direction:rtl}
+.strip i{display:block;aspect-ratio:1;border-radius:2px;background:var(--c2)}
+.strip i.on{background:var(--red)}
+.strip i.off{background:none}
+.strip i.fut{background:none;border:1px solid #1A1A1C}
 .toast{position:fixed;bottom:calc(var(--nav) + 14px);right:16px;left:16px;max-width:520px;margin:0 auto;
 background:var(--c2);border:1px solid var(--c3);border-radius:12px;padding:13px;text-align:center;
 font-size:14px;font-weight:500;z-index:95;opacity:0;transform:translateY(12px);
@@ -270,12 +279,16 @@ const WA=["sq","bp","lat","sp","rear","tri","pal","cf"];
 const WB=["rdl","lun","row","mcp","shrug","curl","splank","cf"];
 
 const FOOT=[
-["קפיצות על קו","קדימה־אחורה · צד־צד · על רגל אחת לכל צד · מגע קצר ככל האפשר ברצפה","4 × 20 שניות","dJI2q9TPdig&t=19"],
-["בלימה","ריצה 5 מטר · עצירה על שתי רגליים · להחזיק 2 שניות · בשקט, בלי רעש","6 פעמים","yvd79yzgnOg"],
-["החלקה הגנתית עם פתיחת אגן","5 מטר החלקה · פתיחת ירך ורוץ · חזרה להחלקה · האגן נפתח, לא הכתפיים","6 פעמים","MIPpxnp9Zgw"],
-["סגירה על זורק","ריצה 4 מטר · צעדים קטנים ומהירים בסוף · יד למעלה · לעצור מאוזן","6 פעמים","CS6x2CF2pKI"],
-["נחיתה על רגל אחת","קפיצה קדימה מרגל אחת · נחיתה על אותה רגל · הקפאה 2 שניות · הברך לא נופלת פנימה","6 לכל רגל","3sGe3UiwrVY&t=47"],
-["שני כדורים","במקביל ואז לסירוגין · הכלי הכי יעיל ליד החלשה · תתחיל ברמות 1-3 בלבד","2 × 30 שניות","z1RRCS5FoIY"]];
+["קפיצות על קו","קדימה־אחורה · צד־צד · על רגל אחת לכל צד · מגע קצר ככל האפשר ברצפה","4 × 20 שניות","dJI2q9TPdig&t=19",0],
+["בלימה","ריצה 5 מטר · עצירה על שתי רגליים · להחזיק 2 שניות · בשקט, בלי רעש","6 פעמים","yvd79yzgnOg",0],
+["החלקה הגנתית עם פתיחת אגן","5 מטר החלקה · פתיחת ירך ורוץ · חזרה להחלקה · האגן נפתח, לא הכתפיים","6 פעמים","MIPpxnp9Zgw",1],
+["סגירה על זורק","ריצה 4 מטר · צעדים קטנים ומהירים בסוף · יד למעלה · לעצור מאוזן","6 פעמים","CS6x2CF2pKI",0],
+["נחיתה על רגל אחת","קפיצה קדימה מרגל אחת · נחיתה על אותה רגל · הקפאה 2 שניות · הברך לא נופלת פנימה","6 לכל רגל","3sGe3UiwrVY&t=47",0],
+["שני כדורים","במקביל ואז לסירוגין · הכלי הכי יעיל ליד החלשה · תתחיל ברמות 1-3 בלבד","2 × 30 שניות","z1RRCS5FoIY",1]];
+const FOOT_LIGHT=FOOT.filter(x=>x[4]);
+function isRestDay(){return new Date().getDay()===5}
+function todayFoot(){return isRestDay()?FOOT_LIGHT:FOOT}
+
 
 const SHA=[
 ["זריקת יד אחת ממטר","יד תומכת מאחורי הגב · שחרור גבוה · 10 קליעות נקיות, רק רשת","10","sY69C_V8MOo"],
@@ -360,12 +373,31 @@ const GOAL=new Date(2026,9,29);
 const K='uri1';
 let S=load(),tab='home',tint=null;
 
-function load(){try{const r=localStorage.getItem(K);if(r)return JSON.parse(r)}catch(e){}
-return{sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},bw:[],tests:{},shop:[]}}
+function load(){let o=null;try{const r=localStorage.getItem(K);if(r)o=JSON.parse(r)}catch(e){}
+if(o){if(!o.start)o.start=today();
+if(!o.footDays)o.footDays=o.active||[];
+if(!o.shotDays)o.shotDays=[];
+delete o.active;return o}
+const d={sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},bw:[],tests:{},shop:[],start:'',footDays:[],shotDays:[]};
+return d}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function today(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function fmt(d){const x=new Date(d);return x.getDate()+'.'+(x.getMonth()+1)}
 
+function dnum(x){const p=String(x).split('-');return Date.UTC(+p[0],+p[1]-1,+p[2])}
+function progWeek(){if(!S.start)return 1;
+const w=Math.floor((dnum(today())-dnum(S.start))/6048e5)+1;return Math.max(1,Math.min(w,12))}
+function mark(k){const t=today();if(!S[k])S[k]=[];if(!S[k].includes(t)){S[k].push(t);save()}}
+function daysSinceBw(){if(!S.bw.length)return 99;
+return Math.floor((dnum(today())-dnum(S.bw[S.bw.length-1].d))/864e5)}
+function lastSets(id){for(let i=S.sessions.length-1;i>=0;i--){const l=S.sessions[i].log[id];
+if(l&&l.length)return l}return null}
+function suggestKg(id){const e=EX[id],l=lastSets(id);
+if(!l||l.length<e.s)return null;
+if(!l.every(x=>x&&x[1]>=e.r))return null;
+const inc=['רגליים','שוקיים'].includes(e.g)?2.5:2;
+const base=Math.max(...l.map(x=>x[0]));
+return base>0?Math.round((base+inc)*2)/2:null}
 function nextW(){for(let i=S.sessions.length-1;i>=0;i--){return S.sessions[i].w==='A'?'B':'A'}return'A'}
 function lastFor(id){for(let i=S.sessions.length-1;i>=0;i--){const l=S.sessions[i].log[id];
 if(l&&l.length)return l.reduce((a,b)=>b[0]>a[0]?b:a)}return null}
@@ -403,7 +435,8 @@ const open=S.cur?Object.values(S.cur.log).flat().filter(Boolean).length:0;
 const last=S.sessions.length?S.sessions[S.sessions.length-1]:null;
 return `<div class="wrap">
 <div class="hero">
-<div class="tiny" style="letter-spacing:3px">תוכנית כוח · 3 אימונים בשבוע</div>
+<div class="row" style="align-items:center"><div class="tiny" style="letter-spacing:3px">תוכנית כוח · 3 אימונים בשבוע</div>
+<div style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()} מתוך 12</div></div>
 <div class="h1" style="margin-top:6px">אורי<span style="color:var(--red)">.</span></div>
 <div class="bar"></div>
 <div style="font-size:17px;font-weight:800">${p[0]}</div>
@@ -413,6 +446,13 @@ return `<div class="wrap">
 <div><div class="v ltr">${S.sessions.length}</div><div class="k">אימוני כוח</div></div>
 <div><div class="v ltr">${bw}</div><div class="k">משקל ק״ג</div></div>
 </div></div>
+${daysSinceBw()>=7?`<div class="warnbox" style="margin-bottom:10px"><b>${S.bw.length?'לא נשקלת שבוע':'עוד לא נשקלת'}</b>
+<p>משקל הגוף הוא המספר הכי חשוב במטרה שלך, והוא היחיד שקל לשכוח. בוקר, לפני אוכל.
+<button onclick="addBw()" style="color:var(--red);font-weight:700;text-decoration:underline">תרשום עכשיו</button></p></div>`:''}
+${progWeek()===6?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע 6 — שבוע המדידה</b>
+<p>הגיע הזמן למדוד את ארבעת המספרים ולהחליט מה משתנה. <button onclick="openWeek6()" style="color:var(--red);font-weight:700;text-decoration:underline">מה בודקים ומה עושים</button></p></div>`:''}
+${progWeek()===7?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע 7 — שבוע הקלה</b>
+<p><b>סט אחד פחות בכל תרגיל, אותו משקל בדיוק.</b> בהכנה האישית — רגליים כרגיל, בלוק קליעה אחד בלבד השבוע, בלי העונשין בלחץ. זה לא חופש, זה השבוע שבו הגוף סוגר פערים.</p></div>`:''}
 ${S.cur?`<div class="card" style="border:1px solid var(--red)">
 <div class="row"><div><div class="nm">אימון ${S.cur.w} בתהליך</div>
 <div class="cue">${open} סטים נרשמו · התחלת ב-${fmt(S.cur.date)}</div></div></div>
@@ -427,6 +467,14 @@ ${last?`<div class="tiny" style="text-align:center;margin-top:10px">האימון
 <button class="mini" onclick="openTips()">טיפים מקצועיים</button>
 </div>
 </div>`}
+
+function openWeek6(){openSheet(`<div class="grab"></div><div class="h2">שבוע 6 — מודדים ומחליטים</div>
+<div class="sub">ארבעה מספרים מול היום הראשון</div><div style="height:14px"></div>
+<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">שלושה מתוך ארבעה עלו</b>ממשיכים. לא נוגעים בכלום.</div>
+<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">חדר הכושר עלה, הקליעה לא זזה</b>מוסיפים בלוק קליעה שלישי בסוף שבוע.</div>
+<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">משקל הגוף לא עלה בכלל</b>הבעיה באוכל, לא באימון. לא מוסיפים שום אימון עד שזה מטופל.</div>
+<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">הזריזות לא השתפרה</b>6 דקות רגליים גם בימי קבוצה, ובודקים אם יש כאב בברך או בעקב.</div>
+<button class="big" style="margin-top:14px" onclick="closeSheet();go('nums')">ללשונית המספרים</button>`)}
 
 function openRules(){openSheet(`<div class="grab"></div><div class="h2">עשרת חוקי הזהב</div>
 <div class="sub">תלה את זה על הקיר. שווה יותר מכל תוכנית.</div><div style="height:12px"></div>
@@ -452,6 +500,8 @@ return `<div class="wrap">
 <div class="sub">${w==='A'?'ברך ודחיפה':'ירך ומשיכה'}</div></div>
 <button class="act" style="flex:0 0 auto;padding:8px 14px" onclick="flip()">החלף</button></div>
 <div class="bar"></div>
+${progWeek()===7?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע הקלה</b>
+<p>סט אחד פחות בכל תרגיל, אותו משקל. אל תוריד במשקל.</p></div>`:''}
 <div class="card" onclick="openWarm()"><div class="row"><div class="nm">חימום קבוע</div>
 <div class="cq" style="font-size:15px">6 דק׳</div></div><div class="cue">5 תרגילים · לחץ לפרטים</div></div>
 ${(()=>{let o='',g='';ids.forEach((id,i)=>{if(EX[id].g!==g){g=EX[id].g;o+=`<div class="sec">${g}</div>`}o+=exCard(id,i)});return o})()}
@@ -476,9 +526,12 @@ function vid(v){window.open('https://www.youtube.com/watch?v='+v,'_blank')}
 
 let sheetCtx=null;
 function tapSet(id,k){ensure();sheetCtx={id,k};const e=EX[id];const lg=S.cur.log[id]||[];
-const prev=lg[k]||lg[k-1]||lastFor(id)||[0,e.r];
+const sg=(k===0&&!lg.length)?suggestKg(id):null;
+const prev=lg[k]||lg[k-1]||(sg?[sg,e.r]:null)||lastFor(id)||[0,e.r];
 openSheet(`<div class="grab"></div>
 <div class="h2">${e.n}</div><div class="sub">סט ${k+1} מתוך ${e.s}</div>
+${sg?`<div class="warnbox" style="margin-top:12px"><b>הגיע הזמן להוסיף משקל</b>
+<p>בפעם הקודמת השלמת את כל ${e.s} הסטים ב-${e.r} חזרות. הצעתי לך <span class="ltr">${sg}</span> ק״ג. אם זה מרגיש כבד מדי — תרד, זה לא ציון.</p></div>`:''}
 <div class="num">
 <div><label>משקל (ק״ג)</label><input id="ikg" type="number" inputmode="decimal" value="${prev[0]||''}"></div>
 <div><label>חזרות</label><input id="irp" type="number" inputmode="numeric" value="${prev[1]||e.r}"></div>
@@ -539,9 +592,16 @@ return `<div class="wrap">
 <div class="h1" style="font-size:26px">הכנה אישית</div>
 <div class="sub">45 דקות ביום מלא · 13 דקות בימי קבוצה</div><div class="bar"></div>
 
-<div class="sec">רגליים · 13 דקות · השער</div>
-<div class="list">${FOOT.map((x,i)=>ck('foot',i,x)).join('')}</div>
+<div class="sec">${isRestDay()?'רגליים · גרסה קלה · 4 דקות':'רגליים · 13 דקות · השער'}</div>
+${isRestDay()?`<div class="warnbox" style="margin-bottom:10px"><b>שישי — יום מנוחה מהעומס, לא מהעבודה</b>
+<p>קואורדינציה נבנית בתדירות, אז לא מוותרים עליה. אבל קפיצות, בלימות ונחיתות כן יורדות היום — הן מעמיסות על הקרסול והברך, וזה היום היחיד בשבוע שבו הרקמות מתאוששות.<br><br>
+ארבע דקות. שני תרגילים. וזהו.</p></div>`:''}
+<div class="list">${todayFoot().map((x,i)=>ck('foot',i,x)).join('')}</div>
 
+<div class="warnbox" style="margin-top:10px"><b>אם כואב — מה יורד ראשון</b>
+<p>כאב <b>מתחת לפיקת הברך</b> או <b>בעקב</b> הוא הדגל האדום של הגיל שלך. הוא בא מהצטברות, לא מאימון אחד.<br><br>
+במקרה כזה — <b>קפיצות על קו והנחיתה על רגל אחת יורדות ראשונות.</b> שאר הבלוק ממשיך כרגיל. לא מפסיקים הכל, ולא ממשיכים כרגיל.<br><br>
+ואם הכאב נשאר יותר משבוע — מדווחים למבוגר. זה לא "לדחוף דרך זה".</p></div>
 <div class="warnbox" style="margin-top:10px"><b>המדד כאן הוא רעש, לא מאמץ</b>
 <p>בבלימה ובנחיתה על רגל אחת — <b>אם שמעת את הנחיתה, נכשלת.</b> רעש אומר שהגוף לא בלם אלא נחבט. תרד בעוצמה עד שזה שקט, ורק אז תעלה.<br><br>
 הנחיתה על רגל אחת היא גם <b>התרגיל הכי מוכח למניעת פציעות ברך</b> אצל מתבגרים, ואתה בדיוק בפרופיל: גבוה, גדל מהר, קל, על פרקט קשה. שתי דקות ביום שמגנות על העונה.</p></div>
@@ -552,7 +612,7 @@ return `<div class="wrap">
 <div class="list">${list.map((x,i)=>ck('shoot',i,x)).join('')}</div>
 
 <div class="warnbox" style="margin-top:20px"><b>יום שנכשל הוא לא שבוע שנכשל</b>
-<p>אם היה מבחן, אם חזרת גמור — תעשה 12 דקות רגליים וזהו. זה נחשב יום מלא.</p></div>
+<p>אם היה מבחן, אם חזרת גמור — תעשה 13 דקות רגליים וזהו. זה נחשב יום מלא.</p></div>
 <div class="card flat" style="margin-top:12px"><div class="nm">חופשה או חג?</div>
 <div class="cue" style="margin-top:5px">ביום חופשי עושים את <b>שני הבלוקים</b>, עם 3-4 שעות מנוחה ביניהם.<br><br><b>בוקר:</b> רגליים בשני סיבובים · בלוק A — קליעה וסיום.<br><b>אחר הצהריים:</b> בלוק B — תנועה ומסירה · ואז משחק אמיתי, חצי שעה ומעלה.<br><br>חמישה ימים כאלה בשבוע, שניים מנוחה מלאה. <b>לא להוסיף ימים</b> — מי שמתאמן שבעה ימים בחופשה חוזר עייף יותר ממה שיצא.</div></div>
 </div>`}
@@ -560,7 +620,10 @@ function ck(key,i,x){const on=S[key].done.includes(i);
 return `<div class="chk ${on?'on':''}" onclick="tg('${key}',${i})"><div class="box">${on?'\u2713':''}</div>
 <div class="ct">${x[0]}<div class="cue">${x[1]}</div></div><div class="qw"><div class="cq">${x[2]}</div>${x[3]?`<button class="vi" onclick="event.stopPropagation();vid('${x[3]}')">\u25B6</button>`:''}</div></div>`}
 function flipShoot(){S.shoot={d:today(),w:S.shoot.w==='A'?'B':'A',done:[]};save();draw()}
-function tg(key,i){const a=S[key].done,k=a.indexOf(i);k<0?a.push(i):a.splice(k,1);save();draw()}
+function tg(key,i){const a=S[key].done,k=a.indexOf(i);k<0?a.push(i):a.splice(k,1);
+if(key==='foot'&&a.length>=todayFoot().length)mark('footDays');
+if(key==='shoot'&&a.length>=(S.shoot.w==='A'?SHA:SHB).length)mark('shotDays');
+save();draw()}
 
 /* ---------- food ---------- */
 function vFood(){return `<div class="wrap">
@@ -591,6 +654,11 @@ return `<div class="wrap">
 <div class="stat"><div><div class="v ltr">${S.sessions.length}</div><div class="k">אימונים</div></div>
 <div><div class="v ltr">${streak()}</div><div class="k">רצף</div></div>
 <div><div class="v ltr">${S.bw.length?S.bw[S.bw.length-1].kg:'—'}</div><div class="k">משקל</div></div></div>
+<div class="sec">לוח מעקב · 5 שבועות</div>
+<div class="card">${calHTML()}</div>
+<div class="tiny" style="text-align:center;margin-top:8px;line-height:1.7">
+אדום — בוצע · אפור — היה אמור ולא בוצע · ריק — יום מנוחה, לא נספר<br>
+המספר הוא מתוך הימים שתוכננו, לא מתוך כל הימים</div>
 <div class="sec">משקל גוף</div>
 <button class="big" onclick="addBw()">רשום משקל היום</button>
 ${bw.length?`<div class="list" style="margin-top:10px">${bw.slice(0,12).map(b=>
@@ -610,9 +678,57 @@ return `<button class="set ${v?'on':''}" onclick="setTest(${i},${j})">${v?`<span
 ${S.sessions.length?`<div class="list">${[...S.sessions].reverse().slice(0,15).map(s=>
 `<div class="bwrow"><span>${fmt(s.date)} · אימון ${s.w}</span><span class="ltr" style="color:var(--t2)">${Object.values(s.log).flat().length} סטים</span></div>`).join('')}</div>`
 :'<div class="card"><div class="cue">אין עדיין אימונים רשומים.</div></div>'}
+<div class="sec">גיבוי</div>
+<div class="card"><div class="cue">כל הנתונים שלך שמורים על הטלפון הזה בלבד. אם תחליף מכשיר או תנקה את הדפדפן — הכל נעלם. תעתיק ותשלח לעצמך בוואטסאפ פעם בשבועיים.</div></div>
+<button class="big" onclick="exportData()">העתק את הנתונים שלי</button>
+<button class="ghost" onclick="openImport()">שחזור מגיבוי</button>
 <button class="ghost" style="margin-top:18px" onclick="delLast()">מחק את האימון האחרון</button>
 <button class="ghost" onclick="wipe()">מחק את כל הנתונים</button>
 </div>`}
+const SCHED={foot:[0,1,2,3,4,5,6],gym:[0,2,4],shot:[1,3]};
+function calHTML(){
+const days=[];const t=new Date();t.setHours(0,0,0,0);
+const end=new Date(t);end.setDate(end.getDate()+(6-end.getDay()));
+for(let i=34;i>=0;i--){const d=new Date(end);d.setDate(d.getDate()-i);
+days.push({k:d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),w:d.getDay(),fut:d>t})}
+const rows=[['רגליים','foot',new Set(S.footDays||[])],
+['אימוני כוח','gym',new Set(S.sessions.map(x=>x.date))],
+['קליעה','shot',new Set(S.shotDays||[])]];
+return rows.map(([name,key,set])=>{
+const sc=SCHED[key];
+const past=days.filter(d=>!d.fut);
+const planned=past.filter(d=>sc.includes(d.w)).length;
+const done=past.filter(d=>set.has(d.k)).length;
+const cells=days.map(d=>{
+  if(set.has(d.k))return '<i class="on"></i>';
+  if(d.fut)return '<i class="fut"></i>';
+  if(!sc.includes(d.w))return '<i class="off"></i>';
+  return '<i></i>'}).join('');
+return `<div class="trk-row"><div class="trk-top"><span class="n">${name}</span>
+<span class="c">${done}/${planned}</span></div>
+<div class="strip">${cells}</div></div>`}).join('')}
+
+function exportData(){const txt=JSON.stringify(S);
+const done=()=>toast('הועתק — תשלח לעצמך בוואטסאפ');
+try{navigator.clipboard.writeText(txt).then(done,()=>fallbackCopy(txt,done))}
+catch(e){fallbackCopy(txt,done)}}
+function fallbackCopy(txt,done){openSheet(`<div class="grab"></div><div class="h2">הנתונים שלך</div>
+<div class="sub">סמן הכל, העתק, ושלח לעצמך</div>
+<textarea readonly style="width:100%;height:140px;margin-top:12px;background:var(--c2);
+border:1px solid var(--c3);border-radius:11px;color:#fff;font-size:11px;padding:10px">${txt}</textarea>
+<button class="ghost" onclick="closeSheet()">סגור</button>`)}
+function openImport(){openSheet(`<div class="grab"></div><div class="h2">שחזור מגיבוי</div>
+<div class="sub">הדבק כאן את הטקסט ששמרת. זה יחליף את כל הנתונים הנוכחיים.</div>
+<textarea id="imp" style="width:100%;height:140px;margin-top:12px;background:var(--c2);
+border:1px solid var(--c3);border-radius:11px;color:#fff;font-size:11px;padding:10px"></textarea>
+<button class="big" style="margin-top:12px" onclick="doImport()">שחזר</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`)}
+function doImport(){try{const o=JSON.parse(document.getElementById('imp').value);
+if(!o||!Array.isArray(o.sessions))throw 0;
+S=o;if(!S.active)S.active=[];if(!S.start)S.start=today();save();closeSheet();draw();
+toast('שוחזרו '+S.sessions.length+' אימונים')}
+catch(e){toast('הטקסט לא תקין')}}
+
 function addBw(){const last=S.bw.length?S.bw[S.bw.length-1].kg:'';
 openSheet(`<div class="grab"></div><div class="h2">משקל גוף</div>
 <div class="sub">בוקר, לפני אוכל, פעם בשבוע</div>
@@ -675,10 +791,22 @@ document.head.appendChild(lk)}catch(e){}
 /* ---------- sheet + timer ---------- */
 function openSheet(h){document.getElementById('shc').innerHTML=h;document.getElementById('sh').classList.add('on')}
 function closeSheet(){document.getElementById('sh').classList.remove('on')}
-function startT(sec){stopT();unlockAudio();let n=sec;const el=document.getElementById('tm');el.classList.add('on');
-const up=()=>{el.textContent='מנוחה · '+Math.floor(n/60)+':'+String(n%60).padStart(2,'0')+'  ·  לחץ לעצור';
-if(n<=0){stopT();beep();if(navigator.vibrate)navigator.vibrate([200,100,200]);toast('סיימת מנוחה');return}n--};up();tint=setInterval(up,1000)}
-function stopT(){if(tint)clearInterval(tint);tint=null;document.getElementById('tm').classList.remove('on')}
+let tEnd=0, WL=null;
+async function lockScreen(){try{if('wakeLock' in navigator)WL=await navigator.wakeLock.request('screen')}catch(e){}}
+function unlockScreen(){try{if(WL){WL.release();WL=null}}catch(e){}}
+function paintT(){const el=document.getElementById('tm');
+const n=Math.round((tEnd-Date.now())/1000);
+if(n<=0){stopT();beep();if(navigator.vibrate)navigator.vibrate([200,100,200]);toast('סיימת מנוחה');return}
+el.textContent='מנוחה · '+Math.floor(n/60)+':'+String(n%60).padStart(2,'0')+'  ·  לחץ לעצור'}
+function startT(sec){stopT();unlockAudio();lockScreen();
+tEnd=Date.now()+sec*1000;
+document.getElementById('tm').classList.add('on');
+paintT();tint=setInterval(paintT,500)}
+function stopT(){if(tint)clearInterval(tint);tint=null;tEnd=0;
+unlockScreen();document.getElementById('tm').classList.remove('on')}
+document.addEventListener('visibilitychange',()=>{
+if(document.visibilityState!=='visible')return;
+if(tEnd){if(Date.now()>=tEnd){stopT();toast('המנוחה נגמרה')}else{lockScreen();paintT()}}});
 
 draw();
 </script>
