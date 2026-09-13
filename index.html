@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--red:#E10600;--bg:#08080A;--c1:#151517;--c2:#1E1E21;--c3:#2A2A2E;
---tx:#FFFFFF;--t2:#A1A1A6;--t3:#6E6E73;--ok:#30D158;
+--tx:#FFFFFF;--t2:#A1A1A6;--t3:#6E6E73;--ok:#2FA46B;--miss:#7A1E1B;
 --nav:calc(58px + env(safe-area-inset-bottom));}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--tx);
@@ -123,15 +123,50 @@ font-size:11px;color:var(--t2);margin:0 0 0 5px}
 .two2{display:flex;gap:9px;margin-top:18px}
 .mini{flex:1;border:1px solid var(--c3);border-radius:12px;padding:14px 8px;font-size:13px;font-weight:500;color:var(--t2)}
 .mini:active{background:var(--c1)}
-.trk-row{margin-bottom:11px}
-.trk-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
-.trk-top .n{font-size:13px;font-weight:700}
-.trk-top .c{font-size:11px;color:var(--t3);direction:ltr;unicode-bidi:bidi-override}
-.strip{display:grid;grid-template-columns:repeat(35,1fr);gap:2px;direction:rtl}
-.strip i{display:block;aspect-ratio:1;border-radius:2px;background:var(--c2)}
-.strip i.on{background:var(--red)}
-.strip i.off{background:none}
-.strip i.fut{background:none;border:1px solid #1A1A1C}
+.wk{display:grid;grid-template-columns:24px repeat(7,1fr);gap:4px;direction:rtl;align-items:center}
+.wk .hd{font-size:11px;color:var(--t3);text-align:center;font-weight:500;padding-bottom:2px}
+.wk .hd.now{color:var(--red);font-weight:800}
+.wk .rl{display:flex;align-items:center;justify-content:center;color:var(--t2)}
+.wk .rl svg{width:16px;height:16px}
+.wk .c{height:19px;border-radius:5px;background:var(--miss)}
+.wk .c.on{background:var(--ok)}
+.wk .c.off{background:none;border:1px solid #232326}
+.wk .c.now{outline:1.5px solid var(--red);outline-offset:1.5px}
+.fnum{font-family:inherit;font-size:34px;font-weight:900;color:var(--ok);line-height:1}
+.fnum .fof{font-size:14px;font-weight:700;color:var(--t3)}
+.fbar{display:flex;gap:5px;margin-top:14px}
+.fbar span{flex:1;height:10px;border-radius:4px;background:var(--c3);transition:background .2s}
+.fbar span.on{background:var(--ok)}
+.badge{background:var(--ok);color:#fff;font-size:10.5px;font-weight:800;
+padding:4px 9px;border-radius:7px;letter-spacing:0;white-space:nowrap}
+.ringwrap{position:relative;flex:0 0 104px;width:104px;height:104px}
+.ringsvg{width:104px;height:104px;display:block}
+.ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;
+align-items:center;justify-content:center;gap:1px}
+.rnum{font-size:27px;font-weight:900;line-height:1;color:var(--ok)}
+.rnum .rp{font-size:14px;font-weight:700}
+.rdone{font-size:30px;color:var(--ok);line-height:1}
+.rlbl{font-size:10.5px;color:var(--t3);font-weight:500}
+.today{display:flex;gap:14px;align-items:center;margin-top:14px}
+.today .tx{flex:1;min-width:0}
+.chips{display:flex;gap:7px;margin-top:12px}
+.chip{flex:1;text-align:center;padding:9px 4px;border-radius:10px;font-size:12.5px;font-weight:700;
+background:var(--c1);color:var(--t3);border:1px solid var(--c2)}
+.chip.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.chip.part{border-color:var(--ok);color:var(--ok)}
+.lgd{display:flex;justify-content:center;gap:14px;font-size:10.5px;color:var(--t3);margin-top:10px}
+.lgd span{display:flex;align-items:center;gap:5px}
+.lgd i{width:14px;height:8px;border-radius:3px;background:var(--ok);display:block}
+.lgd i.g{background:var(--miss)}
+.hist{margin-top:16px}
+.hrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;
+border-bottom:1px solid var(--c2);font-size:12.5px}
+.hrow:last-child{border-bottom:none}
+.hrow .wl{color:var(--t2)}
+.hrow .fr{display:flex;gap:12px}
+.hrow .fr b{font-weight:700}
+.hrow .fr b.n{direction:ltr;unicode-bidi:bidi-override}
+.hrow .fr .full{color:var(--ok)}
 .toast{position:fixed;bottom:calc(var(--nav) + 14px);right:16px;left:16px;max-width:520px;margin:0 auto;
 background:var(--c2);border:1px solid var(--c3);border-radius:12px;padding:13px;text-align:center;
 font-size:14px;font-weight:500;z-index:95;opacity:0;transform:translateY(12px);
@@ -315,13 +350,14 @@ const SHB=[
 
 
 const MEALS=[
-["07:00","ארוחת בוקר","3 ביצים · 2 פרוסות לחם מלא · גבינה צהובה · כוס חלב"],
-["10:00","הפסקה בבית ספר","כריך טונה או חומוס · פרי · יוגורט"],
-["13:00","צהריים","מנת חלבון גדולה (עוף/בשר/דגים) · אורז או פסטה · ירקות"],
-["16:00","לפני אימון","בננה + חמאת בוטנים · או שייק"],
-["19:00","אחרי אימון","המנה הכי גדולה ביום · חלבון + פחמימה · אל תדלג על זה"],
-["21:00","ערב","קוטג׳ או יוגורט יווני · אגוזים · פרי"],
-["לפני השינה","לילה","כוס חלב או שייק קטן — הגוף בונה בלילה"]];
+["07:00","ארוחת בוקר","3 ביצים · 2 פרוסות לחם מלא · גבינה צהובה · כוס חלב",25],
+["10:00","הפסקה בבית ספר","כריך טונה או חומוס · פרי · יוגורט",15],
+["13:00","צהריים","מנת חלבון גדולה (עוף/בשר/דגים) · אורז או פסטה · ירקות",30],
+["16:00","לפני אימון","בננה + חמאת בוטנים · או שייק",8],
+["19:00","אחרי אימון","המנה הכי גדולה ביום · חלבון + פחמימה · אל תדלג על זה",30],
+["21:00","ערב","קוטג׳ או יוגורט יווני · אגוזים · פרי",18],
+["לפני השינה","לילה","כוס חלב או שייק קטן — הגוף בונה בלילה",9]];
+const FUEL_GOAL=6;
 
 const APPETITE=[
 "תשתה קלוריות. שייק נכנס גם כשאין תיאבון — אכילה של 600 קלוריות לוקחת 20 דקות, שתייה לוקחת 3.",
@@ -377,8 +413,10 @@ function load(){let o=null;try{const r=localStorage.getItem(K);if(r)o=JSON.parse
 if(o){if(!o.start)o.start=today();
 if(!o.footDays)o.footDays=o.active||[];
 if(!o.shotDays)o.shotDays=[];
+if(!o.fuel)o.fuel={d:'',done:[]};
+if(!o.fuelDays)o.fuelDays=[];
 delete o.active;return o}
-const d={sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},bw:[],tests:{},shop:[],start:'',footDays:[],shotDays:[]};
+const d={sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},bw:[],tests:{},shop:[],start:'',footDays:[],shotDays:[],fuel:{d:'',done:[]},fuelDays:[]};
 return d}
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function today(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
@@ -388,6 +426,41 @@ function dnum(x){const p=String(x).split('-');return Date.UTC(+p[0],+p[1]-1,+p[2
 function progWeek(){if(!S.start)return 1;
 const w=Math.floor((dnum(today())-dnum(S.start))/6048e5)+1;return Math.max(1,Math.min(w,12))}
 function mark(k){const t=today();if(!S[k])S[k]=[];if(!S[k].includes(t)){S[k].push(t);save()}}
+function unmark(k){const t=today();if(!S[k])return;const i=S[k].indexOf(t);if(i>-1){S[k].splice(i,1);save()}}
+const BLK={foot:{list:()=>todayFoot(),day:'footDays',name:()=>isRestDay()?'רגליים · גרסה קלה':'רגליים'},
+shoot:{list:()=>S.shoot.w==='A'?SHA:SHB,day:'shotDays',name:()=>'בלוק '+S.shoot.w}};
+function blkDone(key){return S[key].done.length>=BLK[key].list().length}
+function weekCount(key){const S3=sets(),days=weekDays(0),k=key==='shoot'?'shot':key;
+return{dn:days.filter(x=>!x.fut&&S3[k].has(x.k)).length,
+pl:days.filter(x=>!x.fut&&SCHED[k].includes(x.w)).length}}
+function gymFrac(){const k=today(),d=new Date().getDay();
+if(!SCHED.gym.includes(d))return 0;
+if(S.sessions.some(x=>x.date===k))return 1;
+if(!S.cur||S.cur.date!==k)return 0;
+const ids=S.cur.w==='A'?WA:WB;
+const tot=ids.reduce((a,id)=>a+EX[id].s,0);
+const dn=Object.values(S.cur.log).flat().filter(Boolean).length;
+return Math.min(1,dn/tot)}
+function dayParts(){const d=new Date().getDay(),k=today(),out=[];
+if(SCHED.foot.includes(d))out.push(['רגליים','foot',S.foot.d===k?S.foot.done.length/todayFoot().length:0]);
+if(SCHED.gym.includes(d))out.push(['כוח','gym',gymFrac()]);
+if(SCHED.shot.includes(d))out.push(['קליעה','shot',S.shoot.d===k?S.shoot.done.length/(S.shoot.w==='A'?SHA:SHB).length:0]);
+if(SCHED.fuel.includes(d))out.push(['אוכל','fuel',Math.min(1,fuelState().done.length/FUEL_GOAL)]);
+return out.map(x=>[x[0],x[1],Math.max(0,Math.min(1,x[2]))])}
+function dayPct(){const p=dayParts();if(!p.length)return 1;
+return p.reduce((a,x)=>a+x[2],0)/p.length}
+function ring(pct){const r=40,c=2*Math.PI*r,off=c*(1-pct);
+return `<svg viewBox="0 0 100 100" class="ringsvg">
+<circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--c2)" stroke-width="10"/>
+<circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--ok)" stroke-width="10"
+stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
+transform="rotate(-90 50 50)"/></svg>`}
+function dayRing(){const p=dayPct(),n=Math.round(p*100),full=n>=100;
+return `<div class="ringwrap">${ring(p)}
+<div class="ringtxt">${full?'<div class="rdone">\u2713</div><div class="rlbl">יום מלא</div>'
+:`<div class="rnum"><span class="ltr">${n}</span><span class="rp">%</span></div><div class="rlbl">מהיום</div>`}</div></div>`}
+function todayLeft(){const d=new Date().getDay(),S3=sets(),k=today();
+return ROWS.filter(([,key])=>SCHED[key].includes(d)).filter(([,key])=>!S3[key].has(k)).map(([n])=>n)}
 function daysSinceBw(){if(!S.bw.length)return 99;
 return Math.floor((dnum(today())-dnum(S.bw[S.bw.length-1].d))/864e5)}
 function lastSets(id){for(let i=S.sessions.length-1;i>=0;i--){const l=S.sessions[i].log[id];
@@ -410,7 +483,7 @@ const diff=Math.round((cur-t)/day);if(diff<=n+3){n++;cur=t}else break}return n}
 /* ---------- nav ---------- */
 const IC={
 home:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
-gym:'<path d="M17.596 12.768a2 2 0 1 0 2.829-2.829l-1.768-1.767a2 2 0 0 0 2.828-2.829l-2.828-2.828a2 2 0 0 0-2.829 2.828l-1.767-1.768a2 2 0 1 0-2.829 2.829z"/><path d="m2.5 21.5 1.4-1.4"/><path d="m20.1 3.9 1.4-1.4"/><path d="M5.343 21.485a2 2 0 1 0 2.829-2.828l1.767 1.768a2 2 0 1 0 2.829-2.829l-6.364-6.364a2 2 0 1 0-2.829 2.829l1.768 1.767a2 2 0 0 0-2.828 2.829z"/><path d="m9.6 14.4 4.8-4.8"/>',
+gym:'<g fill="currentColor" stroke="none"><rect x="1.6" y="9.1" width="2.7" height="5.8" rx="1.15"/><rect x="5.1" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="8.5" y="10.5" width="7" height="3" rx="1.3"/><rect x="15.5" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="19.7" y="9.1" width="2.7" height="5.8" rx="1.15"/></g>',
 pers:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
 food:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
 nums:'<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>'};
@@ -439,8 +512,10 @@ return `<div class="wrap">
 <div style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()} מתוך 12</div></div>
 <div class="h1" style="margin-top:6px">אורי<span style="color:var(--red)">.</span></div>
 <div class="bar"></div>
-<div style="font-size:17px;font-weight:800">${p[0]}</div>
+<div class="today">${dayRing()}
+<div class="tx"><div style="font-size:17px;font-weight:800">${p[0]}</div>
 <div class="sub" style="margin-top:2px">${p[1]}</div>
+${todayChips()}</div></div>
 <div class="stat">
 <div><div class="v ltr">${left}</div><div class="k">ימים ליעד</div></div>
 <div><div class="v ltr">${S.sessions.length}</div><div class="k">אימוני כוח</div></div>
@@ -514,7 +589,7 @@ return `<div class="card">
 <div class="row" onclick="openEx('${id}')">
 <div style="flex:1"><div class="nm">${e.n}</div><div class="cue">${e.cue}</div></div>
 <div class="sr">${e.s} × ${e.r}</div></div>
-${lp?`<div class="last">אחרונה: <span class="ltr">${lp[0]} ק״ג × ${lp[1]}</span></div>`:'<div class="last">פעם ראשונה — תתחיל קל</div>'}
+${lp?`<div class="last">אחרונה: <span class="ltr">${lp[0]}</span> ק״ג <span class="ltr">× ${lp[1]}</span></div>`:'<div class="last">פעם ראשונה — תתחיל קל</div>'}
 <div class="sets">${Array.from({length:e.s},(_,k)=>{const v=lg[k];
 return `<button class="set ${v?'on':''}" onclick="tapSet('${id}',${k})">${v?`<span class="ltr">${v[0]}×${v[1]}</span>`:'סט '+(k+1)}</button>`}).join('')}</div>
 <div class="acts">
@@ -592,7 +667,9 @@ return `<div class="wrap">
 <div class="h1" style="font-size:26px">הכנה אישית</div>
 <div class="sub">45 דקות ביום מלא · 13 דקות בימי קבוצה</div><div class="bar"></div>
 
-<div class="sec">${isRestDay()?'רגליים · גרסה קלה · 4 דקות':'רגליים · 13 דקות · השער'}</div>
+<div class="sec" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span>${isRestDay()?'רגליים · גרסה קלה · 4 דקות':'רגליים · 13 דקות · השער'}</span>
+${blkDone('foot')?'<span class="badge">\u2713 הושלם</span>':''}</div>
 ${isRestDay()?`<div class="warnbox" style="margin-bottom:10px"><b>שישי — יום מנוחה מהעומס, לא מהעבודה</b>
 <p>קואורדינציה נבנית בתדירות, אז לא מוותרים עליה. אבל קפיצות, בלימות ונחיתות כן יורדות היום — הן מעמיסות על הקרסול והברך, וזה היום היחיד בשבוע שבו הרקמות מתאוששות.<br><br>
 ארבע דקות. שני תרגילים. וזהו.</p></div>`:''}
@@ -608,6 +685,7 @@ ${isRestDay()?`<div class="warnbox" style="margin-bottom:10px"><b>שישי — �
 
 <div class="sec" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
 <span>בלוק ${sh.w} · ${sh.w==='A'?'קליעה וסיום':'תנועה ומסירה'} · 32 דקות</span>
+${blkDone('shoot')?'<span class="badge">\u2713 הושלם</span>':''}
 <button onclick="flipShoot()" style="border:1px solid var(--c3);border-radius:8px;padding:5px 11px;font-size:11px;font-weight:500;color:var(--t2);letter-spacing:0">הצג ${sh.w==='A'?'B':'A'}</button></div>
 <div class="list">${list.map((x,i)=>ck('shoot',i,x)).join('')}</div>
 
@@ -621,17 +699,52 @@ return `<div class="chk ${on?'on':''}" onclick="tg('${key}',${i})"><div class="b
 <div class="ct">${x[0]}<div class="cue">${x[1]}</div></div><div class="qw"><div class="cq">${x[2]}</div>${x[3]?`<button class="vi" onclick="event.stopPropagation();vid('${x[3]}')">\u25B6</button>`:''}</div></div>`}
 function flipShoot(){S.shoot={d:today(),w:S.shoot.w==='A'?'B':'A',done:[]};save();draw()}
 function tg(key,i){const a=S[key].done,k=a.indexOf(i);k<0?a.push(i):a.splice(k,1);
-if(key==='foot'&&a.length>=todayFoot().length)mark('footDays');
-if(key==='shoot'&&a.length>=(S.shoot.w==='A'?SHA:SHB).length)mark('shotDays');
+const dk=BLK[key].day, was=(S[dk]||[]).includes(today()), now=blkDone(key);
+if(now&&!was){mark(dk);save();draw();celebrate(key);return}
+if(!now&&was)unmark(dk);
 save();draw()}
+
+function celebrate(key){const w=weekCount(key),left=todayLeft();
+const full=left.length===0;
+try{unlockAudio();beep()}catch(e){}
+if(navigator.vibrate)navigator.vibrate(full?[0,60,80,60,80,140]:[0,50,70,90]);
+openSheet(`<div class="grab"></div>
+<div style="text-align:center;padding:10px 0 2px">
+<div style="width:74px;height:74px;margin:0 auto;border-radius:50%;background:var(--ok);
+display:flex;align-items:center;justify-content:center;font-size:38px;color:#fff">\u2713</div>
+<div class="h2" style="margin-top:16px">${BLK[key].name()} הושלם</div>
+<div class="sub" style="margin-top:3px">${full?'וסיימת את כל מה שהיה היום':'נרשם ונספר במעקב השבועי'}</div></div>
+<div class="stat" style="margin:18px 0 4px">
+<div><div class="v ltr">${w.dn}/${w.pl}</div><div class="k">השבוע</div></div>
+<div><div class="v ltr">${(S[BLK[key].day]||[]).length}</div><div class="k">סה״כ ימים</div></div>
+</div>
+${full?`<div class="warnbox" style="margin-top:14px"><b>יום מלא</b>
+<p>כל מה שהיה מתוכנן להיום — בוצע. זה הדבר שמצטבר.</p></div>`
+:`<div class="tiny" style="text-align:center;margin-top:14px">נשאר להיום: ${left.join(' · ')}</div>`}
+<button class="big" style="margin-top:16px" onclick="closeSheet()">יאללה</button>
+<button class="ghost" onclick="closeSheet();go('nums')">לראות את הלוח</button>`)}
 
 /* ---------- food ---------- */
 function vFood(){return `<div class="wrap">
 <div class="h1" style="font-size:26px">אוכל</div>
 <div class="sub">זה חצי מהתוכנית. בלי זה אין מסה.</div><div class="bar"></div>
-<div class="sec">יום אכילה</div>
-<div class="card"><table class="tbl">${MEALS.map(m=>
-`<tr><td>${m[0]}</td><td><b>${m[1]}</b><div class="cue">${m[2]}</div></td></tr>`).join('')}</table></div>
+<div class="sec" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span>הדלק של היום</span>
+${fuelState().done.length>=FUEL_GOAL?'<span class="badge">\u2713 מיכל מלא</span>':''}</div>
+<div class="card">
+<div class="row" style="align-items:flex-end">
+<div><div class="fnum"><span class="ltr">${fuelState().done.length}</span><span class="fof"> מתוך ${FUEL_GOAL}</span></div>
+<div class="cue" style="margin-top:2px">בערך <span class="ltr">${fuelGrams()}</span> גרם חלבון</div></div>
+<div class="tiny" style="text-align:left">${fuelState().done.length>=FUEL_GOAL?'הגעת ליעד':'עוד '+(FUEL_GOAL-fuelState().done.length)+' ארוחות'}</div>
+</div>
+${fuelBar()}
+</div>
+<div class="list">${MEALS.map((m,i)=>{const on=fuelState().done.includes(i);
+return `<div class="chk ${on?'on':''}" onclick="tgFuel(${i})"><div class="box">${on?'\u2713':''}</div>
+<div class="ct">${m[1]}<div class="cue">${m[2]}</div></div>
+<div class="qw"><div class="cq">${m[0]}</div></div></div>`}).join('')}</div>
+<div class="tiny" style="text-align:center;margin-top:8px">היעד הוא ${FUEL_GOAL} מתוך 7. השביעית היא בונוס.</div>
+
 <div class="sec">שייק המסה</div>
 <div class="card"><div class="cue" style="margin-bottom:8px">הכל לבלנדר. כ-800 קלוריות שנכנסות ב-3 דקות.</div>
 ${SHAKE.map(s=>`<div class="chk"><div class="ct">${s}</div></div>`).join('')}</div>
@@ -643,6 +756,32 @@ return `<div class="chk ${on?'on':''}" onclick="tgShop(${i})"><div class="box">$
 <div class="warnbox" style="margin-top:20px"><b>עלייה ריאלית</b>
 <p>0.7 עד 1 ק״ג בחודש. יותר מזה זה בעיקר שומן. אל תישקל כל יום — פעם בשבוע, בבוקר, אותו יום.</p></div>
 </div>`}
+function fuelState(){if(S.fuel.d!==today()){S.fuel={d:today(),done:[]};save()}return S.fuel}
+function fuelGrams(){return fuelState().done.reduce((a,i)=>a+MEALS[i][3],0)}
+function tgFuel(i){const f=fuelState(),k=f.done.indexOf(i);
+const was=f.done.length>=FUEL_GOAL;
+k<0?f.done.push(i):f.done.splice(k,1);
+const now=f.done.length>=FUEL_GOAL;
+if(now&&!was){mark('fuelDays');winTone();if(navigator.vibrate)navigator.vibrate([0,60,80,60,80,140]);save();draw();fuelWin();return}
+if(!now&&was)unmark('fuelDays');
+if(k<0)stepTone(f.done.length);
+save();draw()}
+function fuelWin(){const g=fuelGrams(),w=weekCount('fuel');
+openSheet(`<div class="grab"></div>
+<div style="text-align:center;padding:10px 0 2px">
+<div style="width:74px;height:74px;margin:0 auto;border-radius:50%;background:var(--ok);
+display:flex;align-items:center;justify-content:center;font-size:38px;color:#fff">\u2713</div>
+<div class="h2" style="margin-top:16px">מיכל מלא</div>
+<div class="sub" style="margin-top:3px">הגעת ליעד הדלק של היום</div></div>
+<div class="stat" style="margin:18px 0 4px">
+<div><div class="v ltr">~${g}</div><div class="k">גרם חלבון</div></div>
+<div><div class="v ltr">${w.dn}/${w.pl}</div><div class="k">ימים השבוע</div></div></div>
+<div class="tiny" style="text-align:center;margin-top:14px">אכילה היא חצי מהתוכנית. היום עשית את החצי הזה.</div>
+<button class="big" style="margin-top:16px" onclick="closeSheet()">יאללה</button>`)}
+function fuelBar(){const f=fuelState(),n=f.done.length;
+return `<div class="fbar">${MEALS.map((_,i)=>
+`<span class="${f.done.includes(i)?'on':''}"></span>`).join('')}</div>`}
+
 function tgShop(i){const k=S.shop.indexOf(i);k<0?S.shop.push(i):S.shop.splice(k,1);save();draw()}
 
 /* ---------- numbers ---------- */
@@ -654,15 +793,13 @@ return `<div class="wrap">
 <div class="stat"><div><div class="v ltr">${S.sessions.length}</div><div class="k">אימונים</div></div>
 <div><div class="v ltr">${streak()}</div><div class="k">רצף</div></div>
 <div><div class="v ltr">${S.bw.length?S.bw[S.bw.length-1].kg:'—'}</div><div class="k">משקל</div></div></div>
-<div class="sec">לוח מעקב · 5 שבועות</div>
+<div class="sec">השבוע הזה</div>
 <div class="card">${calHTML()}</div>
-<div class="tiny" style="text-align:center;margin-top:8px;line-height:1.7">
-אדום — בוצע · אפור — היה אמור ולא בוצע · ריק — יום מנוחה, לא נספר<br>
-המספר הוא מתוך הימים שתוכננו, לא מתוך כל הימים</div>
+<div class="tiny" style="text-align:center;margin-top:8px">שלושת הפסים בכל יום: רגליים · כוח · קליעה</div>
 <div class="sec">משקל גוף</div>
 <button class="big" onclick="addBw()">רשום משקל היום</button>
 ${bw.length?`<div class="list" style="margin-top:10px">${bw.slice(0,12).map(b=>
-`<div class="bwrow"><span>${fmt(b.d)}</span><span class="ltr" style="font-weight:800;color:var(--red)">${b.kg} ק״ג</span></div>`).join('')}</div>`:''}
+`<div class="bwrow"><span>${fmt(b.d)}</span><span style="font-weight:800;color:var(--red)"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
 <div class="sec">השיאים שלך</div>
 ${prs.length?`<div class="list">${prs.map(p=>
 `<div class="bwrow"><span>${p[0]}</span><span class="ltr" style="font-weight:800;color:var(--red)">${p[1][0]} × ${p[1][1]}</span></div>`).join('')}</div>`
@@ -676,7 +813,7 @@ return `<button class="set ${v?'on':''}" onclick="setTest(${i},${j})">${v?`<span
 </div>`).join('')}</div>
 <div class="sec">היסטוריה</div>
 ${S.sessions.length?`<div class="list">${[...S.sessions].reverse().slice(0,15).map(s=>
-`<div class="bwrow"><span>${fmt(s.date)} · אימון ${s.w}</span><span class="ltr" style="color:var(--t2)">${Object.values(s.log).flat().length} סטים</span></div>`).join('')}</div>`
+`<div class="bwrow"><span>${fmt(s.date)} · אימון ${s.w}</span><span style="color:var(--t2)"><span class="ltr">${Object.values(s.log).flat().length}</span> סטים</span></div>`).join('')}</div>`
 :'<div class="card"><div class="cue">אין עדיין אימונים רשומים.</div></div>'}
 <div class="sec">גיבוי</div>
 <div class="card"><div class="cue">כל הנתונים שלך שמורים על הטלפון הזה בלבד. אם תחליף מכשיר או תנקה את הדפדפן — הכל נעלם. תעתיק ותשלח לעצמך בוואטסאפ פעם בשבועיים.</div></div>
@@ -685,28 +822,51 @@ ${S.sessions.length?`<div class="list">${[...S.sessions].reverse().slice(0,15).m
 <button class="ghost" style="margin-top:18px" onclick="delLast()">מחק את האימון האחרון</button>
 <button class="ghost" onclick="wipe()">מחק את כל הנתונים</button>
 </div>`}
-const SCHED={foot:[0,1,2,3,4,5,6],gym:[0,2,4],shot:[1,3]};
-function calHTML(){
-const days=[];const t=new Date();t.setHours(0,0,0,0);
-const end=new Date(t);end.setDate(end.getDate()+(6-end.getDay()));
-for(let i=34;i>=0;i--){const d=new Date(end);d.setDate(d.getDate()-i);
-days.push({k:d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),w:d.getDay(),fut:d>t})}
-const rows=[['רגליים','foot',new Set(S.footDays||[])],
-['אימוני כוח','gym',new Set(S.sessions.map(x=>x.date))],
-['קליעה','shot',new Set(S.shotDays||[])]];
-return rows.map(([name,key,set])=>{
-const sc=SCHED[key];
-const past=days.filter(d=>!d.fut);
-const planned=past.filter(d=>sc.includes(d.w)).length;
-const done=past.filter(d=>set.has(d.k)).length;
-const cells=days.map(d=>{
-  if(set.has(d.k))return '<i class="on"></i>';
-  if(d.fut)return '<i class="fut"></i>';
-  if(!sc.includes(d.w))return '<i class="off"></i>';
-  return '<i></i>'}).join('');
-return `<div class="trk-row"><div class="trk-top"><span class="n">${name}</span>
-<span class="c">${done}/${planned}</span></div>
-<div class="strip">${cells}</div></div>`}).join('')}
+const SCHED={foot:[0,1,2,3,4,5,6],gym:[0,2,4],shot:[1,3],fuel:[0,1,2,3,4,5,6]};
+const DL=['א','ב','ג','ד','ה','ו','ש'];
+function dkey(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function sets(){return{foot:new Set(S.footDays||[]),gym:new Set(S.sessions.map(x=>x.date)),shot:new Set(S.shotDays||[]),fuel:new Set(S.fuelDays||[])}}
+function weekDays(back){const t=new Date();t.setHours(0,0,0,0);
+const sun=new Date(t);sun.setDate(sun.getDate()-sun.getDay()-7*back);
+return Array.from({length:7},(_,i)=>{const d=new Date(sun);d.setDate(d.getDate()+i);
+return{d,k:dkey(d),w:i,fut:d>t,today:dkey(d)===dkey(t)}})}
+
+const RIC={
+foot:'<path d="M12 7.6c2.5 0 4.1 1.9 4.1 4.4 0 1.8-.8 2.8-.8 4.4 0 1.3.5 1.9.5 2.9 0 1.8-1.4 3.1-3.6 3.1s-3.7-1.3-3.7-3.2c0-1.2.5-1.8.5-3 0-1.6-.9-2.6-.9-4.3 0-2.5 1.6-4.3 3.9-4.3Z" fill="currentColor" stroke="none"/><ellipse cx="8.6" cy="4.9" rx="1.6" ry="2" fill="currentColor" stroke="none"/><circle cx="12.1" cy="3.7" r="1.3" fill="currentColor" stroke="none"/><circle cx="15" cy="4.4" r="1.15" fill="currentColor" stroke="none"/><circle cx="17.2" cy="5.9" r="1" fill="currentColor" stroke="none"/>',
+gym:'<g fill="currentColor" stroke="none"><rect x="1.6" y="9.1" width="2.7" height="5.8" rx="1.15"/><rect x="5.1" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="8.5" y="10.5" width="7" height="3" rx="1.3"/><rect x="15.5" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="19.7" y="9.1" width="2.7" height="5.8" rx="1.15"/></g>',
+fuel:'<g fill="currentColor" stroke="none"><path d="M4.6 2.6c-.6 0-1.1.5-1.1 1.1v4.1c0 1.5 1 2.8 2.4 3.2v9.4c0 .6.5 1.1 1.1 1.1s1.1-.5 1.1-1.1V11c1.4-.4 2.4-1.7 2.4-3.2V3.7c0-.6-.5-1.1-1.1-1.1s-1.1.5-1.1 1.1v3.6H7.9V3.7c0-.6-.5-1.1-1.1-1.1s-1.1.5-1.1 1.1v3.6H5.7V3.7c0-.6-.5-1.1-1.1-1.1Z"/><path d="M17.6 2.6c-1.9 0-3.4 2.4-3.4 5.4 0 2.3.9 4.2 2.3 4.9v7.5c0 .6.5 1.1 1.1 1.1s1.1-.5 1.1-1.1V3.7c0-.6-.5-1.1-1.1-1.1Z"/></g>',
+shot:'<ellipse cx="12" cy="7.4" rx="7.8" ry="2.5" fill="currentColor" stroke="none"/><path d="M6.2 9.6 9 18.4c.2.7.8 1.1 1.5 1.1h3c.7 0 1.3-.4 1.5-1.1l2.8-8.8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 13.9h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'};
+function ric(k){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${RIC[k]}</svg>`}
+const ROWS=[['רגליים','foot'],['כוח','gym'],['קליעה','shot'],['אוכל','fuel']];
+function calHTML(){const S3=sets(),wk=weekDays(0);
+let g='<div class="hd"></div>'+wk.map(x=>`<div class="hd ${x.today?'now':''}">${DL[x.w]}</div>`).join('');
+for(const [lbl,key] of ROWS){
+ g+=`<div class="rl">${ric(key)}</div>`;
+ g+=wk.map(x=>{
+  if(!SCHED[key].includes(x.w))return `<div class="c off ${x.today?'now':''}"></div>`;
+  if(S3[key].has(x.k))return `<div class="c on ${x.today?'now':''}"></div>`;
+  return `<div class="c ${x.today?'now':''}"></div>`}).join('')}
+
+const hist=[1,2,3,4].map(b=>{const days=weekDays(b);
+ const f=ROWS.map(([,key])=>{
+  const pl=days.filter(x=>!x.fut&&SCHED[key].includes(x.w)).length;
+  const dn=days.filter(x=>!x.fut&&S3[key].has(x.k)).length;
+  return{dn,pl}});
+ const lbl=b===1?'שבוע שעבר':'לפני '+b+' שבועות';
+ return `<div class="hrow"><span class="wl">${lbl}</span><span class="fr">
+${f.map(x=>`<b class="n ${x.dn>=x.pl&&x.pl?'full':''}">${x.dn}/${x.pl}</b>`).join('')}</span></div>`}).join('');
+
+return `<div class="wk">${g}</div>
+<div class="lgd"><span><i></i>בוצע</span><span><i class="g"></i>הוחמץ</span><span>ריק — לא תוכנן</span></div>
+<div class="lgd" style="margin-top:6px">${ROWS.map(([n,k])=>`<span><span style="color:var(--t2);display:flex;width:15px;height:15px">${ric(k)}</span>${n}</span>`).join('')}</div>
+<div class="hist"><div class="hrow" style="border-bottom:1px solid var(--c3)">
+<span class="wl" style="font-weight:700;color:#fff">היסטוריה</span>
+<span class="fr" style="font-size:10.5px;color:var(--t3)"><b>רגליים</b><b>כוח</b><b>קליעה</b></span></div>
+${hist}</div>`}
+
+function todayChips(){const p=dayParts();if(!p.length)return '';
+return `<div class="chips">${p.map(([n,,f])=>
+`<div class="chip ${f>=1?'done':(f>0?'part':'')}">${f>=1?'\u2713 ':''}${n}</div>`).join('')}</div>`}
 
 function exportData(){const txt=JSON.stringify(S);
 const done=()=>toast('הועתק — תשלח לעצמך בוואטסאפ');
@@ -774,6 +934,14 @@ if(TT)clearTimeout(TT);TT=setTimeout(()=>t.classList.remove('on'),2400)}
 let AC=null;
 function unlockAudio(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
 if(AC.state==='suspended')AC.resume()}catch(e){}}
+function tone(f,t0,dur,vol){const o=AC.createOscillator(),g=AC.createGain();
+o.type='sine';o.frequency.value=f;o.connect(g);g.connect(AC.destination);
+g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+0.015);
+g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);o.start(t0);o.stop(t0+dur+0.02)}
+function stepTone(n){try{unlockAudio();if(!AC)return;
+tone(480+n*72,AC.currentTime,0.16,0.3)}catch(e){}}
+function winTone(){try{unlockAudio();if(!AC)return;const t0=AC.currentTime;
+[[523,0],[659,0.11],[784,0.22],[1046,0.33]].forEach(([f,o])=>tone(f,t0+o,0.3,0.32))}catch(e){}}
 function beep(){try{if(!AC)return;const t0=AC.currentTime;
 [0,0.28,0.56].forEach((off,k)=>{const o=AC.createOscillator(),g=AC.createGain();
 o.type='sine';o.frequency.value=k===2?1180:880;o.connect(g);g.connect(AC.destination);
