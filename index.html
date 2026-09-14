@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--red:#E10600;--bg:#08080A;--c1:#151517;--c2:#1E1E21;--c3:#2A2A2E;
---tx:#FFFFFF;--t2:#A1A1A6;--t3:#6E6E73;--miss:#7A1E1B;
+--tx:#FFFFFF;--t2:#A1A1A6;--t3:#8A8A92;--miss:#7A1E1B;--red2:#FF4B45;
 --ok:#E8C24A;--gd:#C9A227;--gl:#F7DC8A;--on:#0A0A0A;
 --gsolid:linear-gradient(135deg,var(--gl) 0%,var(--ok) 45%,var(--gd) 100%);
 --nav:calc(58px + env(safe-area-inset-bottom));}
@@ -33,32 +33,33 @@ background:linear-gradient(100deg,transparent,rgba(255,255,255,.8),transparent);
 animation:sweep .95s cubic-bezier(.3,0,.2,1) 1 both}
 @media (prefers-reduced-motion:reduce){.spark::after{animation:none;display:none}}
 
-.wrap{padding:calc(env(safe-area-inset-top) + 18px) 16px 24px;max-width:560px;margin:0 auto}
+.wrap{padding:max(calc(env(safe-area-inset-top) + 18px),56px) 16px 24px;max-width:560px;margin:0 auto}
 .h1{font-size:30px;font-weight:900;letter-spacing:-.5px;line-height:1.1}
 .h2{font-size:20px;font-weight:800;margin-bottom:2px}
 .sub{font-size:13px;color:var(--t2)}
 .tiny{font-size:11px;color:var(--t3)}
 .bar{height:3px;width:44px;background:var(--red);margin:9px 0 18px;border-radius:2px}
-.sec{font-size:12px;font-weight:800;color:var(--red);letter-spacing:2px;margin:26px 0 10px}
+.sec{font-size:12px;font-weight:800;color:var(--red2);letter-spacing:2px;margin:26px 0 10px}
 
 .card{background:var(--c1);border-radius:14px;padding:14px;margin-bottom:10px}
 .card.flat{background:none;border:1px solid var(--c3)}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.row[onclick]{min-height:44px;align-items:center}
 .nm{font-size:16px;font-weight:700;line-height:1.25}
-.sr{font-size:15px;font-weight:800;color:var(--red);direction:ltr;unicode-bidi:bidi-override;white-space:nowrap}
+.sr{font-size:15px;font-weight:800;color:var(--red2);direction:ltr;unicode-bidi:bidi-override;white-space:nowrap}
 .cue{font-size:12px;color:var(--t3);margin-top:3px;line-height:1.45}
 .last{font-size:12px;color:var(--t2);margin-top:6px}
 
 .sets{display:flex;gap:6px;margin-top:11px}
-.set{flex:1;background:var(--c2);border-radius:9px;padding:9px 2px;text-align:center;
+.set{flex:1;background:var(--c2);border-radius:9px;padding:13px 2px;text-align:center;min-height:44px;
 font-size:12px;font-weight:700;color:var(--t3);transition:transform .08s}
 .set:active{transform:scale(.94)}
 .set.on{background:var(--red);color:#fff}
 .acts{display:flex;gap:6px;margin-top:8px}
-.act{flex:1;border:1px solid var(--c3);border-radius:9px;padding:9px 2px;text-align:center;
+.act{flex:1;border:1px solid var(--c3);border-radius:9px;padding:13px 2px;text-align:center;min-height:44px;
 font-size:12px;font-weight:500;color:var(--t2)}
 .act:active{background:var(--c2)}
-.act.solid{background:var(--red);color:#fff;border-color:var(--red);font-weight:700}
+.act.solid{background:var(--red);color:#fff;border-color:var(--red2);font-weight:700}
 
 .chk{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--c2);font-size:15px}
 .chk:last-child{border-bottom:none}
@@ -69,8 +70,10 @@ display:flex;align-items:center;justify-content:center;font-size:14px;font-weigh
 .chk.on .ct .cue{text-decoration:none}
 .ct{flex:1;line-height:1.3}
 .qw{flex:0 0 76px;display:flex;flex-direction:column;align-items:center;gap:7px}
-.cq{font-size:12px;color:var(--red);font-weight:700;text-align:center;line-height:1.35}
-.vi{width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;flex:0 0 36px;display:flex;align-items:center;justify-content:center}
+.cq{font-size:12px;color:var(--red2);font-weight:700;text-align:center;line-height:1.35}
+.vi{width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;flex:0 0 36px;
+display:flex;align-items:center;justify-content:center;position:relative}
+.vi::after{content:'';position:absolute;inset:-4px;border-radius:50%}
 .chk{align-items:flex-start}
 .chk.on .vi{background:var(--c3)}
 
@@ -78,7 +81,7 @@ display:flex;align-items:center;justify-content:center;font-size:14px;font-weigh
 backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--c2);
 display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:60}
 .nb{flex:1;padding:9px 0 7px;text-align:center;font-size:10px;color:var(--t3);font-weight:500}
-.nb.on{color:var(--red)}
+.nb.on{color:var(--red2)}
 .ni{display:block;width:23px;height:23px;margin:0 auto 4px}
 
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;display:none;
@@ -88,7 +91,7 @@ align-items:flex-end;justify-content:center}
 padding:20px 18px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto}
 .grab{width:38px;height:4px;background:var(--c3);border-radius:2px;margin:0 auto 16px}
 .blk{margin-bottom:18px}
-.blk h4{font-size:13px;font-weight:800;color:var(--red);letter-spacing:1px;margin-bottom:7px}
+.blk h4{font-size:13px;font-weight:800;color:var(--red2);letter-spacing:1px;margin-bottom:7px}
 .blk p,.blk li{font-size:14.5px;color:#D8D8DC;line-height:1.6}
 .blk ol{padding-right:18px}
 .blk li{margin-bottom:6px}
@@ -105,14 +108,14 @@ font-size:16px;font-weight:800;text-align:center}
 font-size:14px;font-weight:500;color:var(--t2);text-align:center;margin-top:9px}
 
 .timer{position:fixed;top:0;right:0;left:0;background:var(--red);color:#fff;
-padding:calc(env(safe-area-inset-top) + 9px) 16px 9px;text-align:center;
+padding:max(calc(env(safe-area-inset-top) + 9px),48px) 16px 9px;text-align:center;
 font-size:15px;font-weight:800;z-index:70;display:none}
 .timer.on{display:block}
 .timer.prep{background:var(--c3);font-size:20px;letter-spacing:1px}
 
 .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
 .tbl td{padding:10px 6px;border-bottom:1px solid var(--c2);vertical-align:top}
-.tbl td:first-child{color:var(--red);font-weight:700;white-space:nowrap;width:64px}
+.tbl td:first-child{color:var(--red2);font-weight:700;white-space:nowrap;width:64px}
 .tbl tr:last-child td{border-bottom:none}
 .pill{display:inline-block;background:var(--c2);border-radius:7px;padding:3px 9px;
 font-size:11px;color:var(--t2);margin:0 0 0 5px}
@@ -128,14 +131,14 @@ font-size:11px;color:var(--t2);margin:0 0 0 5px}
 .q{font-size:14px;color:#D8D8DC;line-height:1.6;padding:11px 0;border-bottom:1px solid var(--c2)}
 .q:last-child{border-bottom:none}
 .warnbox{border:1px solid var(--red);border-radius:12px;padding:13px;margin-top:12px}
-.warnbox b{color:var(--red)}
+.warnbox b{color:var(--red2)}
 .warnbox p{font-size:13.5px;color:#D8D8DC;line-height:1.55}
 .two2{display:flex;gap:9px;margin-top:18px}
 .mini{flex:1;border:1px solid var(--c3);border-radius:12px;padding:14px 8px;font-size:13px;font-weight:500;color:var(--t2)}
 .mini:active{background:var(--c1)}
 .wk{display:grid;grid-template-columns:24px repeat(7,1fr);gap:4px;direction:rtl;align-items:center}
 .wk .hd{font-size:11px;color:var(--t3);text-align:center;font-weight:500;padding-bottom:2px}
-.wk .hd.now{color:var(--red);font-weight:800}
+.wk .hd.now{color:var(--red2);font-weight:800}
 .wk .rl{display:flex;align-items:center;justify-content:center;color:var(--t2)}
 .wk .rl svg{width:16px;height:16px}
 .wk .c{height:19px;border-radius:5px;background:var(--miss)}
@@ -164,12 +167,12 @@ align-items:center;justify-content:center;gap:1px}
 .mot{border-right:2px solid var(--red);padding:1px 12px 1px 0;margin:18px 0 2px;
 font-size:14.5px;line-height:1.55;color:#DCDCE0}
 .tdl{margin-top:12px}
-.tdh{font-size:12px;font-weight:800;color:var(--red);letter-spacing:2px;margin:20px 0 9px}
+.tdh{font-size:12px;font-weight:800;color:var(--red2);letter-spacing:2px;margin:20px 0 9px}
 .tdi{display:flex;width:100%;align-items:center;gap:11px;background:var(--c1);
 border:1px solid var(--c2);border-radius:12px;padding:11px 13px;margin-bottom:7px;
 text-align:right;min-height:58px}
 .tdi:active{background:var(--c2)}
-.tdi .tdc{flex:0 0 21px;height:21px;color:var(--red);display:flex}
+.tdi .tdc{flex:0 0 21px;height:21px;color:var(--red2);display:flex}
 .tdi .tdt{flex:1;min-width:0}
 .tdi .tdt b{display:block;font-size:15px;font-weight:700;line-height:1.25}
 .tdi .tdt i{display:block;font-style:normal;font-size:11.5px;color:var(--t2);margin-top:3px}
@@ -185,9 +188,9 @@ padding:13px;text-align:center;font-size:14px;font-weight:800;color:var(--ok)}
 padding:11px 6px;text-align:center;min-height:58px}
 .sg b{display:block;font-size:14px;font-weight:700;color:var(--t2);line-height:1.2}
 .sg i{display:block;font-style:normal;font-size:11.5px;color:var(--t3);margin-top:3px;font-weight:700}
-.sg.on{border-color:var(--red);background:#1C1416}
+.sg.on{border-color:var(--red2);background:#1C1416}
 .sg.on b{color:#fff}
-.sg.on i{color:var(--red)}
+.sg.on i{color:var(--red2)}
 .sg.fin{border-color:var(--gd)}
 .sg.fin b,.sg.fin i{color:var(--ok)}
 .notes{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
@@ -198,7 +201,7 @@ font-weight:600;color:#E8908B;margin-bottom:7px;min-height:46px}
 .dbtn:last-child{margin-bottom:0}
 .dbtn:active{background:#2A1210}
 .note{border:1px solid var(--c3);border-radius:9px;padding:9px 11px;font-size:12px;
-font-weight:500;color:var(--t2);min-height:38px}
+font-weight:500;color:var(--t2);min-height:44px}
 .note:active{background:var(--c1)}
 .note.warn{border-color:#5A2320;color:#E8908B}
 .ckw{border-bottom:1px solid var(--c2)}
@@ -206,9 +209,9 @@ font-weight:500;color:var(--t2);min-height:38px}
 .ckw .chk{border-bottom:none}
 .ckact{display:flex;justify-content:flex-start;padding:0 0 11px 35px}
 .tmr{display:flex;align-items:center;gap:6px;border:1px solid var(--c3);border-radius:9px;
-padding:9px 13px;font-size:12.5px;font-weight:700;color:var(--t2);min-height:40px}
+padding:11px 13px;font-size:12.5px;font-weight:700;color:var(--t2);min-height:44px}
 .tmr:active{background:var(--c2)}
-.tmr.run{border-color:var(--red);color:var(--red)}
+.tmr.run{border-color:var(--red2);color:var(--red2)}
 .lgd{display:flex;justify-content:center;gap:14px;font-size:10.5px;color:var(--t3);margin-top:10px}
 .lgd span{display:flex;align-items:center;gap:5px}
 .lgd i{width:14px;height:8px;border-radius:3px;background:var(--gsolid);display:block}
@@ -219,8 +222,9 @@ padding:9px 13px;font-size:12.5px;font-weight:700;color:var(--t2);min-height:40p
 border-bottom:1px solid var(--c2);font-size:12.5px}
 .hrow:last-child{border-bottom:none}
 .hrow .wl{color:var(--t2)}
-.hrow .fr{display:flex;gap:6px}
-.hrow .fr b{font-weight:700;flex:0 0 42px;text-align:center}
+.hrow .fr{display:flex;gap:6px;flex:0 0 auto}
+.hrow .fr b{font-weight:700;flex:0 0 46px;min-width:0;text-align:center;
+white-space:nowrap;overflow:hidden;text-overflow:clip}
 .hrow .fr b.n{direction:ltr;unicode-bidi:bidi-override}
 .hrow .fr .full{color:var(--ok)}
 .toast{position:fixed;bottom:calc(var(--nav) + 14px);right:16px;left:16px;max-width:520px;margin:0 auto;
@@ -768,7 +772,7 @@ return `<div class="wrap">
 <div class="hero">
 <div class="row" style="align-items:center"><div class="tiny" style="letter-spacing:2.5px">נקודת השינוי</div>
 <div style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()} מתוך 12</div></div>
-<div class="h1" style="margin-top:6px">אורי<span style="color:var(--red)">.</span></div>
+<div class="h1" style="margin-top:6px">אורי<span style="color:var(--red2)">.</span></div>
 <div class="bar"></div>
 <div class="today">${dayRing()}
 <div class="tx"><div style="font-size:17px;font-weight:800">${p[0]}</div>
@@ -783,12 +787,12 @@ return `<div class="wrap">
 ${todayList()}
 ${daysSinceBw()>=7?`<div class="warnbox" style="margin-bottom:10px"><b>${S.bw.length?'לא נשקלת שבוע':'עוד לא נשקלת'}</b>
 <p>משקל הגוף הוא המספר הכי חשוב במטרה שלך, והוא היחיד שקל לשכוח. בוקר, לפני אוכל.
-<button onclick="addBw()" style="color:var(--red);font-weight:700;text-decoration:underline">תרשום עכשיו</button></p></div>`:''}
+<button onclick="addBw()" style="color:var(--red2);font-weight:700;text-decoration:underline">תרשום עכשיו</button></p></div>`:''}
 ${progWeek()===6?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע 6 — שבוע המדידה</b>
-<p>הגיע הזמן למדוד את ארבעת המספרים ולהחליט מה משתנה. <button onclick="openWeek6()" style="color:var(--red);font-weight:700;text-decoration:underline">מה בודקים ומה עושים</button></p></div>`:''}
+<p>הגיע הזמן למדוד את ארבעת המספרים ולהחליט מה משתנה. <button onclick="openWeek6()" style="color:var(--red2);font-weight:700;text-decoration:underline">מה בודקים ומה עושים</button></p></div>`:''}
 ${progWeek()===7?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע 7 — שבוע הקלה</b>
 <p><b>סט אחד פחות בכל תרגיל, אותו משקל בדיוק.</b> בהכנה האישית — רגליים כרגיל, בלוק קליעה אחד בלבד השבוע, בלי העונשין בלחץ. זה לא חופש, זה השבוע שבו הגוף סוגר פערים.</p></div>`:''}
-${S.cur?`<div class="card" style="border:1px solid var(--red)">
+${(S.cur&&open)?`<div class="card" style="border:1px solid var(--red)">
 <div class="row"><div><div class="nm">אימון ${S.cur.w} בתהליך</div>
 <div class="cue">${open} סטים נרשמו · התחלת ב-${fmt(S.cur.date)}</div></div></div>
 <div class="acts" style="margin-top:11px">
@@ -813,7 +817,7 @@ function openWeek6(){openSheet(`<div class="grab"></div><div class="h2">שבוע
 
 function openRules(){openSheet(`<div class="grab"></div><div class="h2">עשרת חוקי הזהב</div>
 <div class="sub">תלה את זה על הקיר. שווה יותר מכל תוכנית.</div><div style="height:12px"></div>
-${RULES.map((r,i)=>`<div class="q"><span style="color:var(--red);font-weight:800">${i+1}.</span> ${r}</div>`).join('')}`)}
+${RULES.map((r,i)=>`<div class="q"><span style="color:var(--red2);font-weight:800">${i+1}.</span> ${r}</div>`).join('')}`)}
 
 function openTips(){openSheet(`<div class="grab"></div><div class="h2">טיפים מקצועיים</div>
 <div class="sub">מה שמאמן אומר בצד ואף אחד לא כותב</div><div style="height:12px"></div>
@@ -833,7 +837,7 @@ function vGym(){const w=curW(),ids=w==='A'?WA:WB;
 return `<div class="wrap">
 <div class="row"><div><div class="h1" style="font-size:26px">אימון ${w}</div>
 <div class="sub">${w==='A'?'ברך ודחיפה':'ירך ומשיכה'}</div></div>
-<button class="act" style="flex:0 0 auto;padding:8px 14px" onclick="flip()">החלף</button></div>
+<button class="act" style="flex:0 0 auto;padding:12px 16px" onclick="flip()">החלף</button></div>
 <div class="bar"></div>
 ${progWeek()===7?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע הקלה</b>
 <p>סט אחד פחות בכל תרגיל, אותו משקל. אל תוריד במשקל.</p></div>`:''}
@@ -895,7 +899,7 @@ const w=S.cur.w;S.sessions.push(S.cur);S.cur=null;save();
 const n=S.sessions.length,st=streak();
 openSheet(`<div class="grab"></div>
 <div style="text-align:center;padding:6px 0 4px">
-<div style="font-size:44px;font-weight:900;color:var(--red);line-height:1" class="ltr">${n}</div>
+<div style="font-size:44px;font-weight:900;color:var(--red2);line-height:1" class="ltr">${n}</div>
 <div class="sub" style="margin-top:4px">האימון ה-${n} שלך</div>
 <div class="h2" style="margin-top:14px">אימון ${w} הושלם</div></div>
 <div class="stat" style="margin:16px 0 4px">
@@ -1100,7 +1104,7 @@ function nShake(){openSheet(`<div class="grab"></div><div class="h2">שייק ה
 <div class="warnbox" style="margin-top:14px"><b>למה שייק</b><p>אכילה של 600 קלוריות לוקחת 20 דקות. שתייה לוקחת 3. ביום שאין תיאבון, זה ההבדל בין לעמוד ביעד לבין לא.</p></div>`)}
 function nAppetite(){openSheet(`<div class="grab"></div><div class="h2">אין לי תיאבון</div>
 <div class="sub">שמונה דרכים שעובדות</div><div style="height:12px"></div>
-${APPETITE.map((a,i)=>`<div class="q"><span style="color:var(--red);font-weight:800">${i+1}.</span> ${a}</div>`).join('')}`)}
+${APPETITE.map((a,i)=>`<div class="q"><span style="color:var(--red2);font-weight:800">${i+1}.</span> ${a}</div>`).join('')}`)}
 function nGain(){openSheet(`<div class="grab"></div><div class="h2">כמה זו עלייה ריאלית</div>
 <div class="sub">כדי שלא תרדוף אחרי מספר לא נכון</div><div style="height:14px"></div>
 <div class="blk"><p><b>0.7 עד 1 ק״ג בחודש.</b> יותר מזה זה בעיקר שומן, וזה יאט אותך במגרש במקום לעזור.</p></div>
@@ -1120,7 +1124,7 @@ return `<div class="wrap">
 <div class="sec">משקל גוף</div>
 <button class="big" onclick="addBw()">רשום משקל היום</button>
 ${bw.length?`<div class="list" style="margin-top:10px">${bw.slice(0,12).map(b=>
-`<div class="bwrow"><span>${fmt(b.d)}</span><span style="font-weight:800;color:var(--red)"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
+`<div class="bwrow"><span>${fmt(b.d)}</span><span style="font-weight:800;color:var(--red2)"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
 <div class="sec">השיאים שלך</div>
 ${prs.length?`<div class="list">${prs.map(p=>
 `<div class="bwrow" style="align-items:center"><span>${p[0]}<div class="tiny">שיא · ${fmt(p[1].d)}</div></span>
@@ -1187,7 +1191,7 @@ return `<div class="wk">${g}</div>
 <div class="lgd" style="margin-top:6px">${ROWS.map(([n,k])=>`<span><span style="color:var(--t2);display:flex;width:15px;height:15px">${ric(k)}</span>${n}</span>`).join('')}</div>
 <div class="hist"><div class="hrow" style="border-bottom:1px solid var(--c3)">
 <span class="wl" style="font-weight:700;color:#fff">היסטוריה</span>
-<span class="fr" style="font-size:10.5px;color:var(--t3)">${ROWS.map(([n])=>`<b>${n}</b>`).join('')}</span></div>
+<span class="fr" style="font-size:10px;color:var(--t3)">${ROWS.map(([n])=>`<b>${n}</b>`).join('')}</span></div>
 ${hist}</div>`}
 
 function bkDays(){if(!S.lastBackup)return null;
@@ -1296,6 +1300,9 @@ icons:[{src:document.querySelector('link[rel="apple-touch-icon"]').href,sizes:"a
 const lk=document.createElement('link');lk.rel='manifest';
 lk.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}));
 document.head.appendChild(lk)}catch(e){}
+
+if('serviceWorker' in navigator){window.addEventListener('load',function(){
+try{navigator.serviceWorker.register('sw.js')}catch(e){}})}
 
 /* ---------- sheet + timer ---------- */
 function openSheet(h){document.getElementById('shc').innerHTML=h;document.getElementById('sh').classList.add('on')}
