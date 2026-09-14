@@ -194,6 +194,35 @@ padding:11px 6px;text-align:center;min-height:58px}
 .sg.fin{border-color:var(--gd)}
 .sg.fin b,.sg.fin i{color:var(--ok)}
 .notes{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
+.intent{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
+.intent .ih{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px;margin-bottom:8px}
+.intent .it{font-size:14.5px;line-height:1.55;color:#DCDCE0}
+.intent.on{border-color:var(--gd);background:rgba(232,194,74,.07)}
+.intent.on .ih{color:var(--ok)}
+.iact{display:flex;gap:7px;margin-top:12px}
+.iact button{flex:1;border:1px solid var(--c3);border-radius:10px;padding:12px 6px;
+font-size:13px;font-weight:700;color:var(--t2);min-height:44px}
+.iact button.go{background:var(--red);color:#fff;border-color:var(--red)}
+.dsel{display:flex;gap:5px;margin:14px 0 12px}
+.dbt{flex:1;border:1px solid var(--c2);background:var(--c1);border-radius:10px;padding:12px 0;
+font-size:14px;font-weight:700;color:var(--t2);min-height:44px}
+.dbt.on{background:var(--red);color:#fff;border-color:var(--red)}
+.srow{display:flex;width:100%;align-items:center;gap:11px;border:1px solid var(--c2);
+background:var(--c1);border-radius:11px;padding:12px 13px;margin-bottom:7px;min-height:48px;text-align:right}
+.srow .sbox{width:24px;height:24px;border-radius:7px;border:2px solid var(--c3);flex:0 0 24px;
+display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.srow.on .sbox{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
+.srow .snm{flex:1;font-size:15px;font-weight:700}
+.srow.on .snm{color:#fff}
+.ngame{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
+.ngame .ngh{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px}
+.ngame .ngt{font-size:19px;font-weight:900;margin-top:5px}
+.ngame .ngd{font-size:12px;color:var(--t2);margin-top:3px}
+.fin{width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;
+padding:13px;color:#fff;font-size:15px;min-height:48px}
+.gcard{border:1px solid var(--red);border-radius:12px;padding:13px;margin-top:12px}
+.grow{padding:11px 0;border-bottom:1px solid var(--c2)}
+.grow:last-child{border-bottom:none}
 .danger{border:1px solid #4A1512;border-radius:12px;padding:13px;margin-top:28px}
 .dtitle{font-size:11px;font-weight:800;color:#C0625C;letter-spacing:2px;margin-bottom:10px}
 .dbtn{width:100%;border:1px solid #5A1C18;border-radius:10px;padding:12px;font-size:13.5px;
@@ -488,6 +517,22 @@ const TIPS=[
 ["כשנתקעים — וזה יקרה","אם משקל לא זז שלושה אימונים ברצף: תרד 10% ותבנה חזרה. זו לא נסיגה, זו הדרך היחידה לעבור תקרה. לרוב תעבור אותה תוך שבועיים ותמשיך הלאה."],
 ["המספר היחיד שמעניין","לא כמה מרים מי שלידך. לא כמה מרים מישהו בקבוצה הראשונה. <b>כמה הרמת אתה לפני חודש.</b> זה המספר היחיד שאתה שולט בו, והוא היחיד שמעיד על משהו."]];
 
+const INTENTS=[
+["הגנה","בכל החלקה — האגן נפתח לפני הכתפיים. זה בדיוק מה שאתה עושה בבלוק הרגליים."],
+["הגנה","לסגור על הזורק בצעדים קטנים ומהירים בסוף, יד למעלה, לעצור מאוזן. לא לעוף."],
+["הגנה","לדבר כל מהלך. חסימה, החלפה, עזרה — בקול. מאמן שומע הגנה לפני שהוא רואה אותה."],
+["הגנה","כל כדור שיוצא מהחישוק — קודם מחפשים גוף לחסום, ורק אז את הכדור."],
+["הגנה","אל תיתן לו לקבל את הכדור איפה שהוא רוצה. הקרב הוא לפני המסירה, לא אחריה."],
+["הגנה","לחזור בריצה בכל מהלך. לא בהליכה, לא בחצי. סופרים את זה גם בלי להגיד לך."],
+["הגנה","ידיים למעלה כל הזמן — גם כשנגמר האוויר. זו הדקה שבה רואים מי מתאמן לבד."],
+["הגנה","להיות הראשון שקורא חסימה בקול, בכל מהלך."],
+["הגנה","בסוף כל מהלך הגנתי לדעת איפה הכדור וגם איפה השחקן שלך. לא אחד מהשניים."],
+["מאמץ","הראשון על הרצפה בכל כדור משוחרר. זה לא כישרון, זו החלטה."],
+["מאמץ","לסיים כל ריצה עד הקו. גם את האחרונה, גם כשאף אחד לא מסתכל."],
+["התקפה","המסירה שאתה רואה לפני כולם — תמסור אותה. בלי לחכות לוודא."],
+["התקפה","יד שמאל בכל הזדמנות. אימון הוא המקום היחיד שבו מותר לטעות איתה."],
+["התקפה","עצירת קפיצה במקום עוד צעד. זה מה שהופך אותך לשחקן שסומכים עליו."]];
+
 const RULES=[
 "טכניקה לפני משקל. תמיד.",
 "אף פעם לא עד כשל — תשאיר 2-3 חזרות במאגר.",
@@ -505,10 +550,28 @@ const RULES=[
 <script>
 const K='uri1';
 let dropped=0;
+const SCHED_DEF={team:[0,3,4],foot:[0,1,2,3,4,5,6],gym:[0,2,4],shot:[1,3],fuel:[0,1,2,3,4,5,6]};
+const TIME_DEF={0:'17:30-19:00',3:'19:45-21:00',4:'20:30-22:00'};
+const SKEYS=['team','gym','foot','shot','fuel'];
+const SNAME={team:'אימון קבוצה',gym:'אימון כוח',foot:'רגליים',shot:'קליעה',fuel:'אוכל'};
+let SCHED=JSON.parse(JSON.stringify(SCHED_DEF));
+function syncSched(){SKEYS.forEach(k=>{SCHED[k]=(S.sched&&Array.isArray(S.sched[k]))?S.sched[k]:SCHED_DEF[k].slice()})}
+// מה תוכנן ביום מסוים — נחתם ביום עצמו, כך ששינוי עתידי לא משכתב את העבר
+function planOf(dk,w){const p=(S.dayplan||{})[dk];
+if(p)return p;
+const o={};SKEYS.forEach(k=>o[k]=SCHED[k].includes(w));return o}
+function isPl(key,dk,w){return !!planOf(dk,w)[key]}
+function stampToday(){const k=today(),w=new Date().getDay();
+if(!S.dayplan)S.dayplan={};
+if(!S.dayplan[k]){const o={};SKEYS.forEach(x=>o[x]=SCHED[x].includes(w));S.dayplan[k]=o;save()}
+return S.dayplan[k]}
 let S=load(),tab='home',tint=null;
+syncSched();
 
 function blank(){return{sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},
-bw:[],tests:{},shop:[],start:'',footDays:[],shotDays:[],fuel:{d:'',done:[]},fuelDays:[],lastBackup:''}}
+bw:[],tests:{},shop:[],start:'',footDays:[],shotDays:[],fuel:{d:'',done:[]},fuelDays:[],
+lastBackup:'',games:[],intent:{d:'',i:-1},intentDays:[],
+sched:JSON.parse(JSON.stringify(SCHED_DEF)),times:Object.assign({},TIME_DEF),dayplan:{}}}
 function cleanLog(lg){if(!lg||typeof lg!=='object')return{};
 const out={};Object.keys(lg).forEach(k=>{if(!EX[k]||!Array.isArray(lg[k]))return;
  const v=lg[k].filter(x=>Array.isArray(x)&&x.length===2&&isFinite(x[0])&&isFinite(x[1])
@@ -517,13 +580,33 @@ const out={};Object.keys(lg).forEach(k=>{if(!EX[k]||!Array.isArray(lg[k]))return
 function normalize(o){if(!o||typeof o!=='object'||Array.isArray(o))return null;
 dropped=0;
 const A=k=>{if(!Array.isArray(o[k]))o[k]=[]};
-['sessions','bw','shop','footDays','shotDays','fuelDays'].forEach(A);
+['sessions','bw','shop','footDays','shotDays','fuelDays','games','intentDays'].forEach(A);
+o.games=o.games.filter(x=>x&&typeof x==='object'&&typeof x.d==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x.d))
+ .map(x=>({d:x.d,opp:String(x.opp||'').slice(0,40),home:x.home?1:0,
+  min:numOk(+x.min,0,60)?+x.min:0,
+  good:String(x.good||'').slice(0,90),fix:String(x.fix||'').slice(0,90),lg:x.lg?1:0}))
+ .sort((a,b)=>dnum(a.d)-dnum(b.d));
+o.games=o.games.filter((x,i,arr)=>arr.findIndex(y=>y.d===x.d)===i);
+if(!o.gsnooze||typeof o.gsnooze!=='object')o.gsnooze={};
+if(!o.intent||typeof o.intent!=='object')o.intent={d:'',i:-1};
+if(!o.sched||typeof o.sched!=='object')o.sched={};
+SKEYS.forEach(k=>{const v=o.sched[k];
+ o.sched[k]=Array.isArray(v)?[...new Set(v.filter(x=>Number.isInteger(x)&&x>=0&&x<=6))].sort()
+  :SCHED_DEF[k].slice()});
+if(!o.times||typeof o.times!=='object')o.times=Object.assign({},TIME_DEF);
+if(!o.dayplan||typeof o.dayplan!=='object')o.dayplan={};
+{const keep={},cut=Date.now()-70*864e5;
+ Object.keys(o.dayplan).forEach(k=>{if(/^\d{4}-\d{1,2}-\d{1,2}$/.test(k)&&dnum(k)>=cut
+   &&o.dayplan[k]&&typeof o.dayplan[k]==='object'){const c={};
+   SKEYS.forEach(x=>c[x]=!!o.dayplan[k][x]);keep[k]=c}});
+ o.dayplan=keep}
+if(!Number.isInteger(o.intent.i)||o.intent.i>=INTENTS.length)o.intent={d:'',i:-1};
 const n0=o.sessions.length;
 o.sessions=o.sessions.filter(x=>x&&typeof x==='object'&&x.date).map(x=>{
  x.log=cleanLog(x.log);if(x.w!=='A'&&x.w!=='B')x.w='A';return x});
 dropped+=n0-o.sessions.length;
 o.bw=o.bw.filter(x=>x&&x.d&&numOk(+x.kg,20,200)).map(x=>({d:x.d,kg:+x.kg}));
-['footDays','shotDays','fuelDays'].forEach(k=>{o[k]=o[k].filter(x=>typeof x==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x))});
+['footDays','shotDays','fuelDays','intentDays'].forEach(k=>{o[k]=o[k].filter(x=>typeof x==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x))});
 if(!o.tests||typeof o.tests!=='object')o.tests={};
 const t2={};Object.keys(o.tests).forEach(k=>{
  const id=/^\d+$/.test(k)?(TESTS[+k]||[])[0]:k;
@@ -568,22 +651,22 @@ shoot:{list:()=>S.shoot.w==='A'?SHA:SHB,day:'shotDays',name:()=>'בלוק '+S.sh
 function blkDone(key){return S[key].done.length>=BLK[key].list().length}
 function weekCount(key){const S3=sets(),days=weekDays(0),k=key==='shoot'?'shot':key;
 return{dn:days.filter(x=>!x.fut&&S3[k].has(x.k)).length,
-pl:days.filter(x=>!x.fut&&SCHED[k].includes(x.w)).length}}
+pl:days.filter(x=>!x.fut&&isPl(k,x.k,x.w)).length}}
 function gymFrac(){const k=today(),d=new Date().getDay();
-if(!SCHED.gym.includes(d))return 0;
+if(!isPl('gym',today(),d))return 0;
 if(S.sessions.some(x=>x.date===k))return 1;
 if(!S.cur||S.cur.date!==k)return 0;
 const ids=S.cur.w==='A'?WA:WB;
 const tot=ids.reduce((a,id)=>a+EX[id].s,0);
 const dn=Object.values(S.cur.log).flat().filter(Boolean).length;
 return Math.min(1,dn/tot)}
-function dayParts(){const d=new Date().getDay(),k=today(),S3=sets(),out=[];
+function dayParts(){const d=new Date().getDay(),k=today(),S3=sets(),out=[],P=stampToday();
 const F=(key,f)=>S3[key].has(k)?1:f;
-if(SCHED.foot.includes(d))out.push(['רגליים','foot',F('foot',S.foot.d===k?S.foot.done.length/todayFoot().length:0)]);
-if(SCHED.gym.includes(d))out.push(['כוח','gym',F('gym',gymFrac())]);
-if(SCHED.shot.includes(d)){const sh=shootState();
+if(P.foot)out.push(['רגליים','foot',F('foot',S.foot.d===k?S.foot.done.length/todayFoot().length:0)]);
+if(P.gym)out.push(['כוח','gym',F('gym',gymFrac())]);
+if(P.shot){const sh=shootState();
 out.push(['קליעה','shot',F('shot',sh.done.length/(sh.w==='A'?SHA:SHB).length)])}
-if(SCHED.fuel.includes(d))out.push(['אוכל','fuel',F('fuel',Math.min(1,fuelState().done.length/FUEL_GOAL))]);
+if(P.fuel)out.push(['אוכל','fuel',F('fuel',Math.min(1,fuelState().done.length/FUEL_GOAL))]);
 return out.map(x=>[x[0],x[1],Math.max(0,Math.min(1,x[2]))])}
 function dayPct(){const p=dayParts();if(!p.length)return 1;
 return p.reduce((a,x)=>a+x[2],0)/p.length}
@@ -603,7 +686,7 @@ return `<div class="ringwrap${sp}">${ring(p)}
 <div class="ringtxt">${full?'<div class="rdone">\u2713</div><div class="rlbl">יום מלא</div>'
 :`<div class="rnum${n?'':' zero'}"><span class="ltr">${n}</span><span class="rp">%</span></div><div class="rlbl">מהיום</div>`}</div></div>`}
 function todayLeft(){const d=new Date().getDay(),S3=sets(),k=today();
-return ROWS.filter(([,key])=>SCHED[key].includes(d)).filter(([,key])=>!S3[key].has(k)).map(([n])=>n)}
+return ROWS.filter(([,key])=>isPl(key,k,d)).filter(([,key])=>!S3[key].has(k)).map(([n])=>n)}
 function daysSinceBw(){if(!S.bw.length)return 99;
 return Math.floor((dnum(today())-dnum(S.bw[S.bw.length-1].d))/864e5)}
 function lastSets(id){for(let i=S.sessions.length-1;i>=0;i--){const l=S.sessions[i].log[id];
@@ -643,13 +726,13 @@ function draw(){drawNav();document.getElementById('app').innerHTML=({home:vHome,
 
 function dayDoneAll(back){const d=new Date();d.setDate(d.getDate()-back);
 const w=d.getDay(),k=dkey(d),S3=sets();
-const pl=ROWS.filter(([,key])=>SCHED[key].includes(w));
+const pl=ROWS.filter(([,key])=>isPl(key,k,w));
 return !pl.length||pl.every(([,key])=>S3[key].has(k))}
 function fullStreak(){let n=0;for(let i=1;i<=90;i++){if(dayDoneAll(i))n++;else break}return n}
 function missedYesterday(){if(!workDays())return false;
 const d=new Date();d.setDate(d.getDate()-1);
 const w=d.getDay(),k=dkey(d),S3=sets();
-const pl=ROWS.filter(([,key])=>SCHED[key].includes(w));
+const pl=ROWS.filter(([,key])=>isPl(key,k,w));
 return pl.length>0&&!pl.some(([,key])=>S3[key].has(k))}
 function workDays(){const S3=sets(),u=new Set();
 ROWS.forEach(([,k])=>S3[k].forEach(x=>u.add(x)));return u.size}
@@ -756,15 +839,94 @@ return `<div class="tdl"><div class="tdh">היום</div>
 ${rows||'<div class="allin">הכל נסגר היום. כל מה שהיה מתוכנן — בוצע.</div>'}
 ${chk}</div>`}
 
+function isTeamDay(){return isPl('team',today(),new Date().getDay())}
+function intentToday(){if(S.intent.d!==today()){
+S.intent={d:today(),i:hsh(today()+'i')%INTENTS.length};save()}
+return INTENTS[S.intent.i]}
+function shuffleIntent(){S.intent={d:today(),i:(S.intent.i+1)%INTENTS.length};save();draw()}
+function takeIntent(){mark('intentDays');save();draw();
+try{unlockAudio();winTone()}catch(e){}
+toast('נעול. תיקח את זה לאימון')}
+function intentDone(){return (S.intentDays||[]).includes(today())}
+
+function lastSat(){const d=new Date();d.setHours(0,0,0,0);
+d.setDate(d.getDate()-((d.getDay()+1)%7));return dkey(d)}
+function gameLogged(k){return (S.games||[]).some(g=>g.d===k)}
+function askGame(k){const g=(S.games||[]).find(x=>x.d===k)||{min:'',good:'',fix:''};
+gameCtx=k;
+openSheet(`<div class="grab"></div><div class="h2">משחק ${fmt(k)}</div>
+<div class="sub">שלוש שורות. זה כל מה שצריך.</div>
+<div class="num"><div><label>דקות על המגרש</label>
+<input id="gmin" type="number" inputmode="numeric" value="${g.min||''}"></div></div>
+<div style="margin-top:2px"><label style="display:block;font-size:12px;color:var(--t2);margin-bottom:5px">דבר אחד שעבד</label>
+<input id="ggood" type="text" maxlength="90" value="${esc(g.good||'')}"
+style="width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;padding:13px;color:#fff;font-size:15px"></div>
+<div style="margin-top:11px"><label style="display:block;font-size:12px;color:var(--t2);margin-bottom:5px">דבר אחד לתקן</label>
+<input id="gfix" type="text" maxlength="90" value="${esc(g.fix||'')}"
+style="width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;padding:13px;color:#fff;font-size:15px"></div>
+<button class="big" style="margin-top:14px" onclick="saveGame()">שמור</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`)}
+let gameCtx=null;
+function saveGame(){const k=gameCtx;
+const min=parseInt(document.getElementById('gmin').value);
+if(!numOk(min,0,60)){toast('כמה דקות שיחקת?');return}
+const good=document.getElementById('ggood').value.trim().slice(0,90);
+const fix=document.getElementById('gfix').value.trim().slice(0,90);
+if(!S.games)S.games=[];
+const i=S.games.findIndex(x=>x.d===k);
+const b=i>-1?S.games[i]:{opp:'',home:1};
+const rec={d:k,opp:b.opp||'',home:b.home?1:0,min,good,fix,lg:1};
+if(i>-1)S.games[i]=rec;else S.games.push(rec);
+S.games.sort((a,b)=>dnum(a.d)-dnum(b.d));
+save();closeSheet();draw();toast('נרשם');
+try{unlockAudio();winTone()}catch(e){}}
+
+function weekPR(keys){let best=null;
+Object.keys(EX).forEach(id=>{let pre=0,top=null,cnt=0;
+ S.sessions.forEach(x=>{const l=x.log[id];if(!l||!l.length)return;
+  cnt++;const b=l.reduce((a,c)=>c[0]>a[0]?c:a);
+  if(keys.includes(x.date)){if(!top||b[0]>top[0])top=b}
+  else if(b[0]>pre)pre=b[0]});
+ // שיא = הכי כבד בחלון, שגבוה ממה שהיה לפניו, ורק אם עשה את התרגיל יותר מפעם אחת
+ if(top&&cnt>=2&&top[0]>pre&&(!best||top[0]>best.kg))
+  best={n:EX[id].n,kg:top[0],rp:top[1]}});
+return best}
+
+function last7(){const t=new Date();t.setHours(0,0,0,0);
+return Array.from({length:7},(_,i)=>{const d=new Date(t);d.setDate(d.getDate()-6+i);
+return{k:dkey(d),w:d.getDay()}})}
+function weekReport(){const S3=sets(),days=last7(),ks=days.map(x=>x.k);
+const c=k=>({dn:days.filter(x=>S3[k].has(x.k)).length,pl:days.filter(x=>isPl(k,x.k,x.w)).length});
+const g=c('gym'),f=c('foot'),sh=c('shot'),fu=c('fuel');
+const L=['אורי · שבוע '+progWeek()+' מתוך 12',''];
+L.push('כוח '+g.dn+'/'+g.pl+' · רגליים '+f.dn+'/'+f.pl+' · קליעה '+sh.dn+'/'+sh.pl+' · אוכל '+fu.dn+'/'+fu.pl);
+if(S.bw.length){const n=S.bw[S.bw.length-1].kg;
+ let t='משקל '+n+' ק״ג';
+ if(S.bw.length>1){const d=Math.round((n-S.bw[0].kg)*10)/10;t+=' ('+(d>=0?'+':'')+d+' מאז ההתחלה)'}
+ L.push(t)}
+const pr=weekPR(ks);
+if(pr)L.push('שיא חדש · '+pr.n+' '+pr.kg+'×'+pr.rp);
+const it=days.filter(x=>(S.intentDays||[]).includes(x.k)).length;
+if(it)L.push('כוונה לאימון קבוצה · '+it+' מתוך '+days.filter(x=>isPl('team',x.k,x.w)).length);
+(S.games||[]).filter(x=>ks.includes(x.d)).forEach(x=>{
+ L.push('','משחק '+fmt(x.d)+' · '+x.min+' דקות');
+ if(x.good)L.push('\u2713 '+x.good);
+ if(x.fix)L.push('\u2192 '+x.fix)});
+L.push('',fmt(ks[0])+' \u2013 '+fmt(ks[6]));
+return L.join('\n')}
+
+function sendReport(){const t=weekReport();
+if(navigator.share){navigator.share({text:t}).catch(()=>{});return}
+try{navigator.clipboard.writeText(t).then(()=>toast('הועתק — תדביק בוואטסאפ'),()=>fallbackCopy(t,()=>{}))}
+catch(e){fallbackCopy(t,()=>{})}}
+function openReport(){openSheet(`<div class="grab"></div><div class="h2">הסיכום השבועי</div>
+<div class="sub">זה מה שיישלח</div>
+<div class="card" style="margin-top:14px;white-space:pre-line;font-size:14px;line-height:1.7;color:#D8D8DC">${esc(weekReport())}</div>
+<button class="big" style="margin-top:12px" onclick="sendReport()">שלח</button>
+<button class="ghost" onclick="closeSheet()">סגור</button>`)}
+
 /* ---------- home ---------- */
-const PLAN=[['אימון קבוצה + כוח','ולפני זה: רגליים 13 דקות'],
-['יום אישי','רגליים + קליעה + כדרור'],
-['אימון קבוצה + כוח','ולפני זה: רגליים 13 דקות'],
-['יום אישי','רגליים + קליעה + כדרור'],
-['אימון קבוצה + כוח','ולפני זה: רגליים 13 דקות'],
-['יום מנוחה','4 דקות רגליים קלות ואוכל. שום עומס.'],
-['משחק','תראה להם']];
-function vHome(){const d=new Date(),p=PLAN[d.getDay()];
+function vHome(){const d=new Date(),p=planText();
 const bw=S.bw.length?S.bw[S.bw.length-1].kg:'—';
 const open=S.cur?Object.values(S.cur.log).flat().filter(Boolean).length:0;
 const last=S.sessions.length?S.sessions[S.sessions.length-1]:null;
@@ -776,7 +938,7 @@ return `<div class="wrap">
 <div class="bar"></div>
 <div class="today">${dayRing()}
 <div class="tx"><div style="font-size:17px;font-weight:800">${p[0]}</div>
-<div class="sub" style="margin-top:2px">${p[1]}</div>
+${p[1]?`<div class="sub" style="margin-top:2px">${p[1]}</div>`:''}
 </div></div>
 <div class="stat">
 <div><div class="v ltr">${workDays()}</div><div class="k">ימי אימון</div></div>
@@ -784,7 +946,12 @@ return `<div class="wrap">
 <div><div class="v ltr">${bw}</div><div class="k">משקל ק״ג</div></div>
 </div></div>
 <div class="mot">${motiv()}</div>
+${gamePrompt()}
+${nextGameCard()}
 ${todayList()}
+${intentCard()}
+<div style="text-align:center;margin-top:12px">
+<button class="tiny" style="color:var(--t3);text-decoration:underline;padding:12px 16px;min-height:44px" onclick="openToday()">היום זה לא מתאים</button></div>
 ${daysSinceBw()>=7?`<div class="warnbox" style="margin-bottom:10px"><b>${S.bw.length?'לא נשקלת שבוע':'עוד לא נשקלת'}</b>
 <p>משקל הגוף הוא המספר הכי חשוב במטרה שלך, והוא היחיד שקל לשכוח. בוקר, לפני אוכל.
 <button onclick="addBw()" style="color:var(--red2);font-weight:700;text-decoration:underline">תרשום עכשיו</button></p></div>`:''}
@@ -806,6 +973,130 @@ ${last?`<div class="tiny" style="text-align:center;margin-top:10px">האימון
 <button class="mini" onclick="openTips()">טיפים מקצועיים</button>
 </div>
 </div>`}
+
+function gamePrompt(){const g=pendingGame();if(!g)return '';
+return `<div class="gcard">
+<div class="nm">המשחק מ-${fmt(g.d)}${g.opp?' מול '+esc(g.opp):''}</div>
+<div class="cue" style="margin-top:4px">שלוש שורות כשנוח לך. לא חייב עכשיו.</div>
+<div class="iact" style="margin-top:11px">
+<button onclick="snoozeGame('${g.d}')">אחר כך</button>
+<button class="go" onclick="askGame('${g.d}')">תרשום</button></div></div>`}
+
+function nextGameCard(){const g=nextGame();if(!g)return '';
+const n=Math.round((dnum(g.d)-dnum(today()))/864e5);
+const when=n===0?'היום':(n===1?'מחר':'בעוד '+n+' ימים');
+return `<div class="ngame" onclick="editGame('${g.d}')">
+<div class="ngh">המשחק הבא</div>
+<div class="ngt">${when}${g.opp?' · '+esc(g.opp):''}</div>
+<div class="ngd">${fmt(g.d)} · ${g.home?'בית':'חוץ'}</div></div>`}
+
+function planText(){const P=stampToday(),d=new Date().getDay(),t=(S.times||{})[d];
+const g=(S.games||[]).find(x=>x.d===today());
+if(g)return ['משחק'+(g.opp?' מול '+esc(g.opp):''),'תראה להם'];
+const main=[];
+if(P.team)main.push('אימון קבוצה');
+if(P.gym)main.push('אימון כוח');
+if(P.shot)main.push('קליעה');
+const sub=[];
+if(P.team&&t)sub.push('<span class="ltr">'+esc(t)+'</span>');
+if(P.foot)sub.push('רגליים');
+if(P.fuel&&!main.length)sub.push('אוכל');
+if(!main.length)return [P.foot?'יום קל':'מנוחה מלאה',sub.join(' · ')||'כלום מתוכנן היום'];
+return [main.join(' + '),sub.join(' · ')]}
+
+function intentCard(){if(!isTeamDay())return '';
+const it=intentToday(),on=intentDone();
+return `<div class="intent ${on?'on':''}">
+<div class="ih">${on?'\u2713 הכוונה שלך להיום':'הכוונה להיום · '+it[0]}</div>
+<div class="it">${it[1]}</div>
+${on?'':`<div class="iact">
+<button onclick="shuffleIntent()">כוונה אחרת</button>
+<button class="go" onclick="takeIntent()">לוקח את זה</button></div>`}</div>`}
+
+let schDay=0;
+function openSched(){schDay=new Date().getDay();drawSched()}
+function drawSched(){const d=schDay;
+openSheet(`<div class="grab"></div><div class="h2">המערכת שלי</div>
+<div class="sub">מה יש בכל יום. שינוי תופס מהיום והלאה — מה שכבר נרשם לא משתנה.</div>
+<div class="dsel">${DL.map((n,i)=>`<button class="dbt ${i===d?'on':''}" onclick="schPick(${i})">${n}</button>`).join('')}</div>
+${SKEYS.map(k=>{const on=SCHED[k].includes(d);
+return `<button class="srow ${on?'on':''}" onclick="schTog('${k}')">
+<span class="sbox">${on?'\u2713':''}</span><span class="snm">${SNAME[k]}</span></button>`}).join('')}
+${SCHED.team.includes(d)?`<div style="margin-top:12px">
+<label style="display:block;font-size:12px;color:var(--t2);margin-bottom:5px">שעת אימון הקבוצה</label>
+<input class="fin" id="stime" type="text" value="${esc((S.times||{})[d]||'')}" placeholder="17:30-19:00"
+onchange="schTime(this.value)" style="direction:ltr;text-align:center"></div>`:''}
+<button class="big" style="margin-top:14px" onclick="closeSheet()">סיימתי</button>`)}
+function schPick(i){schDay=i;drawSched()}
+function schTog(k){const a=S.sched[k]||[],i=a.indexOf(schDay);
+i<0?a.push(schDay):a.splice(i,1);a.sort((x,y)=>x-y);
+S.sched[k]=a;syncSched();
+const t=today();
+if(schDay===new Date().getDay()&&S.dayplan&&S.dayplan[t])S.dayplan[t][k]=a.includes(schDay);
+save();drawSched();draw()}
+function schTime(v){if(!S.times)S.times={};S.times[schDay]=String(v).slice(0,20);save();draw()}
+
+function openToday(){const P=stampToday();
+openSheet(`<div class="grab"></div><div class="h2">היום זה לא מתאים</div>
+<div class="sub">שינוי להיום בלבד. המערכת הקבועה נשארת כמו שהיא.</div>
+<div style="height:14px"></div>
+${SKEYS.map(x=>{const on=!!P[x];
+return `<button class="srow ${on?'on':''}" onclick="togToday('${x}')">
+<span class="sbox">${on?'\u2713':''}</span><span class="snm">${SNAME[x]}</span></button>`}).join('')}
+<button class="ghost" style="margin-top:12px" onclick="resetToday()">חזרה למערכת הקבועה</button>
+<button class="big" style="margin-top:8px" onclick="closeSheet()">סיימתי</button>`)}
+function togToday(x){const k=today();stampToday();
+S.dayplan[k][x]=!S.dayplan[k][x];save();draw();openToday()}
+function resetToday(){const k=today();
+if(S.dayplan)delete S.dayplan[k];stampToday();save();draw();openToday()}
+
+/* ---------- משחקים ---------- */
+function fromISO(v){const q=String(v).split('-');
+return q.length===3&&q[0].length===4?(+q[0])+'-'+(+q[1])+'-'+(+q[2]):''}
+function toISO(k){const q=String(k).split('-');
+return q.length===3?q[0]+'-'+String(+q[1]).padStart(2,'0')+'-'+String(+q[2]).padStart(2,'0'):''}
+function nextGame(){const t=dnum(today());
+return (S.games||[]).filter(g=>dnum(g.d)>=t&&!g.lg).sort((a,b)=>dnum(a.d)-dnum(b.d))[0]||null}
+function pendingGame(){const t=dnum(today());
+return (S.games||[]).filter(g=>dnum(g.d)<=t&&!g.lg)
+ .filter(g=>{const z=(S.gsnooze||{})[g.d];return !z||dnum(z)<=t})
+ .sort((a,b)=>dnum(b.d)-dnum(a.d))[0]||null}
+function snoozeGame(k){if(!S.gsnooze)S.gsnooze={};
+const d=new Date();d.setDate(d.getDate()+1);
+S.gsnooze[k]=dkey(d);save();closeSheet();draw();toast('נזכיר לך מחר')}
+function editGame(k){const g=(S.games||[]).find(x=>x.d===k)||{d:k,opp:'',home:1};
+gameCtx=k;
+openSheet(`<div class="grab"></div><div class="h2">${(S.games||[]).some(x=>x.d===k)?'עריכת משחק':'משחק חדש'}</div>
+<div class="sub">מתי, מול מי, ואיפה</div><div style="height:14px"></div>
+<label style="display:block;font-size:12px;color:var(--t2);margin-bottom:5px">תאריך</label>
+<input class="fin" id="gdate" type="date" value="${toISO(g.d)}" style="direction:ltr">
+<label style="display:block;font-size:12px;color:var(--t2);margin:11px 0 5px">מול מי</label>
+<input class="fin" id="gopp" type="text" maxlength="40" value="${esc(g.opp||'')}" placeholder="שם הקבוצה">
+<div class="iact" style="margin-top:11px">
+<button id="gaway" class="${g.home?'':'go'}" onclick="setHome(0)">חוץ</button>
+<button id="ghome" class="${g.home?'go':''}" onclick="setHome(1)">בית</button></div>
+<button class="big" style="margin-top:14px" onclick="saveFixture()">שמור</button>
+${(S.games||[]).some(x=>x.d===k)?`<button class="ghost" onclick="delGame('${k}')">מחק את המשחק</button>`:
+`<button class="ghost" onclick="closeSheet()">ביטול</button>`}`);
+homeSel=g.home?1:0}
+let homeSel=1;
+function setHome(v){homeSel=v;
+const a=document.getElementById('gaway'),h=document.getElementById('ghome');
+if(a)a.className=v?'':'go'; if(h)h.className=v?'go':''}
+function saveFixture(){const iso=document.getElementById('gdate').value;
+const d=fromISO(iso);
+if(!d){toast('בחר תאריך');return}
+const opp=document.getElementById('gopp').value.trim().slice(0,40);
+if(!S.games)S.games=[];
+const old=gameCtx,i=S.games.findIndex(x=>x.d===old);
+const base=i>-1?S.games[i]:{min:0,good:'',fix:'',lg:0};
+const rec={d,opp,home:homeSel?1:0,min:base.min||0,good:base.good||'',fix:base.fix||'',lg:base.lg||0};
+if(i>-1)S.games.splice(i,1);
+const j=S.games.findIndex(x=>x.d===d);
+if(j>-1)S.games[j]=rec;else S.games.push(rec);
+S.games.sort((a,b)=>dnum(a.d)-dnum(b.d));
+save();closeSheet();draw();toast('נשמר')}
+function delGame(k){S.games=(S.games||[]).filter(x=>x.d!==k);save();closeSheet();draw();toast('המשחק נמחק')}
 
 function openWeek6(){openSheet(`<div class="grab"></div><div class="h2">שבוע 6 — מודדים ומחליטים</div>
 <div class="sub">ארבעה מספרים מול היום הראשון</div><div style="height:14px"></div>
@@ -1119,8 +1410,26 @@ return `<div class="wrap">
 <div class="stat"><div><div class="v ltr">${S.sessions.length}</div><div class="k">אימונים</div></div>
 <div><div class="v ltr">${streak()}</div><div class="k">רצף</div></div>
 <div><div class="v ltr">${S.bw.length?S.bw[S.bw.length-1].kg:'—'}</div><div class="k">משקל</div></div></div>
+<div class="sec">הסיכום השבועי</div>
+<div class="card"><div class="cue">כל מה שקרה השבוע, בהודעה אחת לוואטסאפ.</div>
+<div class="acts" style="margin-top:11px">
+<button class="act" onclick="openReport()">תצוגה מקדימה</button>
+<button class="act solid" onclick="sendReport()">שלח</button></div></div>
 <div class="sec">השבוע הזה</div>
 <div class="card">${calHTML()}</div>
+<div class="sec">משחקים</div>
+${(S.games||[]).length?`<div class="list">${[...S.games].reverse().slice(0,8).map(g=>
+`<div class="grow"><div class="row" style="align-items:baseline">
+<span style="font-weight:700">${fmt(g.d)}</span>
+<span style="font-weight:800;color:var(--ok)"><span class="ltr">${g.min}</span> דק׳</span></div>
+${g.good?`<div class="cue" style="margin-top:5px">\u2713 ${esc(g.good)}</div>`:''}
+${g.fix?`<div class="cue" style="margin-top:2px">\u2192 ${esc(g.fix)}</div>`:''}</div>`).join('')}</div>`
+:'<div class="card"><div class="cue">אין עדיין משחקים רשומים. המשחק הוא הדבר היחיד שקובע אם אתה עולה קבוצה — כדאי לתעד אותו.</div></div>'}
+<button class="big" onclick="editGame(today())">הוסף משחק</button>
+<div class="sec">המערכת שלי</div>
+<div class="card"><div class="cue">${SKEYS.filter(k=>SCHED[k].length&&k!=='fuel'&&k!=='foot')
+.map(k=>SNAME[k]+': '+SCHED[k].map(i=>DL[i]).join(' ')).join('<br>')}</div></div>
+<button class="ghost" onclick="openSched()">ערוך את המערכת</button>
 <div class="sec">משקל גוף</div>
 <button class="big" onclick="addBw()">רשום משקל היום</button>
 ${bw.length?`<div class="list" style="margin-top:10px">${bw.slice(0,12).map(b=>
@@ -1151,7 +1460,7 @@ ${bkNote()}</div>
 <button class="dbtn" onclick="delLast()">מחק את האימון האחרון</button>
 <button class="dbtn" onclick="wipe()">מחק את כל הנתונים</button></div>
 </div>`}
-const SCHED={foot:[0,1,2,3,4,5,6],gym:[0,2,4],shot:[1,3],fuel:[0,1,2,3,4,5,6]};
+
 const DL=['א','ב','ג','ד','ה','ו','ש'];
 function dkey(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function sets(){return{foot:new Set(S.footDays||[]),gym:new Set(S.sessions.map(x=>x.date)),shot:new Set(S.shotDays||[]),fuel:new Set(S.fuelDays||[])}}
@@ -1172,14 +1481,14 @@ let g='<div class="hd"></div>'+wk.map(x=>`<div class="hd ${x.today?'now':''}">${
 for(const [lbl,key] of ROWS){
  g+=`<div class="rl">${ric(key)}</div>`;
  g+=wk.map(x=>{const t=x.today?' now':'';
-  if(!SCHED[key].includes(x.w))return `<div class="c off${t}"></div>`;
+  if(!isPl(key,x.k,x.w))return `<div class="c off${t}"></div>`;
   if(S3[key].has(x.k))return `<div class="c on${t}"></div>`;
   if(x.fut||x.today)return `<div class="c wait${t}"></div>`;
   return `<div class="c${t}"></div>`}).join('')}
 
 const hist=[1,2,3,4].map(b=>{const days=weekDays(b);
  const f=ROWS.map(([,key])=>{
-  const pl=days.filter(x=>!x.fut&&SCHED[key].includes(x.w)).length;
+  const pl=days.filter(x=>!x.fut&&isPl(key,x.k,x.w)).length;
   const dn=days.filter(x=>!x.fut&&S3[key].has(x.k)).length;
   return{dn,pl}});
  const lbl=b===1?'שבוע שעבר':'לפני '+b+' שבועות';
@@ -1223,7 +1532,7 @@ try{const raw=JSON.parse(document.getElementById('imp').value);
 if(!raw||!Array.isArray(raw.sessions))throw 0;
 const o=normalize(raw);if(!o)throw 0;
 const d=dropped;
-S=o;save();closeSheet();draw();
+S=o;syncSched();save();closeSheet();draw();
 toast('שוחזרו '+S.sessions.length+' אימונים'+(d?' · '+d+' רשומות פגומות נוקו':''))}
 catch(e){S=JSON.parse(prev);toast('הטקסט לא תקין')}}
 
@@ -1258,7 +1567,7 @@ function wipe(){openSheet(`<div class="grab"></div><div class="h2">למחוק א
 <div class="sub">כל האימונים, המשקלים והמבחנים. אין דרך חזרה.</div><div style="height:16px"></div>
 <button class="big" onclick="doWipe()">כן, מחק הכל</button>
 <button class="ghost" onclick="closeSheet()">ביטול</button>`)}
-function doWipe(){localStorage.removeItem(K);S=load();closeSheet();draw();toast('הכל נמחק')}
+function doWipe(){localStorage.removeItem(K);S=load();syncSched();closeSheet();draw();toast('הכל נמחק')}
 function delLast(){if(!S.sessions.length){toast('אין אימונים');return}
 const l=S.sessions[S.sessions.length-1];
 openSheet(`<div class="grab"></div><div class="h2">למחוק את האימון האחרון?</div>
