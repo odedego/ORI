@@ -298,8 +298,10 @@ window.__crash=function(msg){
   ta.focus();ta.select();this.textContent='הועתק — תשלח את זה עכשיו'};
  d.querySelector('#cAgain').onclick=function(){location.reload()};
 };
-window.onerror=function(m){window.__crash(m);return false};
-window.addEventListener('unhandledrejection',function(e){window.__crash(e.reason)});
+function up(){var a=document.getElementById('app');return !!(a&&a.innerHTML&&a.innerHTML.length>200)}
+window.onerror=function(m){if(!up())window.__crash(m);return false};
+/* הבטחה שנדחית (שמע, נעילת מסך, רישום SW) היא לא תקלה שמצדיקה לחסום את המסך */
+window.addEventListener('unhandledrejection',function(e){if(e&&e.preventDefault)e.preventDefault()});
 setTimeout(function(){
  var a=document.getElementById('app');
  if(a&&!a.innerHTML)window.__crash('האפליקציה לא עלתה');},2500);
@@ -1583,7 +1585,7 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 if(TT)clearTimeout(TT);TT=setTimeout(()=>t.classList.remove('on'),2400)}
 let AC=null;
 function unlockAudio(){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();
-if(AC.state==='suspended')AC.resume()}catch(e){}}
+if(AC.state==='suspended'){const r=AC.resume();if(r&&r.catch)r.catch(()=>{})}}catch(e){}}
 function tone(f,t0,dur,vol){const o=AC.createOscillator(),g=AC.createGain();
 o.type='sine';o.frequency.value=f;o.connect(g);g.connect(AC.destination);
 g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+0.015);
@@ -1611,14 +1613,14 @@ lk.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/man
 document.head.appendChild(lk)}catch(e){}
 
 if('serviceWorker' in navigator){window.addEventListener('load',function(){
-try{navigator.serviceWorker.register('sw.js')}catch(e){}})}
+try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}})}
 
 /* ---------- sheet + timer ---------- */
 function openSheet(h){document.getElementById('shc').innerHTML=h;document.getElementById('sh').classList.add('on')}
 function closeSheet(){document.getElementById('sh').classList.remove('on')}
 let tEnd=0, tLead=0, tLbl='מנוחה', lastN=-1, WL=null;
 async function lockScreen(){try{if('wakeLock' in navigator)WL=await navigator.wakeLock.request('screen')}catch(e){}}
-function unlockScreen(){try{if(WL){WL.release();WL=null}}catch(e){}}
+function unlockScreen(){try{if(WL){const r=WL.release();if(r&&r.catch)r.catch(()=>{});WL=null}}catch(e){}}
 function paintT(){const el=document.getElementById('tm'),now=Date.now();
 if(tLead){const n=Math.ceil((tLead-now)/1000);
  if(n>0){if(n!==lastN){lastN=n;tick(n)}
