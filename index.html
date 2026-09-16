@@ -65,7 +65,7 @@ font-size:12px;font-weight:500;color:var(--t2)}
 .act:active{background:var(--c2)}
 .act.solid{background:var(--red);color:#fff;border-color:var(--red2);font-weight:700}
 
-.chk{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--c2);font-size:15px}
+.chk{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--c2);font-size:15px;min-height:48px}
 .chk:last-child{border-bottom:none}
 .box{width:24px;height:24px;border-radius:7px;border:2px solid var(--c3);flex:0 0 24px;
 display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900}
@@ -196,6 +196,8 @@ color:var(--t2);margin:16px 0 8px}
 .fxcue{font-size:13px;color:var(--t2);margin-top:6px;line-height:1.45}
 .fxtar{font-size:27px;font-weight:900;color:var(--red2);margin-top:11px;
 direction:ltr;text-align:right;letter-spacing:-.5px}
+.stall{margin-top:9px;border-right:2px solid var(--gd);padding:7px 10px 7px 0;
+font-size:12.5px;line-height:1.45;color:var(--t2)}
 .fxnav{display:flex;gap:7px;margin-top:11px}
 .fxnav button{flex:1;border:1px solid var(--c3);border-radius:11px;padding:13px 6px;
 font-size:14px;font-weight:700;color:var(--t2);min-height:48px}
@@ -210,7 +212,6 @@ padding:11px 6px;text-align:center;min-height:58px}
 .sg.on{border-color:var(--red2);background:#1C1416}
 .sg.on b{color:#fff}
 .sg.on i{color:var(--red2)}
-.sg.dim{opacity:.55}
 .sg.fin{border-color:var(--gd)}
 .sg.fin b,.sg.fin i{color:var(--ok)}
 .notes{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
@@ -247,6 +248,39 @@ font-size:13px;font-weight:700;color:var(--t2);min-height:46px}
 .foc .fh{font-size:11px;font-weight:800;color:var(--ok);letter-spacing:2px}
 .foc .ft{font-size:17px;font-weight:900;margin-top:5px}
 .foc .fs{font-size:12px;color:var(--t2);margin-top:4px}
+/* ---------- שינה ---------- */
+.slp{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
+.slp.on{border-color:var(--gd);background:rgba(232,194,74,.07)}
+.slp .slh{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px}
+.slp.on .slh{color:var(--ok)}
+.slb{display:flex;gap:6px;margin-top:11px}
+.slb button{flex:1 1 0;min-width:0;border:1px solid var(--c3);background:var(--c1);
+border-radius:11px;min-height:52px;font-size:20px;font-weight:900;color:#fff}
+.slb button:active{background:var(--red);border-color:var(--red)}
+.slb button.on{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
+.slr{display:flex;align-items:center;gap:11px;margin-top:9px}
+.slv{flex:0 0 auto;font-size:38px;font-weight:900;line-height:1;color:var(--ok)}
+.slm{flex:1 1 auto;min-width:0;font-size:13px;font-weight:700;color:var(--t2)}
+.sle{flex:0 0 auto;border:1px solid var(--c3);border-radius:9px;padding:0 13px;
+min-height:44px;font-size:12px;font-weight:700;color:var(--t2)}
+.slc{margin-top:16px}
+/* שורת העמודות היא מיכל בגובה קבוע ומדויק, כדי שקו היעד יישען על מספר
+   ידוע ולא על ניחוש של גובה התווית שמתחתיו. */
+.slbars{position:relative;display:flex;gap:6px;align-items:flex-end;height:84px}
+.slbar{flex:1 1 0;min-width:0;height:100%;border-radius:7px;background:var(--c2);
+display:flex;align-items:flex-end;overflow:hidden}
+.slbar i{display:block;width:100%;border-radius:7px}
+.slbar i.ok{background:var(--gsolid)}
+/* לילה קצר נראה — הוא פשוט לא זוהר. אפור ולא אדום: אין כאן כישלון לסמן. */
+.slbar i.low{background:#6E6E73}
+.slbar i.none,.slbar i.fut{background:transparent}
+.sldls{display:flex;gap:6px;margin-top:6px}
+.sldl{flex:1 1 0;min-width:0;text-align:center;font-size:11px;font-weight:700;color:var(--t3)}
+.sldl.t{color:#fff}
+.sltg{position:absolute;right:0;left:0;bottom:calc(84px*.8);height:1px;
+background:var(--red);opacity:.6;pointer-events:none}
+.sltg span{position:absolute;right:0;top:-7px;font-size:10px;font-weight:800;
+color:var(--red2);background:var(--c1);padding:0 4px;border-radius:3px}
 .ngame{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
 .ngame .ngh{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px}
 .ngame .ngt{font-size:19px;font-weight:900;margin-top:5px}
@@ -482,9 +516,9 @@ const FOOT=[
 const FOOT_LIGHT=FOOT.filter(x=>x[4]);
 // יום קל = שישי, היום שלפני משחק, או היום שאחרי משחק.
 // אותם שני תרגילים ללא קפיצות ונחיתות — המנגנון שכבר קיים, רק בהקשר רחב יותר.
-function shiftKey(n){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);return dkey(d)}
+function shiftKey(n){const d=nowD();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);return dkey(d)}
 function gameOn(k){return (S.games||[]).some(g=>g.d===k)}
-function lightWhy(){if(new Date().getDay()===5)return 'fri';
+function lightWhy(){if(nowD().getDay()===5)return 'fri';
 if(gameOn(shiftKey(1)))return 'pre';
 if(gameOn(shiftKey(-1)))return 'post';
 return ''}
@@ -610,9 +644,30 @@ const RULES=[
 const K='uri1';
 let dropped=0;
 let S=null,tab='home',tint=null;
+/* הסטת תאריך לבדיקות בלבד. יושבת ב-sessionStorage ולא ב-localStorage:
+   היא מתאדה כשסוגרים את הלשונית, ולכן לא יכולה להיתקע אצל אורי. */
+let DEVOFF=0;
+try{DEVOFF=parseInt(sessionStorage.getItem('uridev')||'0',10)||0}catch(e){DEVOFF=0}
+if(!Number.isInteger(DEVOFF)||Math.abs(DEVOFF)>400)DEVOFF=0;
+function nowD(){const d=new Date();if(DEVOFF)d.setDate(d.getDate()+DEVOFF);return d}
 const SCHED_DEF={team:[0,3,4],foot:[0,1,2,3,4,5,6],gym:[0,2,4],shot:[1,3],fuel:[0,1,2,3,4,5,6]};
 const TIME_DEF={0:'17:30-19:00',3:'19:45-21:00',4:'20:30-22:00'};
 const SKEYS=['team','gym','foot','shot','fuel'];
+/* שינה — חמישה דליים במקום מקלדת. בן 14 ב-6:45 בבוקר לא מקליד "7.5".
+   מפתח יציב ולא אינדקס, כדי ששינוי בטבלה לא יעוות נתונים ישנים. */
+const SLEEPB=[['s5',5,'חמש שעות ומטה'],['s6',6,'בערך שש שעות'],
+['s7',7,'בערך שבע שעות'],['s8',8,'בערך שמונה שעות'],['s9',9,'תשע שעות ומעלה']];
+const SLEEP_OK=8;
+const SLEEP_MSG={
+s5:'נרשם. זה סתם לילה אחד — אל תעשה ממנו שניים.',
+s6:'נרשם. שעתיים מתחת למה שהגוף צריך כדי לבנות.',
+s7:'נרשם. עוד שעה אחת ואתה בטווח.',
+s8:'נרשם. זה הלילה שבונה.',
+s9:'נרשם. ככה נראה לילה שעושה את העבודה.'};
+let sleepPop=0;
+// הסדר ההיסטורי של TESTS, לפני שנוספה הקפיצה האנכית בראש הרשימה.
+// נתונים ישנים נשמרו לפי מיקום — בלי המפה הזו הם היו ממופים למבחן הלא נכון.
+const TID_LEGACY=['shotCatch','shotDrib','ft','stop','slide','dribL'];
 const SNAME={team:'אימון קבוצה',gym:'אימון כוח',foot:'רגליים',shot:'קליעה',fuel:'אוכל'};
 let SCHED=JSON.parse(JSON.stringify(SCHED_DEF));
 function syncSched(){SKEYS.forEach(k=>{SCHED[k]=(S.sched&&Array.isArray(S.sched[k]))?S.sched[k]:SCHED_DEF[k].slice()})}
@@ -621,7 +676,7 @@ function planOf(dk,w){const p=(S.dayplan||{})[dk];
 if(p)return p;
 const o={};SKEYS.forEach(k=>o[k]=SCHED[k].includes(w));return o}
 function isPl(key,dk,w){return !!planOf(dk,w)[key]}
-function stampToday(){const k=today(),w=new Date().getDay();
+function stampToday(){const k=today(),w=nowD().getDay();
 if(!S.dayplan)S.dayplan={};
 if(!S.dayplan[k]){const o={};SKEYS.forEach(x=>o[x]=SCHED[x].includes(w));S.dayplan[k]=o;save()}
 return S.dayplan[k]}
@@ -630,7 +685,8 @@ function blank(){return{sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'
 bw:[],tests:{},shop:[],start:'',footDays:[],shotDays:[],fuel:{d:'',done:[]},fuelDays:[],
 lastBackup:'',games:[],intent:{d:'',i:-1},intentDays:[],
 sched:JSON.parse(JSON.stringify(SCHED_DEF)),times:Object.assign({},TIME_DEF),dayplan:{},
-gsnooze:{},gskip:{},focus:{c:'',since:'',hits:0},coach:{asked:'',txt:''},focusLog:[],weeks:[],rounds:[]}}
+gsnooze:{},gskip:{},focus:{c:'',since:'',hits:0},coach:{asked:'',txt:''},focusLog:[],weeks:[],rounds:[],
+why:'',ht:[],photos:[],miles:[],freeze:{},sleep:[]}}
 function cleanLog(lg){if(!lg||typeof lg!=='object')return{};
 const out={};Object.keys(lg).forEach(k=>{if(!EX[k]||!Array.isArray(lg[k]))return;
  const v=lg[k].filter(x=>Array.isArray(x)&&x.length===2&&isFinite(x[0])&&isFinite(x[1])
@@ -644,8 +700,12 @@ o.games=o.games.filter(x=>x&&typeof x==='object'&&typeof x.d==='string'&&/^\d{4}
  .map(x=>({d:x.d,opp:String(x.opp||'').slice(0,40),home:x.home?1:0,
   mb:Number.isInteger(x.mb)&&x.mb>=0&&x.mb<=4?x.mb
     :(numOk(+x.min,0,60)?(+x.min===0?0:(+x.min<=5?1:(+x.min<=10?2:(+x.min<=20?3:4)))):0),
-  good:String(x.good||'').slice(0,40),fix:String(x.fix||'').slice(0,40),
-  note:String(x.note||'').slice(0,90),saw:String(x.saw||'').slice(0,40),
+  good:CHIPS.some(c=>c[0]===x.good)?x.good:'',
+  fix:CHIPS.some(c=>c[0]===x.fix)?x.fix:'',
+  saw:CHIPS.some(c=>c[0]===x.saw)?x.saw:'',
+  // טקסט חופשי מהגרסה הישנה נשמר כהערה במקום להיעלם מהתצוגה
+  note:[x.note,CHIPS.some(c=>c[0]===x.good)?'':x.good,CHIPS.some(c=>c[0]===x.fix)?'':x.fix]
+   .filter(Boolean).join(' · ').slice(0,90),
   prev:['y','n','na'].includes(x.prev)?x.prev:'',lg:x.lg?1:0}))
  .sort((a,b)=>dnum(a.d)-dnum(b.d));
 o.games=o.games.filter((x,i,arr)=>arr.findIndex(y=>y.d===x.d)===i);
@@ -658,14 +718,25 @@ if(!o.gskip||typeof o.gskip!=='object')o.gskip={};
 if(!o.focus||typeof o.focus!=='object')o.focus={c:'',since:'',hits:0};
 if(!CHIPS.some(c=>c[0]===o.focus.c))o.focus={c:'',since:'',hits:0};
 if(!Number.isInteger(o.focus.hits)||o.focus.hits<0)o.focus.hits=0;
+o.why=String(o.why||'').slice(0,160);
+if(!Array.isArray(o.ht))o.ht=[];
+o.ht=o.ht.filter(x=>x&&typeof x.d==='string'&&numOk(+x.cm,120,220)).map(x=>({d:x.d,cm:+x.cm})).slice(-24);
+if(!Array.isArray(o.photos))o.photos=[];
+o.photos=o.photos.filter(x=>x&&typeof x.d==='string'&&typeof x.src==='string'&&x.src.startsWith('data:image')).slice(-6);
+if(!Array.isArray(o.miles))o.miles=[];
+o.miles=o.miles.filter(x=>x&&typeof x.k==='string'&&typeof x.d==='string').slice(-40);
+/* שינה — לילה אחד ליום, מפתח דלי מוכר בלבד, 90 יום אחורה. */
+if(!Array.isArray(o.sleep))o.sleep=[];
+o.sleep=o.sleep.filter(x=>x&&typeof x==='object'&&typeof x.d==='string'
+  &&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x.d)&&SLEEPB.some(s=>s[0]===x.b))
+ .map(x=>({d:x.d,b:x.b}));
+o.sleep=o.sleep.filter((x,i,a)=>a.findIndex(y=>y.d===x.d)===i)
+ .sort((a,b)=>dnum(a.d)-dnum(b.d)).slice(-90);
+if(!o.freeze||typeof o.freeze!=='object')o.freeze={};
 if(!Array.isArray(o.rounds))o.rounds=[];
 o.rounds=o.rounds.filter(x=>x&&typeof x.d==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x.d)&&x.v&&typeof x.v==='object')
  .map(x=>{const v={};TESTS.forEach(t=>{const q=x.v[t[0]];if(q)v[t[0]]=String(q).slice(0,24)});return{d:x.d,v}})
  .filter(x=>Object.keys(x.v).length).slice(-12);
-// הגירה: העמודה "היום" מהמבחנים הישנים הופכת לסבב המדידה הראשון
-if(!o.rounds.length&&o.tests&&Object.keys(o.tests).length){const v={};
- Object.keys(o.tests).forEach(k=>{const q=(o.tests[k]||[])[0];if(q)v[k]=String(q).slice(0,24)});
- if(Object.keys(v).length)o.rounds.push({d:o.start||today(),v})}
 o.rounds.sort((a,b)=>dnum(a.d)-dnum(b.d));
 if(!Array.isArray(o.focusLog))o.focusLog=[];
 o.focusLog=o.focusLog.filter(x=>x&&CHIPS.some(c=>c[0]===x.c)&&typeof x.d==='string')
@@ -697,9 +768,15 @@ o.bw=o.bw.filter(x=>x&&x.d&&numOk(+x.kg,20,200)).map(x=>({d:x.d,kg:+x.kg}));
 ['footDays','shotDays','fuelDays','intentDays'].forEach(k=>{o[k]=o[k].filter(x=>typeof x==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x))});
 if(!o.tests||typeof o.tests!=='object')o.tests={};
 const t2={};Object.keys(o.tests).forEach(k=>{
- const id=/^\d+$/.test(k)?(TESTS[+k]||[])[0]:k;
+ const id=/^\d+$/.test(k)?TID_LEGACY[+k]:k;
  if(id&&TESTS.some(t=>t[0]===id)&&Array.isArray(o.tests[k]))t2[id]=o.tests[k].slice(0,3)});
 o.tests=t2;
+// רק עכשיו, אחרי שהמפתחות תוקנו: העמודה "היום" הופכת לסבב המדידה הראשון
+if(!o.rounds.length&&Object.keys(o.tests).length){const rv={};
+ Object.keys(o.tests).forEach(k=>{const q=(o.tests[k]||[])[0];
+  if(q&&TESTS.some(t=>t[0]===k))rv[k]=String(q).slice(0,24)});
+ if(Object.keys(rv).length){o.rounds.push({d:o.start||today(),v:rv});
+  o.rounds.sort((a,b)=>dnum(a.d)-dnum(b.d))}}
 o.shop=[...new Set(o.shop.map(x=>typeof x==='number'?(SHOP[x]||[])[0]:x)
  .filter(x=>SHOP.some(i=>i[0]===x)))];
 if(typeof o.lastBackup!=='string')o.lastBackup='';
@@ -725,7 +802,7 @@ function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;',
 function numOk(v,min,max){return typeof v==='number'&&isFinite(v)&&v>=min&&v<=max}
 function med(a){const x=[...a].sort((p,q)=>p-q),m=x.length>>1;
 return x.length%2?x[m]:(x[m-1]+x[m])/2}
-function today(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function today(){const d=nowD();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function fmt(d){const p=String(d).split('-');
 return p.length===3?(+p[2])+'.'+(+p[1]):String(d)}
 
@@ -740,7 +817,7 @@ function blkDone(key){return S[key].done.length>=BLK[key].list().length}
 function weekCount(key){const S3=sets(),days=weekDays(0),k=key==='shoot'?'shot':key;
 return{dn:days.filter(x=>!x.fut&&S3[k].has(x.k)).length,
 pl:days.filter(x=>!x.fut&&isPl(k,x.k,x.w)).length}}
-function gymFrac(){const k=today(),d=new Date().getDay();
+function gymFrac(){const k=today(),d=nowD().getDay();
 if(!isPl('gym',today(),d))return 0;
 if(S.sessions.some(x=>x.date===k))return 1;
 if(!S.cur||S.cur.date!==k)return 0;
@@ -748,7 +825,7 @@ const ids=S.cur.w==='A'?WA:WB;
 const tot=ids.reduce((a,id)=>a+EX[id].s,0);
 const dn=Object.values(S.cur.log).flat().filter(Boolean).length;
 return Math.min(1,dn/tot)}
-function dayParts(){const d=new Date().getDay(),k=today(),S3=sets(),out=[],P=stampToday();
+function dayParts(){const d=nowD().getDay(),k=today(),S3=sets(),out=[],P=stampToday();
 const F=(key,f)=>S3[key].has(k)?1:f;
 if(P.foot)out.push(['רגליים','foot',F('foot',S.foot.d===k?S.foot.done.length/todayFoot().length:0)]);
 if(P.gym)out.push(['כוח','gym',F('gym',gymFrac())]);
@@ -773,10 +850,41 @@ let sp='';if(full&&sparkedDay!==today()){sparkedDay=today();sp=' spark'}
 return `<div class="ringwrap${sp}">${ring(p)}
 <div class="ringtxt">${full?'<div class="rdone">\u2713</div><div class="rlbl">יום מלא</div>'
 :`<div class="rnum${n?'':' zero'}"><span class="ltr">${n}</span><span class="rp">%</span></div><div class="rlbl">מהיום</div>`}</div></div>`}
-function todayLeft(){const d=new Date().getDay(),S3=sets(),k=today();
+function todayLeft(){const d=nowD().getDay(),S3=sets(),k=today();
 return ROWS.filter(([,key])=>isPl(key,k,d)).filter(([,key])=>!S3[key].has(k)).map(([n])=>n)}
 function daysSinceBw(){if(!S.bw.length)return 99;
 return Math.floor((dnum(today())-dnum(S.bw[S.bw.length-1].d))/864e5)}
+
+/* ---------- שינה ----------
+   פעולה אחת בבוקר. לא טופס, לא מקלדת, לא שעון מעורר.
+   השינה לא נכנסת ללוח השבועי בכוונה — לוח שמצייר איקס אדום על לילה
+   הופך את הדבר היחיד שהוא לא יכול לתקן בדיעבד למקור אשמה יומי. */
+function sleepOf(k){const x=(S.sleep||[]).find(y=>y.d===k);return x?x.b:''}
+function sleepHrs(b){const s=SLEEPB.find(x=>x[0]===b);return s?s[1]:0}
+function setSleep(b){if(!SLEEPB.some(x=>x[0]===b))return;
+if(!Array.isArray(S.sleep))S.sleep=[];
+const k=today(),i=S.sleep.findIndex(x=>x.d===k);
+if(i>-1)S.sleep[i].b=b;else S.sleep.push({d:k,b});
+if(S.sleep.length>90)S.sleep=S.sleep.slice(-90);
+save();
+sleepPop=sleepHrs(b)>=SLEEP_OK?1:0;draw();sleepPop=0;
+toast(SLEEP_MSG[b]||'נרשם');popMile()}
+function sleepWeek(back){const ds=weekDays(back||0);
+const rows=ds.map(x=>({k:x.k,w:x.w,fut:x.fut,b:sleepOf(x.k)}));
+const got=rows.filter(x=>x.b);
+return{rows,n:got.length,
+ ok:got.filter(x=>sleepHrs(x.b)>=SLEEP_OK).length,
+ avg:got.length?Math.round(got.reduce((a,x)=>a+sleepHrs(x.b),0)/got.length*10)/10:0}}
+/* הרצף הארוך ביותר של לילות בטווח. ימים חסרים שוברים את הרצף —
+   לילה שלא נרשם הוא לא לילה שנספר. */
+function sleepRun(){const m={};(S.sleep||[]).forEach(x=>m[x.d]=x.b);
+const ks=Object.keys(m).sort((a,b)=>dnum(a)-dnum(b));
+let n=0,best=0,prev=null;
+for(const k of ks){
+ if(prev!==null&&Math.round((dnum(k)-dnum(prev))/864e5)!==1)n=0;
+ n=sleepHrs(m[k])>=SLEEP_OK?n+1:0;
+ if(n>best)best=n;prev=k}
+return best}
 function lastSets(id){for(let i=S.sessions.length-1;i>=0;i--){const l=S.sessions[i].log[id];
 if(l&&l.length)return l}return null}
 function suggestKg(id){const e=EX[id],l=lastSets(id);
@@ -815,13 +923,21 @@ function go(t){tab=t;draw();window.scrollTo(0,0)}
 const VIEWS={home:vHome,train:vTrain,food:vFood,prog:vProg};
 function draw(){drawNav();document.getElementById('app').innerHTML=(VIEWS[tab]||vHome)()}
 
-function dayDoneAll(back){const d=new Date();d.setDate(d.getDate()-back);
+function dayDoneAll(back){const d=nowD();d.setDate(d.getDate()-back);
 const w=d.getDay(),k=dkey(d),S3=sets();
 const pl=ROWS.filter(([,key])=>isPl(key,k,w));
 return !pl.length||pl.every(([,key])=>S3[key].has(k))}
 function fullStreak(){let n=0;for(let i=1;i<=90;i++){if(dayDoneAll(i))n++;else break}return n}
+/* רצף ימים מלאים, עם הקפאה אחת לכל שבעה ימים רצופים.
+   היום הראשון שנשבר הוא בדרך כלל גם האחרון — ההקפאה קונה לו יום. */
+function dayStreak(){let n=0,fr=0,sinceFr=99;
+for(let i=(dayDoneAll(0)?0:1);i<=120;i++){
+ if(dayDoneAll(i)){n++;sinceFr++;continue}
+ if(sinceFr>=7){fr++;sinceFr=0;n++;continue}
+ break}
+return{n,fr}}
 function missedYesterday(){if(!workDays())return false;
-const d=new Date();d.setDate(d.getDate()-1);
+const d=nowD();d.setDate(d.getDate()-1);
 const w=d.getDay(),k=dkey(d),S3=sets();
 const pl=ROWS.filter(([,key])=>isPl(key,k,w));
 return pl.length>0&&!pl.some(([,key])=>S3[key].has(k))}
@@ -857,6 +973,7 @@ done:[
 "אף אחד לא יגיד לך מילה על היום הזה. הוא בכל זאת קרה.",
 ()=>{const n=fullStreak()+1;return n>=3?n+" ימים מלאים ברצף. זה כבר לא מצב רוח, זה מי שאתה.":null}],
 comeback:[
+()=>S.why?'כתבת: "'+S.why+'". זה עדיין נכון היום.':null,
 "אתמול לא קרה. זה לא סוף — זה סתם אתמול. היום כן.",
 "יום אחד שפוספס הוא תקלה. שניים זה כבר הרגל. תעצור את זה היום.",
 "לא צריך לפצות על אתמול. צריך רק לא לחזור עליו."],
@@ -883,7 +1000,7 @@ first:[
 "אתה בונה עכשיו את הבסיס שיאפשר את כל השאר. זה לא מרגש, זה פשוט הכרחי.",
 "היום הראשון קל. השלושים הבאים הם אלה שקובעים."]};
 
-function ctxKey(){const d=new Date().getDay(),pct=dayPct();
+function ctxKey(){const d=nowD().getDay(),pct=dayPct();
 if(d===6)return 'game';
 if(d===5&&pct<1)return 'rest';
 if(pct>=1)return 'done';
@@ -930,7 +1047,7 @@ return `<div class="tdl"><div class="tdh">היום</div>
 ${rows||'<div class="allin">הכל נסגר היום. כל מה שהיה מתוכנן — בוצע.</div>'}
 ${chk}</div>`}
 
-function isTeamDay(){return isPl('team',today(),new Date().getDay())}
+function isTeamDay(){return isPl('team',today(),nowD().getDay())}
 function intentToday(){if(S.intent.d!==today()){
 S.intent={d:today(),i:hsh(today()+'i')%INTENTS.length};save()}
 return INTENTS[S.intent.i]}
@@ -940,9 +1057,6 @@ try{unlockAudio();winTone()}catch(e){}
 toast('נעול. תיקח את זה לאימון')}
 function intentDone(){return (S.intentDays||[]).includes(today())}
 
-function lastSat(){const d=new Date();d.setHours(0,0,0,0);
-d.setDate(d.getDate()-((d.getDay()+1)%7));return dkey(d)}
-function gameLogged(k){return (S.games||[]).some(g=>g.d===k)}
 let gDraft={mb:-1,good:'',fix:'',saw:'',prev:''};
 function askGame(k){const g=(S.games||[]).find(x=>x.d===k)||{};
 gameCtx=k;
@@ -990,7 +1104,8 @@ const nf=rec.fix||rec.saw;
 if(nf&&(!S.focus||!S.focus.c))setFocus(nf);
 save();closeSheet();draw();
 toast(focusOn()?'נרשם · הדגש: '+chipName(S.focus.c):'נרשם');
-try{unlockAudio();winTone()}catch(e){}}
+try{unlockAudio();winTone()}catch(e){}
+popMile()}
 
 function snapWeek(days){const S3=sets(),ks=days.map(x=>x.k);
 const c=k=>[days.filter(x=>S3[k].has(x.k)).length,days.filter(x=>isPl(k,x.k,x.w)).length];
@@ -1011,6 +1126,23 @@ if(added){S.weeks.sort((a,b)=>dnum(a.w)-dnum(b.w));
  if(S.weeks.length>60)S.weeks=S.weeks.slice(-60);save()}
 return added}
 
+/* חציון המשקל באימון, לא המקסימום — סט כבד בודד לא מצייר מגמה. */
+function exSeries(id){const out=[];
+S.sessions.forEach(x=>{const l=(x.log||{})[id];if(!l||!l.length)return;
+ const v=l.filter(Boolean).map(y=>y[0]).filter(y=>y>0);
+ if(v.length)out.push({d:x.date,kg:med(v)})});
+return out}
+/* תקיעה = מספר האימונים האחרונים שבהם החציון לא עלה מעל השיא שלפניהם. */
+function exStall(id){const s=exSeries(id);
+if(s.length<3)return 0;
+let top=s[0].kg,n=0;
+for(let i=1;i<s.length;i++){if(s[i].kg>top){top=s[i].kg;n=0}else n++}
+return n>=3?n:0}
+function exTrend(){return Object.keys(EX).map(id=>{const s=exSeries(id);
+ if(s.length<2)return null;
+ return{n:EX[id].n,a:s[0].kg,b:s[s.length-1].kg,c:s.length,stall:exStall(id)}})
+ .filter(Boolean).sort((a,b)=>b.c-a.c).slice(0,6)}
+
 function weekPR(keys){let best=null;
 Object.keys(EX).forEach(id=>{let pre=0,top=null,cnt=0;
  S.sessions.forEach(x=>{const l=x.log[id];if(!l||!l.length)return;
@@ -1022,7 +1154,7 @@ Object.keys(EX).forEach(id=>{let pre=0,top=null,cnt=0;
   best={n:EX[id].n,kg:top[0],rp:top[1]}});
 return best}
 
-function last7(){const t=new Date();t.setHours(0,0,0,0);
+function last7(){const t=nowD();t.setHours(0,0,0,0);
 return Array.from({length:7},(_,i)=>{const d=new Date(t);d.setDate(d.getDate()-6+i);
 return{k:dkey(d),w:d.getDay()}})}
 function weekReport(){const S3=sets(),days=last7(),ks=days.map(x=>x.k);
@@ -1034,6 +1166,9 @@ if(S.bw.length){const n=S.bw[S.bw.length-1].kg;
  let t='משקל '+n+' ק״ג';
  if(S.bw.length>1){const d=Math.round((n-S.bw[0].kg)*10)/10;t+=' ('+(d>=0?'+':'')+d+' מאז ההתחלה)'}
  L.push(t)}
+{const w=sleepWeek();
+ if(w.n)L.push('שינה · ממוצע '+w.avg+' שעות · '+w.ok+' מתוך '+w.n+' לילות בטווח');
+ else L.push('שינה · לא נרשמה השבוע');}
 const pr=weekPR(ks);
 if(pr)L.push('שיא חדש · '+pr.n+' '+pr.kg+'×'+pr.rp);
 const it=days.filter(x=>(S.intentDays||[]).includes(x.k)).length;
@@ -1053,6 +1188,17 @@ if(focusOn())L.push('','הדגש עד המשחק הבא: '+chipName(S.focus.c));
    L.push(fmt(x.w)+' · כוח '+x.gym[0]+'/'+x.gym[1]+' · רגליים '+x.foot[0]+'/'+x.foot[1]
     +' · קליעה '+x.shot[0]+'/'+x.shot[1]+' · אוכל '+x.fuel[0]+'/'+x.fuel[1]
     +(x.bw?' · '+x.bw+' ק״ג':''))});}}
+/* \u05de\u05d2\u05de\u05d4 \u05dc\u05ea\u05e8\u05d2\u05d9\u05dc \u2014 \u05dc\u05e2\u05d5\u05d3\u05d3 \u05d1\u05dc\u05d1\u05d3, \u05de\u05d0\u05d5\u05ea\u05d4 \u05e1\u05d9\u05d1\u05d4: \u05d2\u05e8\u05e3 \u05e9\u05d8\u05d5\u05d7 \u05e9\u05de\u05d3\u05d1\u05e8 \u05d0\u05dc \u05d9\u05dc\u05d3 \u05d1\u05dc\u05d9 \u05de\u05ea\u05d5\u05d5\u05da
+   \u05d4\u05d5\u05d0 \u05d1\u05d3\u05d9\u05d5\u05e7 \u05d4\u05de\u05e1\u05e4\u05e8 \u05e9\u05db\u05d5\u05d0\u05d1. \u05db\u05d0\u05df \u05d4\u05d5\u05d0 \u05de\u05d9\u05d3\u05e2 \u05e9\u05de\u05d0\u05e4\u05e9\u05e8 \u05dc\u05d4\u05ea\u05e2\u05e8\u05d1. */
+{const tr=exTrend();
+ if(tr.length){L.push('','\u2014 \u05de\u05d2\u05de\u05d4 \u05dc\u05ea\u05e8\u05d2\u05d9\u05dc');
+  tr.forEach(x=>L.push(x.n+' \u00b7 '+x.a+' \u2192 '+x.b+' \u05e7\u05f4\u05d2'
+   +(x.stall?' \u00b7 \u05ea\u05e7\u05d5\u05e2 '+x.stall+' \u05d0\u05d9\u05de\u05d5\u05e0\u05d9\u05dd':'')));}}
+/* \u05de\u05d2\u05de\u05ea \u05d4\u05e9\u05d9\u05e0\u05d4 \u05e0\u05e9\u05dc\u05d7\u05ea \u05dc\u05e2\u05d5\u05d3\u05d3 \u05d1\u05dc\u05d1\u05d3. \u05d1\u05d0\u05e4\u05dc\u05d9\u05e7\u05e6\u05d9\u05d4 \u05d0\u05d5\u05e8\u05d9 \u05e8\u05d5\u05d0\u05d4 \u05e8\u05e7 \u05d0\u05ea \u05d4\u05e9\u05d1\u05d5\u05e2 \u05d4\u05e0\u05d5\u05db\u05d7\u05d9. */
+{const rows=[];
+ for(let b=3;b>=1;b--){const w=sleepWeek(b);
+  if(w.n)rows.push(fmt(w.rows[0].k)+' \u00b7 \u05de\u05de\u05d5\u05e6\u05e2 '+w.avg+' \u00b7 \u05d1\u05d8\u05d5\u05d5\u05d7 '+w.ok+'/'+w.n)}
+ if(rows.length)L.push('','\u2014 \u05e9\u05d9\u05e0\u05d4, \u05e9\u05d1\u05d5\u05e2\u05d5\u05ea \u05e7\u05d5\u05d3\u05de\u05d9\u05dd',...rows);}
 L.push('',fmt(ks[0])+' \u2013 '+fmt(ks[6]));
 return L.join('\n')}
 
@@ -1067,23 +1213,75 @@ function openReport(){openSheet(`<div class="grab"></div><div class="h2">הסי�
 <button class="ghost" onclick="closeSheet()">סגור</button>`)}
 
 /* ---------- home ---------- */
-function bwCard(){return `<div class="warnbox"><b>${S.bw.length?'לא נשקלת שבוע':'עוד לא נשקלת'}</b>
+function bwCard(){const h=htDue();
+return `<div class="warnbox"><b>${S.bw.length?'לא נשקלת שבוע':'עוד לא נשקלת'}${h?' · וגם הגובה':''}</b>
 <p>משקל הגוף הוא המספר הכי חשוב במטרה שלך, והוא היחיד שקל לשכוח. בוקר, לפני אוכל.
-<button onclick="addBw()" style="color:var(--red2);font-weight:700;text-decoration:underline">תרשום עכשיו</button></p></div>`}
+<button onclick="addBw()" style="color:var(--red2);font-weight:700;text-decoration:underline">תרשום משקל</button>
+${h?` · <button onclick="addHt()" style="color:var(--red2);font-weight:700;text-decoration:underline">וגובה</button>`:''}</p></div>`}
+function htCard(){return `<div class="warnbox"><b>עברו ארבעה שבועות — כדאי למדוד גובה</b>
+<p>אתה בגדילה. בלי המספר הזה, שינוי במשקל יכול להיראות כמו כישלון כשהוא בכלל לא.
+<button onclick="addHt()" style="color:var(--red2);font-weight:700;text-decoration:underline">תמדוד עכשיו</button></p></div>`}
 function week6Card(){return `<div class="warnbox"><b>שבוע 6 — שבוע המדידה</b>
 <p>הגיע הזמן למדוד את ארבעת המספרים ולהחליט מה משתנה.
 <button onclick="openWeek6()" style="color:var(--red2);font-weight:700;text-decoration:underline">מה בודקים ומה עושים</button></p></div>`}
+/* הרצועה יושבת מחוץ לתקציב הכרטיסים: היא נעלמת בנגיעה אחת,
+   ואחרי שנרשם היא כבר לא בקשה אלא מספר. */
+function sleepStrip(){const b=sleepOf(today());
+if(b){const w=sleepWeek(),h=sleepHrs(b);
+ return `<div class="slp on${sleepPop?' spark':''}">
+<div class="slh">השינה של אתמול</div>
+<div class="slr">
+<div class="slv ltr">${h}${b==='s9'?'+':''}</div>
+<div class="slm">שעות
+<div class="tiny" style="margin-top:2px">ממוצע השבוע <span class="ltr">${w.avg||'—'}</span> · בטווח <span class="ltr">${w.ok}</span> מתוך <span class="ltr">${w.n}</span></div></div>
+<button class="sle" onclick="fixSleep()">שנה</button></div></div>`}
+if(nowD().getHours()>=14)return '';
+return `<div class="slp">
+<div class="slh">כמה שעות ישנת הלילה?</div>
+<div class="slb">${SLEEPB.map(s=>
+`<button onclick="setSleep('${s[0]}')" aria-label="${s[2]}"><span class="ltr">${s[1]}${s[0]==='s9'?'+':''}</span></button>`).join('')}</div></div>`}
+function fixSleep(){const cur=sleepOf(today());
+openSheet(`<div class="grab"></div><div class="h2">כמה שעות ישנת הלילה?</div>
+<div class="sub">בערך מספיק. אף אחד לא מודד בשניות.</div>
+<div class="slb" style="margin-top:16px">${SLEEPB.map(s=>
+`<button class="${s[0]===cur?'on':''}" aria-label="${s[2]}" onclick="closeSheet();setSleep('${s[0]}')"><span class="ltr">${s[1]}${s[0]==='s9'?'+':''}</span></button>`).join('')}</div>
+<button class="ghost" style="margin-top:14px" onclick="closeSheet()">ביטול</button>`)}
+
+function sleepLine(w){
+if(!w.n)return 'עוד לא רשמת אף לילה השבוע. תקתוק אחד בבוקר, שנייה אחת.';
+if(w.ok>=6)return 'זה כבר לא מקרה. הגוף מקבל בדיוק את מה שהוא צריך כדי לבנות.';
+if(w.ok>=3)return 'חצי מהשבוע בטווח. החצי השני הוא כל ההבדל.';
+if(w.ok>=1)return 'לילה או שניים בטווח. בשאר הלילות הגוף עוד מחכה.';
+return 'אף לילה לא הגיע לשמונה. זה הדבר הכי זול שאתה יכול לשנות.'}
+function sleepChart(){const w=sleepWeek(),D=['א','ב','ג','ד','ה','ו','ש'];
+return `<div class="card">
+<div class="row" style="align-items:baseline">
+<div style="font-weight:800;font-size:15px">השבוע בשינה</div>
+<div style="font-size:13px;font-weight:800;color:${w.ok>=5?'var(--ok)':'var(--t3)'}">
+<span class="ltr">${w.ok}</span> ${w.ok===1?'לילה':'לילות'} בטווח</div></div>
+<div class="slc">
+<div class="slbars">
+${w.rows.map(r=>{const h=r.b?sleepHrs(r.b):0;
+ const cls=r.b?(h>=SLEEP_OK?'ok':'low'):(r.fut?'fut':'none');
+ return `<div class="slbar"><i class="${cls}" style="height:${h?Math.round(h/10*100):0}%"></i></div>`}).join('')}
+<div class="sltg"><span class="ltr">8</span></div></div>
+<div class="sldls">${w.rows.map(r=>`<div class="sldl${r.today?' t':''}">${D[r.w]}</div>`).join('')}</div></div>
+<div class="cue" style="margin-top:12px">${sleepLine(w)}</div>
+${sleepOf(today())?'':`<button class="act solid" style="width:100%;margin-top:12px" onclick="fixSleep()">תרשום את הלילה</button>`}</div>`}
+
 function week7Card(){return `<div class="warnbox"><b>שבוע 7 — שבוע הקלה</b>
 <p><b>סט אחד פחות בכל תרגיל, אותו משקל בדיוק.</b> זה לא חופש, זה השבוע שבו הגוף סוגר פערים.</p></div>`}
 
 /* תקציב כרטיסים: עד שניים דחופים ועד שניים לטווח ארוך.
    מה שלא נכנס היום — יעלה מחר, כשמשהו אחר ייסגר. */
 function homeUrgent(){const out=[];
+if(isDayOne())return onboardCard();
 if(progWeek()===6)out.push(week6Card());
 if(progWeek()===7)out.push(week7Card());
 if(pendingGame())out.push(gamePrompt());
 if(measureDue())out.push(measureCard());
 if(daysSinceBw()>=7)out.push(bwCard());
+else if(htDue())out.push(htCard());
 return out.filter(Boolean).slice(0,2).join('')}
 function homeHorizon(){const out=[];
 if(nextGame())out.push(nextGameCard());
@@ -1094,11 +1292,12 @@ return out.filter(Boolean).slice(0,2).join('')}
 function vHome(){const p=planText();
 const bw=S.bw.length?S.bw[S.bw.length-1].kg:'—';
 const open=S.cur?Object.values(S.cur.log).flat().filter(Boolean).length:0;
-const gymToday=isPl('gym',today(),new Date().getDay());
+const gymToday=isPl('gym',today(),nowD().getDay());
 return `<div class="wrap">
 <div class="hero">
 <div class="row" style="align-items:center"><div class="tiny" style="letter-spacing:2.5px">נקודת השינוי</div>
-<div style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()}${progWeek()<=12?' מתוך 12':''}</div></div>
+<div onclick="devTap()" style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()}${progWeek()<=12?' מתוך 12':''}</div></div>
+${DEVOFF?`<div onclick="openDev()" style="margin-top:10px;border:1px solid var(--red);border-radius:9px;padding:8px 11px;font-size:12px;font-weight:800;color:var(--red2)">מצב בדיקה · הסטה של <span class="ltr">${DEVOFF}</span> ימים</div>`:''}
 <div class="h1" style="margin-top:6px">אורי<span style="color:var(--red2)">.</span></div>
 <div class="bar"></div>
 <div class="today">${dayRing()}
@@ -1110,6 +1309,7 @@ ${p[1]?`<div class="sub" style="margin-top:2px">${p[1]}</div>`:''}
 <div><div class="v ltr">${S.sessions.length}</div><div class="k">אימוני כוח</div></div>
 <div><div class="v ltr">${bw}</div><div class="k">משקל ק״ג</div></div>
 </div></div>
+${sleepStrip()}
 <div class="mot">${motiv()}</div>
 ${homeUrgent()}
 ${todayList()}
@@ -1130,6 +1330,33 @@ ${homeHorizon()}
 </div>
 </div>`}
 
+/* ---------- מסך פיתוח ----------
+   שבע נגיעות על תג השבוע. ההסטה חיה ב-sessionStorage בלבד, ולכן
+   נעלמת עם סגירת הלשונית ואי אפשר להשאיר אותה דלוקה בטעות. */
+let devTaps=0,devT=null;
+function devTap(){devTaps++;if(devT)clearTimeout(devT);
+devT=setTimeout(()=>{devTaps=0},1400);
+if(devTaps>=7){devTaps=0;openDev()}}
+function setDev(n){const v=Math.max(-400,Math.min(400,parseInt(n,10)||0));
+DEVOFF=v;try{sessionStorage.setItem('uridev',String(v))}catch(e){}
+closeSheet();draw();toast(v?'הסטה: '+v+' ימים':'חזרנו להיום')}
+function openDev(){openSheet(`<div class="grab"></div><div class="h2">מסך פיתוח</div>
+<div class="sub">הסטת תאריך לבדיקה. נמחקת לבד כשסוגרים את הלשונית.</div>
+<div class="card" style="margin-top:14px">
+<div class="cue">היום לפי האפליקציה</div>
+<div style="font-size:19px;font-weight:900;margin-top:4px"><span class="ltr">${today()}</span> · יום ${['א','ב','ג','ד','ה','ו','ש'][nowD().getDay()]}</div>
+<div class="cue" style="margin-top:6px">הסטה נוכחית: <span class="ltr">${DEVOFF}</span> ימים · שעה <span class="ltr">${nowD().getHours()}</span></div></div>
+<div class="slb" style="margin-top:12px">
+<button onclick="setDev(${DEVOFF-7})"><span class="ltr">-7</span></button>
+<button onclick="setDev(${DEVOFF-1})"><span class="ltr">-1</span></button>
+<button onclick="setDev(0)">היום</button>
+<button onclick="setDev(${DEVOFF+1})"><span class="ltr">+1</span></button>
+<button onclick="setDev(${DEVOFF+7})"><span class="ltr">+7</span></button></div>
+<div class="card" style="margin-top:12px">
+<div class="cue">שינה · רצף הכי ארוך בטווח: <span class="ltr">${sleepRun()}</span> · לילות רשומים: <span class="ltr">${(S.sleep||[]).length}</span></div>
+<div class="cue" style="margin-top:4px">רצף ימים: <span class="ltr">${dayStreak().n}</span> · שבוע תוכנית: <span class="ltr">${progWeek()}</span> · יום קל: ${lightWhy()||'לא'}</div></div>
+<button class="ghost" style="margin-top:14px" onclick="closeSheet()">סגור</button>`)}
+
 function gamePrompt(){const g=pendingGame();if(!g)return '';
 return `<div class="gcard">
 <div class="nm">המשחק מ-${fmt(g.d)}${g.opp?' מול '+esc(g.opp):''}</div>
@@ -1149,19 +1376,14 @@ return `<div class="ngame" onclick="editGame('${g.d}')">
 ${n===0&&f?`<div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--c2);
 font-size:14px;font-weight:800;color:var(--ok)">המשימה היום: ${chipName(f.c)}</div>`:''}</div>`}
 
-function planText(){const P=stampToday(),d=new Date().getDay(),t=(S.times||{})[d];
+function planText(){const P=stampToday(),d=nowD().getDay(),t=(S.times||{})[d];
 const g=(S.games||[]).find(x=>x.d===today());
 if(g)return ['משחק'+(g.opp?' מול '+esc(g.opp):''),'תראה להם'];
-const main=[];
-if(P.team)main.push('אימון קבוצה');
-if(P.gym)main.push('אימון כוח');
-if(P.shot)main.push('קליעה');
-const sub=[];
-if(P.team&&t)sub.push('<span class="ltr">'+esc(t)+'</span>');
-if(P.foot)sub.push('רגליים');
-if(P.fuel&&!main.length)sub.push('אוכל');
-if(!main.length)return [P.foot?'יום קל':'מנוחה מלאה',sub.join(' · ')||'כלום מתוכנן היום'];
-return [main.join(' + '),sub.join(' · ')]}
+// הכותרת נותנת את ההקשר של היום. הפירוט יושב ברשימה מתחתיה — אין טעם לומר אותו פעמיים.
+if(P.team)return ['אימון קבוצה',t?'<span class="ltr">'+esc(t)+'</span>':''];
+if(P.gym)return ['יום כוח',''];
+if(P.shot||P.foot)return ['יום אישי',''];
+return ['מנוחה מלאה','כלום מתוכנן היום']}
 
 function intentCard(){if(!isTeamDay())return '';
 const it=intentToday(),on=intentDone();
@@ -1173,7 +1395,7 @@ ${on?'':`<div class="iact">
 <button class="go" onclick="takeIntent()">לוקח את זה</button></div>`}</div>`}
 
 let schDay=0;
-function openSched(){schDay=new Date().getDay();drawSched()}
+function openSched(){schDay=nowD().getDay();drawSched()}
 function drawSched(){const d=schDay;
 openSheet(`<div class="grab"></div><div class="h2">המערכת שלי</div>
 <div class="sub">מה יש בכל יום. שינוי תופס מהיום והלאה — מה שכבר נרשם לא משתנה.</div>
@@ -1191,7 +1413,7 @@ function schTog(k){const a=S.sched[k]||[],i=a.indexOf(schDay);
 i<0?a.push(schDay):a.splice(i,1);a.sort((x,y)=>x-y);
 S.sched[k]=a;syncSched();
 const t=today();
-if(schDay===new Date().getDay()&&S.dayplan&&S.dayplan[t])S.dayplan[t][k]=a.includes(schDay);
+if(schDay===nowD().getDay()&&S.dayplan&&S.dayplan[t])S.dayplan[t][k]=a.includes(schDay);
 save();drawSched();draw()}
 function schTime(v){if(!S.times)S.times={};S.times[schDay]=String(v).slice(0,20);save();draw()}
 
@@ -1224,9 +1446,86 @@ return (S.games||[]).filter(g=>dnum(g.d)<t&&!g.lg)          // הבוקר שאח
 function snoozeGame(k){if(!S.gsnooze)S.gsnooze={};if(!S.gskip)S.gskip={};
 const n=((S.gsnooze[k]&&S.gsnooze[k].n)||0)+1;
 if(n>=3){S.gskip[k]=1;save();draw();toast('נסגר בלי תיעוד. ממשיכים.');return}
-const d=new Date();d.setDate(d.getDate()+1);
+const d=nowD();d.setDate(d.getDate()+1);
 S.gsnooze[k]={d:dkey(d),n};save();draw();toast('נזכיר מחר')}
 function lastRound(){return (S.rounds||[]).length?S.rounds[S.rounds.length-1]:null}
+function isDayOne(){return !S.why&&!S.sessions.length&&!(S.footDays||[]).length&&!(S.rounds||[]).length}
+function onboardCard(){return `<div class="gcard">
+<div class="nm">לפני שמתחילים — ארבע דקות</div>
+<div class="cue" style="margin-top:5px">מספרי פתיחה ומשפט אחד שלך. בעוד שישה שבועות זה מה שיראה לך כמה זזת.</div>
+<button class="act solid" style="width:100%;margin-top:12px" onclick="openWhy()">בוא נתחיל</button></div>`}
+function openWhy(){openSheet(`<div class="grab"></div><div class="h2">למה אתה עושה את זה</div>
+<div class="sub">משפט אחד, במילים שלך. אף אחד לא יראה אותו חוץ ממך.</div>
+<div class="blk" style="margin-top:12px"><p>ביום שלא בא לך, זה מה שיקפוץ לך.</p></div>
+<input class="fin" id="whytxt" type="text" maxlength="160" value="${esc(S.why||'')}"
+ placeholder="אני רוצה...">
+<button class="big" style="margin-top:14px" onclick="saveWhy()">שמור</button>
+<button class="ghost" onclick="closeSheet()">אחר כך</button>`)}
+function saveWhy(){const v=document.getElementById('whytxt').value.trim().slice(0,160);
+if(!v){toast('כתוב משפט אחד');return}
+S.why=v;save();closeSheet();draw();
+try{unlockAudio();winTone()}catch(e){}
+openStart()}
+function openStart(){openSheet(`<div class="grab"></div><div class="h2">מספרי הפתיחה</div>
+<div class="sub">אלה יהיו נקודת ההשוואה שלך</div><div style="height:12px"></div>
+<div class="num"><div><label>משקל (ק״ג)</label>
+<input id="ibw" type="number" inputmode="decimal" step="0.1" value="${S.bw.length?S.bw[S.bw.length-1].kg:''}"></div>
+<div><label>גובה (ס״מ)</label>
+<input id="iht" type="number" inputmode="numeric" value="${S.ht.length?S.ht[S.ht.length-1].cm:''}"></div></div>
+<button class="big" style="margin-top:12px" onclick="saveStart()">שמור והמשך</button>
+<button class="ghost" onclick="closeSheet();openMeasure()">דלג למדידות</button>`)}
+function saveStart(){const w=parseFloat(document.getElementById('ibw').value);
+const h=parseInt(document.getElementById('iht').value);
+if(!numOk(w,30,150)){toast('משקל בין 30 ל-150');return}
+if(!numOk(h,120,220)){toast('גובה בין 120 ל-220');return}
+const i=S.bw.findIndex(x=>x.d===today());
+if(i>-1)S.bw[i].kg=w;else S.bw.push({d:today(),kg:w});
+const j=S.ht.findIndex(x=>x.d===today());
+if(j>-1)S.ht[j].cm=h;else S.ht.push({d:today(),cm:h});
+save();closeSheet();draw();openMeasure()}
+function htDue(){if(!S.ht.length)return false;
+return Math.floor((dnum(today())-dnum(S.ht[S.ht.length-1].d))/864e5)>=28}
+function addHt(){openSheet(`<div class="grab"></div><div class="h2">גובה</div>
+<div class="sub">פעם בארבעה שבועות. אתה בגדילה — זה משנה את קריאת המשקל.</div>
+<div class="num"><div><label>סנטימטרים</label>
+<input id="iht2" type="number" inputmode="numeric" value="${S.ht.length?S.ht[S.ht.length-1].cm:''}"></div></div>
+<button class="big" onclick="saveHt()">שמור</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`)}
+function saveHt(){const h=parseInt(document.getElementById('iht2').value);
+if(!numOk(h,120,220)){toast('גובה בין 120 ל-220');return}
+const i=S.ht.findIndex(x=>x.d===today());
+if(i>-1)S.ht[i].cm=h;else S.ht.push({d:today(),cm:h});
+save();closeSheet();draw();toast('נרשם <span>'+h+'</span> ס״מ'.replace(/<[^>]+>/g,''))}
+function pickPhoto(){try{
+const i=document.createElement('input');i.type='file';i.accept='image/*';
+i.onchange=function(){const f=i.files&&i.files[0];if(!f)return;
+ const r=new FileReader();
+ r.onload=function(){const im=new Image();
+  im.onload=function(){try{
+   const c=document.createElement('canvas'),w=320,h=Math.round(im.height*w/im.width);
+   c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
+   if(!S.photos)S.photos=[];
+   S.photos.push({d:today(),src:c.toDataURL('image/jpeg',0.7)});
+   if(S.photos.length>6)S.photos=S.photos.slice(-6);
+   save();draw();toast('התמונה נשמרה על המכשיר')}catch(e){toast('לא הצלחנו לשמור')}};
+  im.src=r.result};
+ r.readAsDataURL(f)};
+i.click()}catch(e){toast('לא נתמך במכשיר הזה')}}
+function photoCard(){const n=(S.photos||[]).length;
+if(!n)return `<div class="card"><div class="cue">תמונה אחת עכשיו, ועוד אחת בעוד שישה שבועות. זה הדבר היחיד שמראה שינוי שאי אפשר להרגיש מיום ליום.</div></div>
+<button class="ghost" onclick="pickPhoto()">צלם תמונת "לפני"</button>`;
+const first=S.photos[0],last=S.photos[n-1];
+return `<div class="card"><div class="acts" style="gap:9px">
+<div style="flex:1;text-align:center"><img src="${first.src}" style="width:100%;border-radius:10px;display:block">
+<div class="tiny" style="margin-top:5px">${fmt(first.d)}</div></div>
+${n>1?`<div style="flex:1;text-align:center"><img src="${last.src}" style="width:100%;border-radius:10px;display:block">
+<div class="tiny" style="margin-top:5px">${fmt(last.d)}</div></div>`:''}
+</div></div>
+<button class="ghost" onclick="pickPhoto()">תמונה חדשה</button>`}
+
+function htGain(){if(S.ht.length<2)return null;
+const g=S.ht[S.ht.length-1].cm-S.ht[0].cm;return g>0?g:null}
+
 function measureDue(){const r=lastRound();
 if(!r)return workDays()>=14;
 return Math.floor((dnum(today())-dnum(r.d))/864e5)>=42}
@@ -1287,7 +1586,7 @@ return `<div class="gcard"><div class="nm">הגיע הזמן לשאול</div>
 <div class="iact" style="margin-top:11px">
 <button onclick="laterCoach()">עוד לא</button>
 <button class="go" onclick="openCoach()">שאלתי — הנה התשובה</button></div></div>`}
-function laterCoach(){const d=new Date();d.setDate(d.getDate()+7);
+function laterCoach(){const d=nowD();d.setDate(d.getDate()+7);
 S.coach.asked=dkey(new Date(dnum(today())-35*864e5));save();draw();toast('נזכיר בשבוע הבא')}
 function openCoach(){openSheet(`<div class="grab"></div><div class="h2">מה הוא אמר</div>
 <div class="sub">במילים שלו, קצר. זה יהפוך לדגש שגובר על הכל.</div><div style="height:14px"></div>
@@ -1299,6 +1598,33 @@ if(!v){toast('מה הוא אמר?');return}
 S.coach={asked:today(),txt:v};save();closeSheet();draw();
 try{unlockAudio();winTone()}catch(e){}
 toast('נשמר. זה הדגש עכשיו')}
+
+const MILES=[
+['w10',s=>s.sessions.length>=10,'עשרה אימוני כוח','הראשון קל. העשירי אומר משהו.'],
+['w25',s=>s.sessions.length>=25,'עשרים וחמישה אימונים','זה כבר לא ניסיון. זו שגרה.'],
+['w50',s=>s.sessions.length>=50,'חמישים אימונים','מעטים מגיעים לכאן. אתה אחד מהם.'],
+['d30',()=>dayStreak().n>=30,'שלושים ימים ברצף','חודש בלי לפספס. זה הדבר שמצטבר.'],
+['sq50',s=>{const b=bestFor('sq');return b&&b.kg>=50},'סקוואט 50 ק״ג','המספר הזה היה רחוק. עכשיו הוא שלך.'],
+['bw65',s=>s.bw.length&&s.bw[s.bw.length-1].kg>=65,'65 ק״ג','הגוף עושה בדיוק מה שביקשת ממנו.'],
+['g5',s=>(s.games||[]).filter(g=>g.lg).length>=5,'חמישה משחקים מתועדים','יש לך תיק. זה מה שמראים.'],
+['f3',s=>(s.focusLog||[]).length>=3,'שלושה דגשים נסגרו','שלוש חולשות שכבר לא שם.'],
+['sl4',()=>sleepRun()>=4,'ארבעה לילות ברצף','ארבעה לילות שהגוף קיבל את מה שביקש.'],
+['sl10',()=>sleepRun()>=10,'עשרה לילות ברצף','זו כבר לא החלטה יומית. זו שגרה.']];
+function checkMiles(){if(!S.miles)S.miles=[];
+const got=MILES.filter(m=>!S.miles.some(x=>x.k===m[0])&&m[1](S));
+if(!got.length)return null;
+const m=got[0];S.miles.push({k:m[0],d:today()});save();return m}
+function mileSheet(m){try{unlockAudio();winTone()}catch(e){}
+openSheet(`<div class="grab"></div>
+<div style="text-align:center;padding:12px 0 2px">
+<div class="spark" style="width:84px;height:84px;margin:0 auto;border-radius:50%;
+background:var(--gsolid);display:flex;align-items:center;justify-content:center;
+font-size:40px;color:var(--on)">\u2605</div>
+<div class="h2" style="margin-top:18px">${m[2]}</div>
+<div class="sub" style="margin-top:6px">${m[3]}</div></div>
+<button class="big" style="margin-top:20px" onclick="closeSheet()">יאללה</button>`)}
+function popMile(){const m=checkMiles();if(m)mileSheet(m);return !!m}
+function sheetDone(next){closeSheet();if(!popMile()&&next)go(next)}
 
 function focusOn(){return S.focus&&S.focus.c?S.focus:null}
 function setFocus(c){S.focus={c,since:today(),hits:0};save()}
@@ -1411,6 +1737,8 @@ return `${(i===0&&!done)?`<div class="card" style="margin-top:12px" onclick="ope
 <div class="fxtar"><span class="ltr">${e.s} × ${e.r}</span></div>
 ${lp?`<div class="last">אחרונה: <span class="ltr">${lp[0]}</span> ק״ג <span class="ltr">× ${lp[1]}</span></div>`
    :'<div class="last">פעם ראשונה — תתחיל קל</div>'}
+${exStall(id)?`<div class="stall">אותו משקל <span class="ltr">${exStall(id)}</span> אימונים.
+תוסיף חזרה אחת לסט לפני שאתה מוסיף משקל.</div>`:''}
 <div class="sets">${Array.from({length:e.s},(_,k)=>{const v=lg[k];
 return `<button class="set ${v?'on':''}" onclick="tapSet('${id}',${k})">${v?`<span class="ltr">${v[0]}×${v[1]}</span>`:'סט '+(k+1)}</button>`}).join('')}</div>
 <div class="acts">
@@ -1433,17 +1761,6 @@ return `<button class="tdi" onclick="exJump(${i})">
 <span class="tdm"><span class="ltr">${e.s} × ${e.r}</span></span></button>`}).join('')}
 <button class="big" style="margin-top:12px" onclick="finish()">סיימתי את האימון</button>`}
 
-function bodyGymOld(){const w=curW(),ids=w==='A'?WA:WB;
-return `<div class="row" style="margin:14px 0 2px;align-items:center">
-<div class="sub">${w==='A'?'ברך ודחיפה':'ירך ומשיכה'}</div>
-<button class="note" style="min-height:34px;padding:7px 11px" onclick="flip()">החלף אימון</button></div>
-${progWeek()===7?`<div class="warnbox" style="margin:10px 0 2px"><b>שבוע הקלה</b>
-<p>סט אחד פחות בכל תרגיל, אותו משקל. אל תוריד במשקל.</p></div>`:''}
-<div class="card" style="margin-top:12px" onclick="openWarm()"><div class="row"><div class="nm">חימום קבוע</div>
-<div class="cq" style="font-size:15px">6 דק׳</div></div><div class="cue">5 תרגילים · לחץ לפרטים</div></div>
-${(()=>{let o='',g='';ids.forEach((id,i)=>{if(EX[id].g!==g){g=EX[id].g;o+=`<div class="sec">${g}</div>`}o+=exCard(id,i)});return o})()}
-<button class="big" style="margin-top:14px" onclick="finish()">סיימתי את האימון</button>
-<div class="tiny" style="text-align:center;margin-top:9px">בפעם הבאה תקבל אימון ${w==='A'?'B':'A'}</div>`}
 function exCard(id,i){const e=EX[id];ensure();
 const lg=S.cur.log[id]||[];const lp=lastFor(id);
 return `<div class="card">
@@ -1487,7 +1804,6 @@ const rp=parseInt(document.getElementById('irp').value);
 if(!numOk(kg,0,300)){toast('משקל לא הגיוני — בין 0 ל-300');return}
 if(!numOk(rp,1,200)){toast('חזרות חייבות להיות לפחות 1');return}
 ensure();if(!S.cur.log[id])S.cur.log[id]=[];S.cur.log[id][k]=[kg,rp];save();closeSheet();draw();startT(EX[id].rest)}
-function setsOf(id){return exDone(id)}
 function clrSet(){const{id,k}=sheetCtx;if(S.cur.log[id])delete S.cur.log[id][k];save();closeSheet();draw()}
 function finish(){if(!S.cur||!Object.values(S.cur.log).flat().filter(Boolean).length){toast('לא רשמת אף סט');return}
 S.cur.log=Object.fromEntries(Object.entries(S.cur.log).map(([k,v])=>[k,v.filter(Boolean)]));
@@ -1505,8 +1821,8 @@ openSheet(`<div class="grab"></div>
 <div><div class="v ltr">${vol}</div><div class="k">נפח ק״ג</div></div>
 <div><div class="v ltr">${st}</div><div class="k">רצף</div></div></div>
 <div class="tiny" style="text-align:center;margin:14px 0 4px">בפעם הבאה: אימון ${w==='A'?'B':'A'}</div>
-<button class="big" style="margin-top:12px" onclick="closeSheet();go('prog')">לראות את המספרים</button>
-<button class="ghost" onclick="closeSheet();go('home')">סגור</button>`)}
+<button class="big" style="margin-top:12px" onclick="sheetDone('prog')">לראות את המספרים</button>
+<button class="ghost" onclick="sheetDone('home')">סגור</button>`)}
 
 
 function openWarm(){openSheet(`<div class="grab"></div><div class="h2">חימום קבוע · 6-8 דקות</div>
@@ -1538,12 +1854,12 @@ S.shoot={d:today(),w:prev?(fin?(S.shoot.w==='A'?'B':'A'):S.shoot.w):'A',done:[]}
 return S.shoot}
 let trainTab=null;
 function trainBlocks(){const sh=shootState(),g=gymSets();
-return{gym:{n:'כוח '+curW(),min:45,done:g[0],tot:g[1],pl:isPl('gym',today(),new Date().getDay())},
+return{gym:{n:'כוח '+curW(),min:45,done:g[0],tot:g[1],pl:isPl('gym',today(),nowD().getDay())},
  foot:{n:isRestDay()?'רגליים · קל':'רגליים',min:isRestDay()?4:12,
        done:S.foot.d===today()?S.foot.done.length:0,tot:todayFoot().length,
-       pl:isPl('foot',today(),new Date().getDay())},
+       pl:isPl('foot',today(),nowD().getDay())},
  shoot:{n:'בלוק '+sh.w,min:32,done:sh.done.length,tot:(sh.w==='A'?SHA:SHB).length,
-        pl:isPl('shot',today(),new Date().getDay())}}}
+        pl:isPl('shot',today(),nowD().getDay())}}}
 function trainActive(){const b=trainBlocks();
 if(trainTab&&b[trainTab])return trainTab;
 // ברירת מחדל: מה שמתוכנן להיום וטרם נסגר
@@ -1558,7 +1874,7 @@ function goTrain(t){tab='train';trainTab=t;draw();window.scrollTo(0,0)}
 function vTrain(){dayList('foot');
 const b=trainBlocks(),act=trainActive();
 const seg=['gym','foot','shoot'].map(k=>{const x=b[k],fin=x.tot&&x.done>=x.tot;
- return `<button class="sg ${act===k?'on':''} ${fin?'fin':''}${x.pl?'':' dim'}" onclick="setTrain('${k}')">
+ return `<button class="sg ${act===k?'on':''} ${fin?'fin':''}" onclick="setTrain('${k}')">
 <b>${fin?'✓ ':''}${x.n}</b><i><span class="ltr">${x.done}</span>/<span class="ltr">${x.tot}</span> · <span class="ltr">${x.min}</span> דק׳</i></button>`}).join('');
 const sub=act==='gym'?'אימון כוח'
  :(isRestDay()&&act==='foot'
@@ -1634,7 +1950,7 @@ function tg(key,i){const a=S[key].done,k=a.indexOf(i);k<0?a.push(i):a.splice(k,1
 const dk=BLK[key].day, was=(S[dk]||[]).includes(today()), now=blkDone(key);
 if(now&&!was){mark(dk);save();draw();celebrate(key);return}
 if(!now&&was)unmark(dk);
-save();draw()}
+save();draw();popMile()}
 
 function celebrate(key){const w=weekCount(key),left=todayLeft();
 const full=left.length===0;
@@ -1653,8 +1969,8 @@ display:flex;align-items:center;justify-content:center;font-size:38px;color:var(
 ${full?`<div class="warnbox" style="margin-top:14px"><b>יום מלא</b>
 <p>כל מה שהיה מתוכנן להיום — בוצע. זה הדבר שמצטבר.</p></div>`
 :`<div class="tiny" style="text-align:center;margin-top:14px">נשאר להיום: ${left.join(' · ')}</div>`}
-<button class="big" style="margin-top:16px" onclick="closeSheet()">יאללה</button>
-<button class="ghost" onclick="closeSheet();go('prog')">לראות את הלוח</button>`)}
+<button class="big" style="margin-top:16px" onclick="sheetDone()">יאללה</button>
+<button class="ghost" onclick="sheetDone('prog')">לראות את הלוח</button>`)}
 
 /* ---------- food ---------- */
 function vFood(){return `<div class="wrap">
@@ -1710,7 +2026,7 @@ display:flex;align-items:center;justify-content:center;font-size:38px;color:var(
 <div><div class="v ltr">~${g}</div><div class="k">גרם חלבון</div></div>
 <div><div class="v ltr">${w.dn}/${w.pl}</div><div class="k">ימים השבוע</div></div></div>
 <div class="tiny" style="text-align:center;margin-top:14px">אכילה היא חצי מהתוכנית. היום עשית את החצי הזה.</div>
-<button class="big" style="margin-top:16px" onclick="closeSheet()">יאללה</button>`)}
+<button class="big" style="margin-top:16px" onclick="sheetDone()">יאללה</button>`)}
 function fuelBar(){const n=Math.min(fuelState().done.length,FUEL_GOAL);
 return `<div class="fbar">${Array.from({length:FUEL_GOAL},(_,i)=>
 `<span class="${i<n?'on':''}"></span>`).join('')}</div>`}
@@ -1753,8 +2069,11 @@ return `<div class="wrap">
 <div class="zone">ההוכחות</div>
 <div class="stat" style="margin-top:0">
 <div><div class="v ltr">${S.sessions.length}</div><div class="k">אימונים</div></div>
-<div><div class="v ltr">${streak()}</div><div class="k">רצף</div></div>
+<div><div class="v ltr">${dayStreak().n}</div><div class="k">ימים ברצף</div></div>
 <div><div class="v ltr">${S.bw.length?S.bw[S.bw.length-1].kg:'—'}</div><div class="k">משקל</div></div></div>
+
+<div class="sec">שינה</div>
+${sleepChart()}
 
 <div class="sec">משחקים</div>
 ${(S.games||[]).length?`<div class="list">${[...S.games].reverse().slice(0,8).map(g=>{
@@ -1765,6 +2084,7 @@ return `<div class="grow"><div class="row" style="align-items:baseline">
 ${g.lg&&g.mb===0&&g.saw?`<div class="cue" style="margin-top:5px">→ ${chipName(g.saw)}</div>`:''}
 ${g.lg&&g.good?`<div class="cue" style="margin-top:5px">✓ ${chipName(g.good)}</div>`:''}
 ${g.lg&&g.fix?`<div class="cue" style="margin-top:2px">→ ${chipName(g.fix)}</div>`:''}
+${g.note?`<div class="cue" style="margin-top:4px">${esc(g.note)}</div>`:''}
 ${g.prev==='y'?`<div class="cue" style="margin-top:2px;color:var(--ok)">הדגש הקודם נסגר</div>`:''}</div>`}).join('')}</div>`
 :'<div class="card"><div class="cue">המשחק הוא הדבר היחיד שקובע אם אתה עולה קבוצה. כדאי לתעד אותו.</div></div>'}
 <button class="ghost" onclick="editGame(today())">הוסף משחק</button>
@@ -1784,10 +2104,24 @@ ${(S.focusLog||[]).length?`<div class="sec">דגשים שנסגרו</div>
 ${(S.rounds||[]).length?roundsTable():'<div class="card"><div class="cue">עוד לא נמדדת. סבב אחד עכשיו הופך כל שיפור לדבר שאפשר להוכיח.</div></div>'}
 <button class="ghost" onclick="openMeasure()">${(S.rounds||[]).length?'סבב מדידה חדש':'בוא נמדוד'}</button>
 
-<div class="sec">משקל גוף</div>
-${bw.length?`<div class="list">${bw.slice(0,6).map(b=>
+<div class="sec">ההתחלה</div>
+${S.why?`<div class="card"><div class="cue" style="font-size:14px;color:#DCDCE0;line-height:1.5">"${esc(S.why)}"</div>
+<div class="tiny" style="margin-top:6px">מה שכתבת ביום הראשון</div></div>`
+:'<div class="card"><div class="cue">עוד לא כתבת למה אתה עושה את זה.</div></div>'}
+<button class="ghost" onclick="openWhy()">${S.why?'לשנות את המשפט':'לכתוב את המשפט'}</button>
+${photoCard()}
+
+<div class="sec">גוף</div>
+${S.ht.length?`<div class="list"><div class="bwrow"><span>גובה${htGain()?`<div class="tiny">+<span class="ltr">${htGain()}</span> ס״מ מאז ההתחלה</div>`:''}</span>
+<span style="font-weight:800;color:var(--ok)"><span class="ltr">${S.ht[S.ht.length-1].cm}</span> ס״מ</span></div></div>`:''}
+<button class="ghost" onclick="addHt()">${S.ht.length?'עדכן גובה':'רשום גובה'}</button>
+${bw.length?`<div class="list" style="margin-top:9px">${bw.slice(0,6).map(b=>
 `<div class="bwrow"><span>${fmt(b.d)}</span><span style="font-weight:800;color:var(--ok)"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
 <button class="ghost" onclick="addBw()">רשום משקל היום</button>
+${(S.miles||[]).length?`<div class="sec">אבני דרך</div>
+<div class="list">${[...S.miles].reverse().map(x=>{const m=MILES.find(y=>y[0]===x.k);
+return m?`<div class="bwrow"><span>${m[2]}</span>
+<span style="font-weight:800;color:var(--ok)">\u2605 ${fmt(x.d)}</span></div>`:''}).join('')}</div>`:''}
 
 <div class="notes" style="margin-top:20px">
 <button class="note" onclick="openHist()">היסטוריית אימונים</button>
@@ -1819,7 +2153,7 @@ ${bkNote()}</div>
 const DL=['א','ב','ג','ד','ה','ו','ש'];
 function dkey(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function sets(){return{foot:new Set(S.footDays||[]),gym:new Set(S.sessions.map(x=>x.date)),shot:new Set(S.shotDays||[]),fuel:new Set(S.fuelDays||[])}}
-function weekDays(back){const t=new Date();t.setHours(0,0,0,0);
+function weekDays(back){const t=nowD();t.setHours(0,0,0,0);
 const sun=new Date(t);sun.setDate(sun.getDate()-sun.getDay()-7*back);
 return Array.from({length:7},(_,i)=>{const d=new Date(sun);d.setDate(d.getDate()+i);
 return{d,k:dkey(d),w:i,fut:d>t,today:dkey(d)===dkey(t)}})}
@@ -1867,7 +2201,9 @@ if(d===null)return `<div class="warnbox" style="margin-top:11px"><b>עוד לא 
 if(d>=14)return `<div class="warnbox" style="margin-top:11px"><b>עברו ${d} ימים מהגיבוי האחרון</b>
 <p>הזמן לגבות שוב.</p></div>`;
 return `<div class="tiny" style="margin-top:9px">גיבוי אחרון: ${d===0?'היום':(d===1?'אתמול':'לפני '+d+' ימים')}</div>`}
-function exportData(){S.lastBackup=today();save();const txt=JSON.stringify(S);
+function exportData(){S.lastBackup=today();save();
+const cp=Object.assign({},S);delete cp.photos;   // תמונות נשארות על המכשיר — הודעת וואטסאפ לא תסחב אותן
+const txt=JSON.stringify(cp);
 const done=()=>{draw();toast('הועתק — תשלח לעצמך בוואטסאפ')};
 try{navigator.clipboard.writeText(txt).then(done,()=>fallbackCopy(txt,done))}
 catch(e){fallbackCopy(txt,done)}}
@@ -1903,21 +2239,7 @@ function saveBw(){const n=parseFloat(document.getElementById('ibw').value);
 if(!numOk(n,30,150)){toast('משקל לא הגיוני — בין 30 ל-150 ק״ג');return}
 const i=S.bw.findIndex(x=>x.d===today());
 if(i>-1)S.bw[i].kg=n;else S.bw.push({d:today(),kg:n});
-save();closeSheet();draw();toast((i>-1?'עודכן ':'נרשם ')+n+' ק״ג')}
-let testCtx=null;
-function setTest(i,j){testCtx={i,j};const cur=(S.tests[i]||[])[j]||'';
-const t=TESTS.find(x=>x[0]===i)||['','',''];
-openSheet(`<div class="grab"></div><div class="h2">${t[1]}</div>
-<div class="sub">${t[2]} · ${['היום','עוד 6 שבועות','עוד 12 שבועות'][j]}</div>
-<div class="num"><div><label>תוצאה</label>
-<input id="itst" type="text" inputmode="decimal" value="${cur}"></div></div>
-<button class="big" onclick="saveTest()">שמור</button>
-<button class="ghost" onclick="clrTest()">נקה</button>`);
-setTimeout(()=>{const e=document.getElementById('itst');if(e)e.select()},60)}
-function saveTest(){const{i,j}=testCtx;const v=document.getElementById('itst').value.trim().slice(0,24);
-if(!v){toast('לא הוזנה תוצאה');return}
-if(!S.tests[i])S.tests[i]=[];S.tests[i][j]=v;save();closeSheet();draw()}
-function clrTest(){const{i,j}=testCtx;if(S.tests[i])S.tests[i][j]='';save();closeSheet();draw()}
+save();closeSheet();draw();toast((i>-1?'עודכן ':'נרשם ')+n+' ק״ג');popMile()}
 function wipe(){openSheet(`<div class="grab"></div><div class="h2">למחוק את כל הנתונים?</div>
 <div class="sub">כל האימונים, המשקלים והמבחנים. אין דרך חזרה.</div><div style="height:16px"></div>
 <button class="big" onclick="doWipe()">כן, מחק הכל</button>
