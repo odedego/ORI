@@ -39,6 +39,10 @@ animation:sweep .95s cubic-bezier(.3,0,.2,1) 1 both}
 .sub{font-size:13px;color:var(--t2)}
 .tiny{font-size:11px;color:var(--t3)}
 .bar{height:3px;width:44px;background:var(--red);margin:9px 0 18px;border-radius:2px}
+.zone{font-family:inherit;font-size:19px;font-weight:900;margin:26px 0 11px;letter-spacing:-.3px}
+.zone:first-of-type{margin-top:20px}
+.gear{flex:0 0 40px;width:40px;height:40px;padding:8px;color:var(--t2);min-height:44px}
+.gear svg{width:100%;height:100%}
 .sec{font-size:12px;font-weight:800;color:var(--red2);letter-spacing:2px;margin:26px 0 10px}
 
 .card{background:var(--c1);border-radius:14px;padding:14px;margin-bottom:10px}
@@ -183,6 +187,21 @@ border-radius:8px;padding:6px 10px;white-space:nowrap}
 border:1px solid rgba(232,194,74,.38);border-radius:9px;padding:7px 11px}
 .allin{background:rgba(232,194,74,.10);border:1px solid rgba(232,194,74,.36);border-radius:12px;
 padding:13px;text-align:center;font-size:14px;font-weight:800;color:var(--ok)}
+.fxhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;
+color:var(--t2);margin:16px 0 8px}
+.fxbar{height:5px;background:var(--c2);border-radius:3px;overflow:hidden;margin-bottom:13px}
+.fxbar i{display:block;height:100%;background:var(--gsolid);border-radius:3px}
+.fxcard{background:var(--c1);border:1px solid var(--c2);border-radius:16px;padding:17px 15px}
+.fxname{font-size:23px;font-weight:900;line-height:1.15}
+.fxcue{font-size:13px;color:var(--t2);margin-top:6px;line-height:1.45}
+.fxtar{font-size:27px;font-weight:900;color:var(--red2);margin-top:11px;
+direction:ltr;text-align:right;letter-spacing:-.5px}
+.fxnav{display:flex;gap:7px;margin-top:11px}
+.fxnav button{flex:1;border:1px solid var(--c3);border-radius:11px;padding:13px 6px;
+font-size:14px;font-weight:700;color:var(--t2);min-height:48px}
+.fxnav button.go{background:var(--red);color:#fff;border-color:var(--red)}
+.fxnav button.fin{background:var(--gsolid);color:var(--on);border-color:var(--gd)}
+.fxnav button.off{opacity:.35}
 .seg{display:flex;gap:7px;margin:14px 0 4px}
 .sg{flex:1;border:1px solid var(--c2);background:var(--c1);border-radius:12px;
 padding:11px 6px;text-align:center;min-height:58px}
@@ -191,6 +210,7 @@ padding:11px 6px;text-align:center;min-height:58px}
 .sg.on{border-color:var(--red2);background:#1C1416}
 .sg.on b{color:#fff}
 .sg.on i{color:var(--red2)}
+.sg.dim{opacity:.55}
 .sg.fin{border-color:var(--gd)}
 .sg.fin b,.sg.fin i{color:var(--ok)}
 .notes{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
@@ -214,6 +234,19 @@ display:flex;align-items:center;justify-content:center;font-size:13px;font-weigh
 .srow.on .sbox{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
 .srow .snm{flex:1;font-size:15px;font-weight:700}
 .srow.on .snm{color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+.chp{border:1px solid var(--c3);background:var(--c1);border-radius:10px;padding:11px 13px;
+font-size:13px;font-weight:600;color:var(--t2);min-height:44px}
+.chp.on{background:var(--gsolid);border-color:var(--gd);color:var(--on);font-weight:800}
+.chp.fx.on{background:var(--red);border-color:var(--red);color:#fff}
+.mb{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.mbb{flex:1 1 30%;border:1px solid var(--c3);background:var(--c1);border-radius:10px;padding:12px 4px;
+font-size:13px;font-weight:700;color:var(--t2);min-height:46px}
+.mbb.on{background:var(--red);border-color:var(--red);color:#fff}
+.foc{border:1px solid var(--gd);background:rgba(232,194,74,.07);border-radius:12px;padding:13px;margin-top:12px}
+.foc .fh{font-size:11px;font-weight:800;color:var(--ok);letter-spacing:2px}
+.foc .ft{font-size:17px;font-weight:900;margin-top:5px}
+.foc .fs{font-size:12px;color:var(--t2);margin-top:4px}
 .ngame{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
 .ngame .ngh{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px}
 .ngame .ngt{font-size:19px;font-weight:900;margin-top:5px}
@@ -440,14 +473,22 @@ const WA=["sq","bp","lat","sp","rear","tri","pal","cf"];
 const WB=["rdl","lun","row","mcp","shrug","curl","splank","cf"];
 
 const FOOT=[
-["קפיצות על קו","קדימה־אחורה · צד־צד · על רגל אחת לכל צד · מגע קצר ככל האפשר ברצפה","4 × 20 שניות","dJI2q9TPdig&t=19",0],
+["קפיצות על קו","קדימה־אחורה · צד־צד · על רגל אחת לכל צד · מגע קצר ככל האפשר ברצפה","3 × 15 שניות","dJI2q9TPdig&t=19",0],
 ["בלימה","ריצה 5 מטר · עצירה על שתי רגליים · להחזיק 2 שניות · בשקט, בלי רעש","6 פעמים","yvd79yzgnOg",0],
 ["החלקה הגנתית עם פתיחת אגן","5 מטר החלקה · פתיחת ירך ורוץ · חזרה להחלקה · האגן נפתח, לא הכתפיים","6 פעמים","MIPpxnp9Zgw",1],
 ["סגירה על זורק","ריצה 4 מטר · צעדים קטנים ומהירים בסוף · יד למעלה · לעצור מאוזן","6 פעמים","CS6x2CF2pKI",0],
 ["נחיתה על רגל אחת","קפיצה קדימה מרגל אחת · נחיתה על אותה רגל · הקפאה 2 שניות · הברך לא נופלת פנימה","6 לכל רגל","3sGe3UiwrVY&t=47",0],
 ["שני כדורים","במקביל ואז לסירוגין · הכלי הכי יעיל ליד החלשה · תתחיל ברמות 1-3 בלבד","2 × 30 שניות","z1RRCS5FoIY",1]];
 const FOOT_LIGHT=FOOT.filter(x=>x[4]);
-function isRestDay(){return new Date().getDay()===5}
+// יום קל = שישי, היום שלפני משחק, או היום שאחרי משחק.
+// אותם שני תרגילים ללא קפיצות ונחיתות — המנגנון שכבר קיים, רק בהקשר רחב יותר.
+function shiftKey(n){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+n);return dkey(d)}
+function gameOn(k){return (S.games||[]).some(g=>g.d===k)}
+function lightWhy(){if(new Date().getDay()===5)return 'fri';
+if(gameOn(shiftKey(1)))return 'pre';
+if(gameOn(shiftKey(-1)))return 'post';
+return ''}
+function isRestDay(){return !!lightWhy()}
 function todayFoot(){return isRestDay()?FOOT_LIGHT:FOOT}
 
 
@@ -503,6 +544,7 @@ const SHOP=[["eggs","ביצים"],["milk","חלב"],["cottage","קוטג׳ וי�
 ["oil","שמן זית"],["veg","ירקות קפואים"]];
 
 const TESTS=[
+["jump","קפיצה אנכית","סימון על קיר · ההפרש בין הושטה לקפיצה, בס״מ"],
 ["shotCatch","קליעה מקבלה","100 זריקות, 5 תחנות"],
 ["shotDrib","קליעה מהכדרור","50 זריקות, ימין ושמאל"],
 ["ft","עונשין","50 זריקות רצוף"],
@@ -535,6 +577,21 @@ const INTENTS=[
 ["התקפה","יד שמאל בכל הזדמנות. אימון הוא המקום היחיד שבו מותר לטעות איתה."],
 ["התקפה","עצירת קפיצה במקום עוד צעד. זה מה שהופך אותך לשחקן שסומכים עליו."]];
 
+const MINB=[[0,'לא נכנסתי'],[1,'עד 5 דקות'],[2,'5 עד 10'],[3,'10 עד 20'],[4,'20 ומעלה']];
+const CHIPS=[
+["close","סגירה על הזורק","סגירה על זורק"],
+["hand","נשארתי מול היד החזקה","החלקה הגנתית עם פתיחת אגן"],
+["help","עזרה וחזרה במקום","החלקה הגנתית עם פתיחת אגן"],
+["pos","מיקום לפני שהכדור הגיע",""],
+["box","חסימת ריבאונד","נחיתה על רגל אחת"],
+["back","חזרה בהגנה",""],
+["talk","דיבור בהגנה",""],
+["fake","לא קניתי פייק","בלימה"],
+["feet","רגליים מוכנות לפני הקליטה","בלימה"],
+["pass","המסירה הראשונה","מסירה מהכדרור ביד אחת"]];
+function chipName(id){const c=CHIPS.find(x=>x[0]===id);return c?c[1]:''}
+function chipDrill(id){const c=CHIPS.find(x=>x[0]===id);return c?c[2]:''}
+
 const RULES=[
 "טכניקה לפני משקל. תמיד.",
 "אף פעם לא עד כשל — תשאיר 2-3 חזרות במאגר.",
@@ -552,6 +609,7 @@ const RULES=[
 <script>
 const K='uri1';
 let dropped=0;
+let S=null,tab='home',tint=null;
 const SCHED_DEF={team:[0,3,4],foot:[0,1,2,3,4,5,6],gym:[0,2,4],shot:[1,3],fuel:[0,1,2,3,4,5,6]};
 const TIME_DEF={0:'17:30-19:00',3:'19:45-21:00',4:'20:30-22:00'};
 const SKEYS=['team','gym','foot','shot','fuel'];
@@ -567,13 +625,12 @@ function stampToday(){const k=today(),w=new Date().getDay();
 if(!S.dayplan)S.dayplan={};
 if(!S.dayplan[k]){const o={};SKEYS.forEach(x=>o[x]=SCHED[x].includes(w));S.dayplan[k]=o;save()}
 return S.dayplan[k]}
-let S=load(),tab='home',tint=null;
-syncSched();
 
 function blank(){return{sessions:[],cur:null,foot:{d:'',done:[]},shoot:{d:'',w:'A',done:[]},
 bw:[],tests:{},shop:[],start:'',footDays:[],shotDays:[],fuel:{d:'',done:[]},fuelDays:[],
 lastBackup:'',games:[],intent:{d:'',i:-1},intentDays:[],
-sched:JSON.parse(JSON.stringify(SCHED_DEF)),times:Object.assign({},TIME_DEF),dayplan:{}}}
+sched:JSON.parse(JSON.stringify(SCHED_DEF)),times:Object.assign({},TIME_DEF),dayplan:{},
+gsnooze:{},gskip:{},focus:{c:'',since:'',hits:0},coach:{asked:'',txt:''},focusLog:[],weeks:[],rounds:[]}}
 function cleanLog(lg){if(!lg||typeof lg!=='object')return{};
 const out={};Object.keys(lg).forEach(k=>{if(!EX[k]||!Array.isArray(lg[k]))return;
  const v=lg[k].filter(x=>Array.isArray(x)&&x.length===2&&isFinite(x[0])&&isFinite(x[1])
@@ -585,11 +642,40 @@ const A=k=>{if(!Array.isArray(o[k]))o[k]=[]};
 ['sessions','bw','shop','footDays','shotDays','fuelDays','games','intentDays'].forEach(A);
 o.games=o.games.filter(x=>x&&typeof x==='object'&&typeof x.d==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x.d))
  .map(x=>({d:x.d,opp:String(x.opp||'').slice(0,40),home:x.home?1:0,
-  min:numOk(+x.min,0,60)?+x.min:0,
-  good:String(x.good||'').slice(0,90),fix:String(x.fix||'').slice(0,90),lg:x.lg?1:0}))
+  mb:Number.isInteger(x.mb)&&x.mb>=0&&x.mb<=4?x.mb
+    :(numOk(+x.min,0,60)?(+x.min===0?0:(+x.min<=5?1:(+x.min<=10?2:(+x.min<=20?3:4)))):0),
+  good:String(x.good||'').slice(0,40),fix:String(x.fix||'').slice(0,40),
+  note:String(x.note||'').slice(0,90),saw:String(x.saw||'').slice(0,40),
+  prev:['y','n','na'].includes(x.prev)?x.prev:'',lg:x.lg?1:0}))
  .sort((a,b)=>dnum(a.d)-dnum(b.d));
 o.games=o.games.filter((x,i,arr)=>arr.findIndex(y=>y.d===x.d)===i);
 if(!o.gsnooze||typeof o.gsnooze!=='object')o.gsnooze={};
+Object.keys(o.gsnooze).forEach(k=>{const v=o.gsnooze[k];
+ o.gsnooze[k]=(v&&typeof v==='object')?{d:String(v.d||''),n:Number(v.n)||0}
+  :(typeof v==='string'?{d:v,n:1}:undefined);
+ if(!o.gsnooze[k]||!o.gsnooze[k].d)delete o.gsnooze[k]});
+if(!o.gskip||typeof o.gskip!=='object')o.gskip={};
+if(!o.focus||typeof o.focus!=='object')o.focus={c:'',since:'',hits:0};
+if(!CHIPS.some(c=>c[0]===o.focus.c))o.focus={c:'',since:'',hits:0};
+if(!Number.isInteger(o.focus.hits)||o.focus.hits<0)o.focus.hits=0;
+if(!Array.isArray(o.rounds))o.rounds=[];
+o.rounds=o.rounds.filter(x=>x&&typeof x.d==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x.d)&&x.v&&typeof x.v==='object')
+ .map(x=>{const v={};TESTS.forEach(t=>{const q=x.v[t[0]];if(q)v[t[0]]=String(q).slice(0,24)});return{d:x.d,v}})
+ .filter(x=>Object.keys(x.v).length).slice(-12);
+// הגירה: העמודה "היום" מהמבחנים הישנים הופכת לסבב המדידה הראשון
+if(!o.rounds.length&&o.tests&&Object.keys(o.tests).length){const v={};
+ Object.keys(o.tests).forEach(k=>{const q=(o.tests[k]||[])[0];if(q)v[k]=String(q).slice(0,24)});
+ if(Object.keys(v).length)o.rounds.push({d:o.start||today(),v})}
+o.rounds.sort((a,b)=>dnum(a.d)-dnum(b.d));
+if(!Array.isArray(o.focusLog))o.focusLog=[];
+o.focusLog=o.focusLog.filter(x=>x&&CHIPS.some(c=>c[0]===x.c)&&typeof x.d==='string')
+ .map(x=>({c:x.c,d:x.d})).slice(-40);
+if(!Array.isArray(o.weeks))o.weeks=[];
+o.weeks=o.weeks.filter(x=>x&&typeof x.w==='string'&&/^\d{4}-\d{1,2}-\d{1,2}$/.test(x.w))
+ .slice(-60);
+if(!o.coach||typeof o.coach!=='object')o.coach={asked:'',txt:''};
+o.coach={asked:typeof o.coach.asked==='string'?o.coach.asked:'',
+ txt:String(o.coach.txt||'').slice(0,120)};
 if(!o.intent||typeof o.intent!=='object')o.intent={d:'',i:-1};
 if(!o.sched||typeof o.sched!=='object')o.sched={};
 SKEYS.forEach(k=>{const v=o.sched[k];
@@ -645,7 +731,7 @@ return p.length===3?(+p[2])+'.'+(+p[1]):String(d)}
 
 function dnum(x){const p=String(x).split('-');return Date.UTC(+p[0],+p[1]-1,+p[2])}
 function progWeek(){if(!S.start)return 1;
-const w=Math.floor((dnum(today())-dnum(S.start))/6048e5)+1;return Math.max(1,Math.min(w,12))}
+const w=Math.floor((dnum(today())-dnum(S.start))/6048e5)+1;return Math.max(1,w)}
 function mark(k){const t=today();if(!S[k])S[k]=[];if(!S[k].includes(t)){S[k].push(t);save()}}
 function unmark(k){const t=today();if(!S[k])return;const i=S[k].indexOf(t);if(i>-1){S[k].splice(i,1);save()}}
 const BLK={foot:{list:()=>todayFoot(),day:'footDays',name:()=>isRestDay()?'רגליים · גרסה קלה':'רגליים'},
@@ -715,16 +801,19 @@ if(diff>=0&&diff<=4){n++;cur=t}else break}return n}
 
 /* ---------- nav ---------- */
 const IC={
+train:'<g fill="currentColor" stroke="none"><rect x="1.6" y="9.1" width="2.7" height="5.8" rx="1.15"/><rect x="5.1" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="8.5" y="10.5" width="7" height="3" rx="1.3"/><rect x="15.5" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="19.7" y="9.1" width="2.7" height="5.8" rx="1.15"/></g>',
+prog:'<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
 home:'<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
 gym:'<g fill="currentColor" stroke="none"><rect x="1.6" y="9.1" width="2.7" height="5.8" rx="1.15"/><rect x="5.1" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="8.5" y="10.5" width="7" height="3" rx="1.3"/><rect x="15.5" y="6.3" width="3.4" height="11.4" rx="1.5"/><rect x="19.7" y="9.1" width="2.7" height="5.8" rx="1.15"/></g>',
-pers:'<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+
 food:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
 nums:'<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>'};
-const TABS=[['home','בית'],['gym','אימון'],['pers','אישי'],['food','אוכל'],['nums','מספרים']];
+const TABS=[['home','היום'],['train','אימון'],['food','אוכל'],['prog','התקדמות']];
 function drawNav(){document.getElementById('nav').innerHTML=TABS.map(t=>
 `<button class="nb ${tab===t[0]?'on':''}" onclick="go('${t[0]}')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${IC[t[0]]}</svg>${t[1]}</button>`).join('')}
 function go(t){tab=t;draw();window.scrollTo(0,0)}
-function draw(){drawNav();document.getElementById('app').innerHTML=({home:vHome,gym:vGym,pers:vPers,food:vFood,nums:vNums})[tab]()}
+const VIEWS={home:vHome,train:vTrain,food:vFood,prog:vProg};
+function draw(){drawNav();document.getElementById('app').innerHTML=(VIEWS[tab]||vHome)()}
 
 function dayDoneAll(back){const d=new Date();d.setDate(d.getDate()-back);
 const w=d.getDay(),k=dkey(d),S3=sets();
@@ -812,15 +901,15 @@ if(!pool.length)return '';
 return pool[hsh(today()+c)%pool.length]}
 
 const TODO={
-foot:{tab:'pers',n:()=>isRestDay()?'רגליים · גרסה קלה':'רגליים',
+foot:{tab:'train',n:()=>isRestDay()?'רגליים · גרסה קלה':'רגליים',
  s:()=>isRestDay()?'שני תרגילים, בלי קפיצות':'השער — זריזות וקרקוע',
  m:()=>[isRestDay()?4:13,'דק׳'],
  c:()=>[S.foot.d===today()?S.foot.done.length:0,todayFoot().length]},
-gym:{tab:'gym',n:()=>'אימון כוח '+curW(),s:()=>curW()==='A'?'ברך ודחיפה':'ירך ומשיכה',
+gym:{tab:'train',n:()=>'אימון כוח '+curW(),s:()=>curW()==='A'?'ברך ודחיפה':'ירך ומשיכה',
  m:()=>[45,'דק׳'],
  c:()=>{const ids=curW()==='A'?WA:WB,t=ids.reduce((a,id)=>a+EX[id].s,0);
   return [S.cur&&S.cur.date===today()?Object.values(S.cur.log).flat().filter(Boolean).length:0,t]}},
-shot:{tab:'pers',n:()=>'בלוק '+shootState().w,
+shot:{tab:'train',n:()=>'בלוק '+shootState().w,
  s:()=>shootState().w==='A'?'קליעה וסיום':'תנועה ומסירה',
  m:()=>[32,'דק׳'],
  c:()=>{const sh=shootState();return [sh.done.length,(sh.w==='A'?SHA:SHB).length]}},
@@ -832,7 +921,7 @@ function todayList(){const p=dayParts();if(!p.length)return '';
 const open=p.filter(x=>x[2]<1),done=p.filter(x=>x[2]>=1);
 const rows=open.map(([,k])=>{const t=TODO[k],[a,b]=t.c(),[mv,mw]=t.m();
  const sub=a>0?`<span class="ltr">${a}</span> מתוך <span class="ltr">${b}</span> — עוד <span class="ltr">${b-a}</span>`:t.s();
- return `<button class="tdi" onclick="go('${t.tab}')">
+ return `<button class="tdi" onclick="goTrain('${k==='shot'?'shoot':k}')">
 <span class="tdc">${ric(k)}</span>
 <span class="tdt"><b>${t.n()}</b><i>${sub}</i></span>
 <span class="tdm"><span class="ltr">${mv}</span> ${mw}</span></button>`}).join('');
@@ -854,34 +943,73 @@ function intentDone(){return (S.intentDays||[]).includes(today())}
 function lastSat(){const d=new Date();d.setHours(0,0,0,0);
 d.setDate(d.getDate()-((d.getDay()+1)%7));return dkey(d)}
 function gameLogged(k){return (S.games||[]).some(g=>g.d===k)}
-function askGame(k){const g=(S.games||[]).find(x=>x.d===k)||{min:'',good:'',fix:''};
+let gDraft={mb:-1,good:'',fix:'',saw:'',prev:''};
+function askGame(k){const g=(S.games||[]).find(x=>x.d===k)||{};
 gameCtx=k;
-openSheet(`<div class="grab"></div><div class="h2">משחק ${fmt(k)}</div>
-<div class="sub">שלוש שורות. זה כל מה שצריך.</div>
-<div class="num"><div><label>דקות על המגרש</label>
-<input id="gmin" type="number" inputmode="numeric" value="${g.min||''}"></div></div>
-<div style="margin-top:2px"><label style="display:block;font-size:12px;color:var(--t2);margin-bottom:5px">דבר אחד שעבד</label>
-<input id="ggood" type="text" maxlength="90" value="${esc(g.good||'')}"
-style="width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;padding:13px;color:#fff;font-size:15px"></div>
-<div style="margin-top:11px"><label style="display:block;font-size:12px;color:var(--t2);margin-bottom:5px">דבר אחד לתקן</label>
-<input id="gfix" type="text" maxlength="90" value="${esc(g.fix||'')}"
-style="width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;padding:13px;color:#fff;font-size:15px"></div>
-<button class="big" style="margin-top:14px" onclick="saveGame()">שמור</button>
+gDraft={mb:Number.isInteger(g.mb)?g.mb:-1,good:g.good||'',fix:g.fix||'',saw:g.saw||'',prev:g.prev||''};
+drawGame()}
+function gPick(f,v){gDraft[f]=gDraft[f]===v?'':v;if(f==='mb')gDraft.mb=v;drawGame()}
+function drawGame(){const k=gameCtx,f=focusOn();
+const mb=gDraft.mb;
+const head=`<div class="grab"></div><div class="h2">משחק ${fmt(k)}</div>
+<div class="sub">נגיעות בלבד. פחות מדקה.</div>
+<div class="sec" style="margin-top:16px">כמה שיחקת</div>
+<div class="mb">${MINB.map(m=>`<button class="mbb ${mb===m[0]?'on':''}" onclick="gPick('mb',${m[0]})">${m[1]}</button>`).join('')}</div>`;
+if(mb<0)return openSheet(head+`<button class="ghost" style="margin-top:14px" onclick="closeSheet()">ביטול</button>`);
+if(mb===0)return openSheet(head+
+`<div class="sec">לא נכנסת</div>
+<div class="blk"><p>זה קורה, וזה לא הנתון שמעניין. מה שכן מעניין — מה ראית משם.</p></div>
+<div style="font-size:13.5px;color:#DCDCE0;line-height:1.5">מה ראית מהספסל שאתה יכול לעשות טוב יותר ממי ששיחק?</div>
+<div class="chips">${CHIPS.map(c=>`<button class="chp ${gDraft.saw===c[0]?'on':''}" onclick="gPick('saw','${c[0]}')">${c[1]}</button>`).join('')}</div>
+<button class="big" style="margin-top:16px" onclick="saveGame()">שמור</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`);
+openSheet(head+
+`${f?`<div class="sec">הדגש מהמשחק הקודם</div>
+<div style="font-size:15px;font-weight:700">${chipName(f.c)} — קרה?</div>
+<div class="mb">${[['y','כן'],['n','לא'],['na','לא הייתה הזדמנות']].map(x=>
+`<button class="mbb ${gDraft.prev===x[0]?'on':''}" onclick="gPick('prev','${x[0]}')">${x[1]}</button>`).join('')}</div>`:''}
+<div class="sec">מה עבד</div>
+<div class="chips">${CHIPS.map(c=>`<button class="chp ${gDraft.good===c[0]?'on':''}" onclick="gPick('good','${c[0]}')">${c[1]}</button>`).join('')}</div>
+<div class="sec">מה לתקן</div>
+<div class="chips">${CHIPS.map(c=>`<button class="chp fx ${gDraft.fix===c[0]?'on':''}" onclick="gPick('fix','${c[0]}')">${c[1]}</button>`).join('')}</div>
+<button class="big" style="margin-top:16px" onclick="saveGame()">שמור</button>
 <button class="ghost" onclick="closeSheet()">ביטול</button>`)}
 let gameCtx=null;
-function saveGame(){const k=gameCtx;
-const min=parseInt(document.getElementById('gmin').value);
-if(!numOk(min,0,60)){toast('כמה דקות שיחקת?');return}
-const good=document.getElementById('ggood').value.trim().slice(0,90);
-const fix=document.getElementById('gfix').value.trim().slice(0,90);
+function saveGame(){const k=gameCtx,d=gDraft;
+if(d.mb<0){toast('כמה שיחקת?');return}
 if(!S.games)S.games=[];
 const i=S.games.findIndex(x=>x.d===k);
 const b=i>-1?S.games[i]:{opp:'',home:1};
-const rec={d:k,opp:b.opp||'',home:b.home?1:0,min,good,fix,lg:1};
+const rec={d:k,opp:b.opp||'',home:b.home?1:0,mb:d.mb,
+ good:d.mb===0?'':d.good,fix:d.mb===0?'':d.fix,saw:d.mb===0?d.saw:'',
+ note:'',prev:d.prev||'',lg:1};
 if(i>-1)S.games[i]=rec;else S.games.push(rec);
 S.games.sort((a,b)=>dnum(a.d)-dnum(b.d));
-save();closeSheet();draw();toast('נרשם');
+if(rec.prev)bumpFocus(rec.prev);
+const nf=rec.fix||rec.saw;
+if(nf&&(!S.focus||!S.focus.c))setFocus(nf);
+save();closeSheet();draw();
+toast(focusOn()?'נרשם · הדגש: '+chipName(S.focus.c):'נרשם');
 try{unlockAudio();winTone()}catch(e){}}
+
+function snapWeek(days){const S3=sets(),ks=days.map(x=>x.k);
+const c=k=>[days.filter(x=>S3[k].has(x.k)).length,days.filter(x=>isPl(k,x.k,x.w)).length];
+const bw=(S.bw||[]).filter(x=>ks.includes(x.d)).pop();
+return{w:days[0].k,gym:c('gym'),foot:c('foot'),shot:c('shot'),fuel:c('fuel'),
+ bw:bw?bw.kg:null,
+ g:(S.games||[]).filter(x=>ks.includes(x.d)&&x.lg).map(x=>({d:x.d,mb:x.mb})),
+ est:days.some(x=>!(S.dayplan||{})[x.k])?1:0}}
+function rollWeeks(){if(!Array.isArray(S.weeks))S.weeks=[];
+const cur=weekDays(0)[0].k;let added=0;
+for(let b=1;b<=8;b++){const days=weekDays(b),wk=days[0].k;
+ if(wk===cur)continue;
+ if(S.weeks.some(x=>x.w===wk))continue;
+ if(S.start&&dnum(wk)<dnum(weekDays(0)[0].k)-8*6048e5)continue;
+ if(S.start&&dnum(days[6].k)<dnum(S.start))continue;
+ S.weeks.push(snapWeek(days));added++}
+if(added){S.weeks.sort((a,b)=>dnum(a.w)-dnum(b.w));
+ if(S.weeks.length>60)S.weeks=S.weeks.slice(-60);save()}
+return added}
 
 function weekPR(keys){let best=null;
 Object.keys(EX).forEach(id=>{let pre=0,top=null,cnt=0;
@@ -900,7 +1028,7 @@ return{k:dkey(d),w:d.getDay()}})}
 function weekReport(){const S3=sets(),days=last7(),ks=days.map(x=>x.k);
 const c=k=>({dn:days.filter(x=>S3[k].has(x.k)).length,pl:days.filter(x=>isPl(k,x.k,x.w)).length});
 const g=c('gym'),f=c('foot'),sh=c('shot'),fu=c('fuel');
-const L=['אורי · שבוע '+progWeek()+' מתוך 12',''];
+const L=['אורי · שבוע '+progWeek()+(progWeek()<=12?' מתוך 12':''),''];
 L.push('כוח '+g.dn+'/'+g.pl+' · רגליים '+f.dn+'/'+f.pl+' · קליעה '+sh.dn+'/'+sh.pl+' · אוכל '+fu.dn+'/'+fu.pl);
 if(S.bw.length){const n=S.bw[S.bw.length-1].kg;
  let t='משקל '+n+' ק״ג';
@@ -910,10 +1038,21 @@ const pr=weekPR(ks);
 if(pr)L.push('שיא חדש · '+pr.n+' '+pr.kg+'×'+pr.rp);
 const it=days.filter(x=>(S.intentDays||[]).includes(x.k)).length;
 if(it)L.push('כוונה לאימון קבוצה · '+it+' מתוך '+days.filter(x=>isPl('team',x.k,x.w)).length);
-(S.games||[]).filter(x=>ks.includes(x.d)).forEach(x=>{
- L.push('','משחק '+fmt(x.d)+' · '+x.min+' דקות');
- if(x.good)L.push('\u2713 '+x.good);
- if(x.fix)L.push('\u2192 '+x.fix)});
+(S.games||[]).filter(x=>ks.includes(x.d)&&x.lg).forEach(x=>{
+ const mb=(MINB.find(m=>m[0]===x.mb)||MINB[0])[1];
+ L.push('','משחק '+fmt(x.d)+(x.opp?' מול '+x.opp:'')+' · '+mb);
+ if(x.mb===0){if(x.saw)L.push('\u2192 '+chipName(x.saw))}
+ else{if(x.good)L.push('\u2713 '+chipName(x.good));
+      if(x.fix)L.push('\u2192 '+chipName(x.fix))}});
+if(focusOn())L.push('','הדגש עד המשחק הבא: '+chipName(S.focus.c));
+{const cl=(S.focusLog||[]).slice(-3);
+ if(cl.length)L.push('דגשים שנסגרו: '+cl.map(x=>chipName(x.c)).join(' · '));}
+{const w4=(S.weeks||[]).filter(x=>!x.est).slice(-4);
+ if(w4.length>=2){L.push('','\u2014 ארבעת השבועות האחרונים');
+  w4.forEach(x=>{const pct=k=>x[k][1]?Math.round(x[k][0]/x[k][1]*100):0;
+   L.push(fmt(x.w)+' · כוח '+x.gym[0]+'/'+x.gym[1]+' · רגליים '+x.foot[0]+'/'+x.foot[1]
+    +' · קליעה '+x.shot[0]+'/'+x.shot[1]+' · אוכל '+x.fuel[0]+'/'+x.fuel[1]
+    +(x.bw?' · '+x.bw+' ק״ג':''))});}}
 L.push('',fmt(ks[0])+' \u2013 '+fmt(ks[6]));
 return L.join('\n')}
 
@@ -928,14 +1067,38 @@ function openReport(){openSheet(`<div class="grab"></div><div class="h2">הסי�
 <button class="ghost" onclick="closeSheet()">סגור</button>`)}
 
 /* ---------- home ---------- */
-function vHome(){const d=new Date(),p=planText();
+function bwCard(){return `<div class="warnbox"><b>${S.bw.length?'לא נשקלת שבוע':'עוד לא נשקלת'}</b>
+<p>משקל הגוף הוא המספר הכי חשוב במטרה שלך, והוא היחיד שקל לשכוח. בוקר, לפני אוכל.
+<button onclick="addBw()" style="color:var(--red2);font-weight:700;text-decoration:underline">תרשום עכשיו</button></p></div>`}
+function week6Card(){return `<div class="warnbox"><b>שבוע 6 — שבוע המדידה</b>
+<p>הגיע הזמן למדוד את ארבעת המספרים ולהחליט מה משתנה.
+<button onclick="openWeek6()" style="color:var(--red2);font-weight:700;text-decoration:underline">מה בודקים ומה עושים</button></p></div>`}
+function week7Card(){return `<div class="warnbox"><b>שבוע 7 — שבוע הקלה</b>
+<p><b>סט אחד פחות בכל תרגיל, אותו משקל בדיוק.</b> זה לא חופש, זה השבוע שבו הגוף סוגר פערים.</p></div>`}
+
+/* תקציב כרטיסים: עד שניים דחופים ועד שניים לטווח ארוך.
+   מה שלא נכנס היום — יעלה מחר, כשמשהו אחר ייסגר. */
+function homeUrgent(){const out=[];
+if(progWeek()===6)out.push(week6Card());
+if(progWeek()===7)out.push(week7Card());
+if(pendingGame())out.push(gamePrompt());
+if(measureDue())out.push(measureCard());
+if(daysSinceBw()>=7)out.push(bwCard());
+return out.filter(Boolean).slice(0,2).join('')}
+function homeHorizon(){const out=[];
+if(nextGame())out.push(nextGameCard());
+if(focusOn())out.push(focusCard());
+const c=coachCard();if(c)out.push(c);
+return out.filter(Boolean).slice(0,2).join('')}
+
+function vHome(){const p=planText();
 const bw=S.bw.length?S.bw[S.bw.length-1].kg:'—';
 const open=S.cur?Object.values(S.cur.log).flat().filter(Boolean).length:0;
-const last=S.sessions.length?S.sessions[S.sessions.length-1]:null;
+const gymToday=isPl('gym',today(),new Date().getDay());
 return `<div class="wrap">
 <div class="hero">
 <div class="row" style="align-items:center"><div class="tiny" style="letter-spacing:2.5px">נקודת השינוי</div>
-<div style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()} מתוך 12</div></div>
+<div style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()}${progWeek()<=12?' מתוך 12':''}</div></div>
 <div class="h1" style="margin-top:6px">אורי<span style="color:var(--red2)">.</span></div>
 <div class="bar"></div>
 <div class="today">${dayRing()}
@@ -948,28 +1111,19 @@ ${p[1]?`<div class="sub" style="margin-top:2px">${p[1]}</div>`:''}
 <div><div class="v ltr">${bw}</div><div class="k">משקל ק״ג</div></div>
 </div></div>
 <div class="mot">${motiv()}</div>
-${gamePrompt()}
-${nextGameCard()}
+${homeUrgent()}
 ${todayList()}
 ${intentCard()}
-<div style="text-align:center;margin-top:12px">
-<button class="tiny" style="color:var(--t3);text-decoration:underline;padding:12px 16px;min-height:44px" onclick="openToday()">היום זה לא מתאים</button></div>
-${daysSinceBw()>=7?`<div class="warnbox" style="margin-bottom:10px"><b>${S.bw.length?'לא נשקלת שבוע':'עוד לא נשקלת'}</b>
-<p>משקל הגוף הוא המספר הכי חשוב במטרה שלך, והוא היחיד שקל לשכוח. בוקר, לפני אוכל.
-<button onclick="addBw()" style="color:var(--red2);font-weight:700;text-decoration:underline">תרשום עכשיו</button></p></div>`:''}
-${progWeek()===6?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע 6 — שבוע המדידה</b>
-<p>הגיע הזמן למדוד את ארבעת המספרים ולהחליט מה משתנה. <button onclick="openWeek6()" style="color:var(--red2);font-weight:700;text-decoration:underline">מה בודקים ומה עושים</button></p></div>`:''}
-${progWeek()===7?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע 7 — שבוע הקלה</b>
-<p><b>סט אחד פחות בכל תרגיל, אותו משקל בדיוק.</b> בהכנה האישית — רגליים כרגיל, בלוק קליעה אחד בלבד השבוע, בלי העונשין בלחץ. זה לא חופש, זה השבוע שבו הגוף סוגר פערים.</p></div>`:''}
-${(S.cur&&open)?`<div class="card" style="border:1px solid var(--red)">
+${(S.cur&&open)?`<div class="card" style="border:1px solid var(--red);margin-top:12px">
 <div class="row"><div><div class="nm">אימון ${S.cur.w} בתהליך</div>
-<div class="cue">${open} סטים נרשמו · התחלת ב-${fmt(S.cur.date)}</div></div></div>
+<div class="cue"><span class="ltr">${open}</span> סטים נרשמו · התחלת ב-${fmt(S.cur.date)}</div></div></div>
 <div class="acts" style="margin-top:11px">
-<button class="act solid" onclick="go('gym')">המשך אימון</button>
+<button class="act solid" onclick="goTrain('gym')">המשך אימון</button>
 <button class="act" onclick="askDrop()">בטל</button></div></div>`
-:`<button class="big" onclick="go('gym')">התחל אימון ${nextW()}</button>`}
-<button class="ghost" onclick="go('pers')">הכנה אישית</button>
-${last?`<div class="tiny" style="text-align:center;margin-top:10px">האימון האחרון: ${fmt(last.date)} · אימון ${last.w}</div>`:''}
+:(gymToday?`<button class="big" style="margin-top:12px" onclick="goTrain('gym')">התחל אימון ${nextW()}</button>`:'')}
+${homeHorizon()}
+<div style="text-align:center;margin-top:14px">
+<button class="tiny" style="color:var(--t3);text-decoration:underline;padding:12px 16px;min-height:44px" onclick="openToday()">היום זה לא מתאים</button></div>
 <div class="two2">
 <button class="mini" onclick="openRules()">עשרת חוקי הזהב</button>
 <button class="mini" onclick="openTips()">טיפים מקצועיים</button>
@@ -987,10 +1141,13 @@ return `<div class="gcard">
 function nextGameCard(){const g=nextGame();if(!g)return '';
 const n=Math.round((dnum(g.d)-dnum(today()))/864e5);
 const when=n===0?'היום':(n===1?'מחר':'בעוד '+n+' ימים');
+const f=focusOn();
 return `<div class="ngame" onclick="editGame('${g.d}')">
 <div class="ngh">המשחק הבא</div>
 <div class="ngt">${when}${g.opp?' · '+esc(g.opp):''}</div>
-<div class="ngd">${fmt(g.d)} · ${g.home?'בית':'חוץ'}</div></div>`}
+<div class="ngd">${fmt(g.d)} · ${g.home?'בית':'חוץ'}</div>
+${n===0&&f?`<div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--c2);
+font-size:14px;font-weight:800;color:var(--ok)">המשימה היום: ${chipName(f.c)}</div>`:''}</div>`}
 
 function planText(){const P=stampToday(),d=new Date().getDay(),t=(S.times||{})[d];
 const g=(S.games||[]).find(x=>x.d===today());
@@ -1060,12 +1217,106 @@ return q.length===3?q[0]+'-'+String(+q[1]).padStart(2,'0')+'-'+String(+q[2]).pad
 function nextGame(){const t=dnum(today());
 return (S.games||[]).filter(g=>dnum(g.d)>=t&&!g.lg).sort((a,b)=>dnum(a.d)-dnum(b.d))[0]||null}
 function pendingGame(){const t=dnum(today());
-return (S.games||[]).filter(g=>dnum(g.d)<=t&&!g.lg)
- .filter(g=>{const z=(S.gsnooze||{})[g.d];return !z||dnum(z)<=t})
+return (S.games||[]).filter(g=>dnum(g.d)<t&&!g.lg)          // הבוקר שאחרי, לא ערב המשחק
+ .filter(g=>!(S.gskip||{})[g.d])
+ .filter(g=>{const z=(S.gsnooze||{})[g.d];return !z||dnum(z.d)<=t})
  .sort((a,b)=>dnum(b.d)-dnum(a.d))[0]||null}
-function snoozeGame(k){if(!S.gsnooze)S.gsnooze={};
+function snoozeGame(k){if(!S.gsnooze)S.gsnooze={};if(!S.gskip)S.gskip={};
+const n=((S.gsnooze[k]&&S.gsnooze[k].n)||0)+1;
+if(n>=3){S.gskip[k]=1;save();draw();toast('נסגר בלי תיעוד. ממשיכים.');return}
 const d=new Date();d.setDate(d.getDate()+1);
-S.gsnooze[k]=dkey(d);save();closeSheet();draw();toast('נזכיר לך מחר')}
+S.gsnooze[k]={d:dkey(d),n};save();draw();toast('נזכיר מחר')}
+function lastRound(){return (S.rounds||[]).length?S.rounds[S.rounds.length-1]:null}
+function measureDue(){const r=lastRound();
+if(!r)return workDays()>=14;
+return Math.floor((dnum(today())-dnum(r.d))/864e5)>=42}
+function measureCard(){const r=lastRound();
+return `<div class="gcard"><div class="nm">${r?'הגיע הזמן למדוד שוב':'סבב מדידה ראשון'}</div>
+<div class="cue" style="margin-top:5px">${r?'עברו שישה שבועות מהמדידה הקודמת. אותם מבחנים בדיוק, כדי שההשוואה תהיה אמיתית.':'ארבעה מספרים שיהיו נקודת ההשוואה שלך לכל השנה. עדיף לעשות את זה לפני שמתקדמים.'}</div>
+<button class="act solid" style="width:100%;margin-top:12px" onclick="openMeasure()">${r?'למדידה':'בוא נמדוד'}</button></div>`}
+function openMeasure(){const r=lastRound(),isNew=!r||r.d!==today();
+const cur=isNew?{}:r.v;
+openSheet(`<div class="grab"></div><div class="h2">סבב מדידה</div>
+<div class="sub">אותם מבחנים בכל פעם. מה שלא מדדת — תשאיר ריק.</div><div style="height:10px"></div>
+${TESTS.map(t=>{const prev=prevVal(t[0],isNew?null:r);
+return `<div style="margin-top:12px">
+<label style="display:block;font-size:13px;font-weight:700;margin-bottom:3px">${t[1]}</label>
+<div class="cue" style="margin-bottom:6px">${t[2]}${prev?' · קודם: '+esc(prev):''}</div>
+<input class="fin" id="m_${t[0]}" type="text" maxlength="24" value="${esc(cur[t[0]]||'')}"></div>`}).join('')}
+<button class="big" style="margin-top:16px" onclick="saveMeasure()">שמור את הסבב</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`)}
+function prevVal(id,skip){const rs=(S.rounds||[]).filter(x=>x!==skip);
+for(let i=rs.length-1;i>=0;i--)if(rs[i].v[id])return rs[i].v[id];
+return ''}
+function saveMeasure(){const v={};
+TESTS.forEach(t=>{const e=document.getElementById('m_'+t[0]);
+ if(e&&e.value.trim())v[t[0]]=e.value.trim().slice(0,24)});
+if(!Object.keys(v).length){toast('לא הוזן אף מדד');return}
+if(!S.rounds)S.rounds=[];
+const i=S.rounds.findIndex(x=>x.d===today());
+if(i>-1)S.rounds[i]={d:today(),v};else S.rounds.push({d:today(),v});
+S.rounds.sort((a,b)=>dnum(a.d)-dnum(b.d));
+if(S.rounds.length>12)S.rounds=S.rounds.slice(-12);
+save();closeSheet();draw();
+try{unlockAudio();winTone()}catch(e){}
+toast('הסבב נשמר')}
+function numOf(t){const m=String(t).match(/-?\d+(\.\d+)?/);return m?parseFloat(m[0]):null}
+function roundsTable(){const rs=S.rounds||[];if(!rs.length)return '';
+const cur=rs[rs.length-1],prev=rs.length>1?rs[rs.length-2]:null;
+return `<div class="list">${TESTS.filter(t=>cur.v[t[0]]||(prev&&prev.v[t[0]])).map(t=>{
+const a=cur.v[t[0]]||'',b=prev?prev.v[t[0]]:'';
+const na=numOf(a),nb=numOf(b);
+const d=(na!==null&&nb!==null)?Math.round((na-nb)*10)/10:null;
+return `<div class="bwrow" style="align-items:center"><span>${t[1]}${b?`<div class="tiny">קודם: ${esc(b)}</div>`:''}</span>
+<span style="text-align:left"><span style="font-weight:800;color:var(--ok);font-size:15px">${esc(a)||'—'}</span>
+${d!==null&&d!==0?`<div class="tiny" style="color:${d>0?'var(--ok)':'var(--t3)'}">${d>0?'+':''}<span class="ltr">${d}</span></div>`:''}</span></div>`}).join('')}</div>
+<div class="tiny" style="text-align:center;margin-top:8px">סבב אחרון: ${fmt(cur.d)}${prev?' · קודם: '+fmt(prev.d):''}</div>`}
+
+function coachDue(){if(workDays()<12)return false;
+if(!S.coach.asked)return true;
+return Math.floor((dnum(today())-dnum(S.coach.asked))/864e5)>=42}
+function coachCard(){
+if(S.coach.txt&&!coachDue())return `<div class="foc" style="border-color:var(--c3);background:none">
+<div class="fh" style="color:var(--t3)">מה שהמאמן ביקש</div>
+<div class="ft" style="font-size:15px">${esc(S.coach.txt)}</div>
+<div class="fs">נשאל ב-${fmt(S.coach.asked)}</div></div>`;
+if(!coachDue())return '';
+return `<div class="gcard"><div class="nm">הגיע הזמן לשאול</div>
+<div class="cue" style="margin-top:5px">בסוף האימון הקרוב, פנים אל פנים, שאלה אחת:<br>
+<b style="color:#fff">״מה הדבר האחד שאם אשפר תיתן לי יותר דקות?״</b></div>
+<div class="iact" style="margin-top:11px">
+<button onclick="laterCoach()">עוד לא</button>
+<button class="go" onclick="openCoach()">שאלתי — הנה התשובה</button></div></div>`}
+function laterCoach(){const d=new Date();d.setDate(d.getDate()+7);
+S.coach.asked=dkey(new Date(dnum(today())-35*864e5));save();draw();toast('נזכיר בשבוע הבא')}
+function openCoach(){openSheet(`<div class="grab"></div><div class="h2">מה הוא אמר</div>
+<div class="sub">במילים שלו, קצר. זה יהפוך לדגש שגובר על הכל.</div><div style="height:14px"></div>
+<input class="fin" id="ctxt" type="text" maxlength="120" value="${esc(S.coach.txt||'')}" placeholder="לדוגמה: לחזור מהר יותר בהגנה">
+<button class="big" style="margin-top:14px" onclick="saveCoach()">שמור</button>
+<button class="ghost" onclick="closeSheet()">ביטול</button>`)}
+function saveCoach(){const v=document.getElementById('ctxt').value.trim().slice(0,120);
+if(!v){toast('מה הוא אמר?');return}
+S.coach={asked:today(),txt:v};save();closeSheet();draw();
+try{unlockAudio();winTone()}catch(e){}
+toast('נשמר. זה הדגש עכשיו')}
+
+function focusOn(){return S.focus&&S.focus.c?S.focus:null}
+function setFocus(c){S.focus={c,since:today(),hits:0};save()}
+function bumpFocus(ans){if(!S.focus||!S.focus.c)return;
+if(ans==='y'){S.focus.hits=(S.focus.hits||0)+1;
+ if(S.focus.hits>=2){
+  if(!S.focusLog)S.focusLog=[];
+  if(!S.focusLog.some(x=>x.c===S.focus.c))S.focusLog.push({c:S.focus.c,d:today()});
+  if(S.focusLog.length>40)S.focusLog=S.focusLog.slice(-40);
+  S.focus={c:'',since:'',hits:0}}}
+save()}
+function focusCard(){const f=focusOn();if(!f)return '';
+const dr=chipDrill(f.c);
+return `<div class="foc"><div class="fh">הדגש עד המשחק הבא</div>
+<div class="ft">${chipName(f.c)}</div>
+${dr?`<div class="fs">בהכנה האישית: ${dr}</div>`:''}
+${f.hits?`<div class="fs">נסגר <span class="ltr">${f.hits}</span> מתוך <span class="ltr">2</span></div>`:''}</div>`}
+
 function editGame(k){const g=(S.games||[]).find(x=>x.d===k)||{d:k,opp:'',home:1};
 gameCtx=k;
 openSheet(`<div class="grab"></div><div class="h2">${(S.games||[]).some(x=>x.d===k)?'עריכת משחק':'משחק חדש'}</div>
@@ -1106,7 +1357,7 @@ function openWeek6(){openSheet(`<div class="grab"></div><div class="h2">שבוע
 <div class="q"><b style="color:#fff;display:block;margin-bottom:3px">חדר הכושר עלה, הקליעה לא זזה</b>מוסיפים בלוק קליעה שלישי בסוף שבוע.</div>
 <div class="q"><b style="color:#fff;display:block;margin-bottom:3px">משקל הגוף לא עלה בכלל</b>הבעיה באוכל, לא באימון. לא מוסיפים שום אימון עד שזה מטופל.</div>
 <div class="q"><b style="color:#fff;display:block;margin-bottom:3px">הזריזות לא השתפרה</b>6 דקות רגליים גם בימי קבוצה, ובודקים אם יש כאב בברך או בעקב.</div>
-<button class="big" style="margin-top:14px" onclick="closeSheet();go('nums')">ללשונית המספרים</button>`)}
+<button class="big" style="margin-top:14px" onclick="closeSheet();go('prog')">ללשונית המספרים</button>`)}
 
 function openRules(){openSheet(`<div class="grab"></div><div class="h2">עשרת חוקי הזהב</div>
 <div class="sub">תלה את זה על הקיר. שווה יותר מכל תוכנית.</div><div style="height:12px"></div>
@@ -1126,20 +1377,73 @@ function dropCur(){S.cur=null;save();closeSheet();draw();toast('האימון ב�
 /* ---------- gym ---------- */
 function curW(){return S.cur?S.cur.w:nextW()}
 function ensure(){if(!S.cur)S.cur={date:today(),w:nextW(),log:{}}}
-function vGym(){const w=curW(),ids=w==='A'?WA:WB;
-return `<div class="wrap">
-<div class="row"><div><div class="h1" style="font-size:26px">אימון ${w}</div>
-<div class="sub">${w==='A'?'ברך ודחיפה':'ירך ומשיכה'}</div></div>
-<button class="act" style="flex:0 0 auto;padding:12px 16px" onclick="flip()">החלף</button></div>
-<div class="bar"></div>
-${progWeek()===7?`<div class="warnbox" style="margin-bottom:10px"><b>שבוע הקלה</b>
+function gymSets(){const ids=curW()==='A'?WA:WB;
+const tot=ids.reduce((a,id)=>a+EX[id].s,0);
+const dn=(S.cur&&S.cur.date===today())?Object.values(S.cur.log).flat().filter(Boolean).length:0;
+return[dn,tot]}
+let exIdx=-1,gymList=false;
+function exDone(id){const lg=(S.cur&&S.cur.log[id])||[];return lg.filter(Boolean).length}
+function nextOpen(ids){for(let i=0;i<ids.length;i++)if(exDone(ids[i])<EX[ids[i]].s)return i;return -1}
+function exAt(ids){if(exIdx>=0&&exIdx<ids.length)return exIdx;
+const n=nextOpen(ids);return n<0?ids.length-1:n}
+function exGo(d){const ids=curW()==='A'?WA:WB;
+exIdx=Math.max(0,Math.min(exAt(ids)+d,ids.length-1));draw();window.scrollTo(0,0)}
+function exJump(i){exIdx=i;gymList=false;draw();window.scrollTo(0,0)}
+function toggleGymList(){gymList=!gymList;draw();window.scrollTo(0,0)}
+
+function bodyGym(){ensure();const ids=curW()==='A'?WA:WB;
+return gymList?listGym(ids):focusGym(ids)}
+
+function focusGym(ids){const i=exAt(ids),id=ids[i],e=EX[id];
+const dn=exDone(id),lg=(S.cur.log[id]||[]),lp=lastFor(id);
+const tot=ids.reduce((a,x)=>a+EX[x].s,0);
+const done=ids.reduce((a,x)=>a+exDone(x),0);
+const all=done>=tot;
+return `${(i===0&&!done)?`<div class="card" style="margin-top:12px" onclick="openWarm()">
+<div class="row"><div class="nm">חימום קבוע</div><div class="cq" style="font-size:15px">6 דק׳</div></div>
+<div class="cue">5 תרגילים · לחץ לפרטים</div></div>`:''}
+<div class="fxhead"><span>תרגיל <span class="ltr">${i+1}</span> מתוך <span class="ltr">${ids.length}</span></span>
+<button onclick="toggleGymList()" style="color:var(--t2);text-decoration:underline;padding:8px 4px;min-height:44px">כל האימון</button></div>
+<div class="fxbar"><i style="width:${Math.round(done/tot*100)}%"></i></div>
+<div class="fxcard">
+<div class="fxname" onclick="openEx('${id}')">${e.n}</div>
+<div class="fxcue">${e.cue}</div>
+<div class="fxtar"><span class="ltr">${e.s} × ${e.r}</span></div>
+${lp?`<div class="last">אחרונה: <span class="ltr">${lp[0]}</span> ק״ג <span class="ltr">× ${lp[1]}</span></div>`
+   :'<div class="last">פעם ראשונה — תתחיל קל</div>'}
+<div class="sets">${Array.from({length:e.s},(_,k)=>{const v=lg[k];
+return `<button class="set ${v?'on':''}" onclick="tapSet('${id}',${k})">${v?`<span class="ltr">${v[0]}×${v[1]}</span>`:'סט '+(k+1)}</button>`}).join('')}</div>
+<div class="acts">
+${e.v?`<button class="act" onclick="vid('${e.v}')">▶ טכניקה${e.d?` · ${e.d} שנ׳`:``}</button>`:''}
+<button class="act" onclick="startT(${e.rest})">מנוחה ${Math.floor(e.rest/60)}:${String(e.rest%60).padStart(2,'0')}</button>
+</div></div>
+<div class="fxnav">
+<button class="${i===0?'off':''}" onclick="exGo(-1)">הקודם</button>
+${i<ids.length-1?`<button class="${dn>=e.s?'go':''}" onclick="exGo(1)">${dn>=e.s?'לתרגיל הבא':'דלג'}</button>`
+ :`<button class="${all?'fin':'go'}" onclick="finish()">סיימתי את האימון</button>`}</div>
+${all&&i<ids.length-1?`<button class="big" style="margin-top:10px" onclick="finish()">סיימתי את האימון</button>`:''}
+<div class="tiny" style="text-align:center;margin-top:11px">בפעם הבאה תקבל אימון ${curW()==='A'?'B':'A'}</div>`}
+
+function listGym(ids){const w=curW();
+return `<div class="fxhead"><span>כל האימון</span>
+<button onclick="toggleGymList()" style="color:var(--t2);text-decoration:underline;padding:8px 4px;min-height:44px">חזרה לתרגיל</button></div>
+${ids.map((id,i)=>{const e=EX[id],dn=exDone(id),fin=dn>=e.s;
+return `<button class="tdi" onclick="exJump(${i})">
+<span class="tdt"><b>${fin?'\u2713 ':''}${e.n}</b><i><span class="ltr">${dn}</span>/<span class="ltr">${e.s}</span> סטים</i></span>
+<span class="tdm"><span class="ltr">${e.s} × ${e.r}</span></span></button>`}).join('')}
+<button class="big" style="margin-top:12px" onclick="finish()">סיימתי את האימון</button>`}
+
+function bodyGymOld(){const w=curW(),ids=w==='A'?WA:WB;
+return `<div class="row" style="margin:14px 0 2px;align-items:center">
+<div class="sub">${w==='A'?'ברך ודחיפה':'ירך ומשיכה'}</div>
+<button class="note" style="min-height:34px;padding:7px 11px" onclick="flip()">החלף אימון</button></div>
+${progWeek()===7?`<div class="warnbox" style="margin:10px 0 2px"><b>שבוע הקלה</b>
 <p>סט אחד פחות בכל תרגיל, אותו משקל. אל תוריד במשקל.</p></div>`:''}
-<div class="card" onclick="openWarm()"><div class="row"><div class="nm">חימום קבוע</div>
+<div class="card" style="margin-top:12px" onclick="openWarm()"><div class="row"><div class="nm">חימום קבוע</div>
 <div class="cq" style="font-size:15px">6 דק׳</div></div><div class="cue">5 תרגילים · לחץ לפרטים</div></div>
 ${(()=>{let o='',g='';ids.forEach((id,i)=>{if(EX[id].g!==g){g=EX[id].g;o+=`<div class="sec">${g}</div>`}o+=exCard(id,i)});return o})()}
 <button class="big" style="margin-top:14px" onclick="finish()">סיימתי את האימון</button>
-<div class="tiny" style="text-align:center;margin-top:9px">בפעם הבאה תקבל אימון ${w==='A'?'B':'A'}</div>
-</div>`}
+<div class="tiny" style="text-align:center;margin-top:9px">בפעם הבאה תקבל אימון ${w==='A'?'B':'A'}</div>`}
 function exCard(id,i){const e=EX[id];ensure();
 const lg=S.cur.log[id]||[];const lp=lastFor(id);
 return `<div class="card">
@@ -1160,7 +1464,7 @@ openSheet(`<div class="grab"></div><div class="h2">להחליף לאימון ${S
 <div style="height:16px"></div>
 <button class="big" onclick="doFlip()">כן, החלף</button>
 <button class="ghost" onclick="closeSheet()">לא, תחזור</button>`)}
-function doFlip(){ensure();S.cur.w=S.cur.w==='A'?'B':'A';S.cur.log={};save();closeSheet();draw()}
+function doFlip(){ensure();S.cur.w=S.cur.w==='A'?'B':'A';S.cur.log={};exIdx=-1;gymList=false;save();closeSheet();draw()}
 function vid(v){window.open('https://www.youtube.com/watch?v='+v,'_blank')}
 
 let sheetCtx=null;
@@ -1183,12 +1487,13 @@ const rp=parseInt(document.getElementById('irp').value);
 if(!numOk(kg,0,300)){toast('משקל לא הגיוני — בין 0 ל-300');return}
 if(!numOk(rp,1,200)){toast('חזרות חייבות להיות לפחות 1');return}
 ensure();if(!S.cur.log[id])S.cur.log[id]=[];S.cur.log[id][k]=[kg,rp];save();closeSheet();draw();startT(EX[id].rest)}
+function setsOf(id){return exDone(id)}
 function clrSet(){const{id,k}=sheetCtx;if(S.cur.log[id])delete S.cur.log[id][k];save();closeSheet();draw()}
 function finish(){if(!S.cur||!Object.values(S.cur.log).flat().filter(Boolean).length){toast('לא רשמת אף סט');return}
 S.cur.log=Object.fromEntries(Object.entries(S.cur.log).map(([k,v])=>[k,v.filter(Boolean)]));
-const sets=Object.values(S.cur.log).flat();
-const vol=Math.round(sets.reduce((a,b)=>a+b[0]*b[1],0));
-const w=S.cur.w;S.sessions.push(S.cur);S.cur=null;save();
+const allSets=Object.values(S.cur.log).flat();
+const vol=Math.round(allSets.reduce((a,b)=>a+b[0]*b[1],0));
+const w=S.cur.w;S.sessions.push(S.cur);S.cur=null;exIdx=-1;gymList=false;save();
 const n=S.sessions.length,st=streak();
 openSheet(`<div class="grab"></div>
 <div style="text-align:center;padding:6px 0 4px">
@@ -1196,11 +1501,11 @@ openSheet(`<div class="grab"></div>
 <div class="sub" style="margin-top:4px">האימון ה-${n} שלך</div>
 <div class="h2" style="margin-top:14px">אימון ${w} הושלם</div></div>
 <div class="stat" style="margin:16px 0 4px">
-<div><div class="v ltr">${sets.length}</div><div class="k">סטים</div></div>
+<div><div class="v ltr">${allSets.length}</div><div class="k">סטים</div></div>
 <div><div class="v ltr">${vol}</div><div class="k">נפח ק״ג</div></div>
 <div><div class="v ltr">${st}</div><div class="k">רצף</div></div></div>
 <div class="tiny" style="text-align:center;margin:14px 0 4px">בפעם הבאה: אימון ${w==='A'?'B':'A'}</div>
-<button class="big" style="margin-top:12px" onclick="closeSheet();go('nums')">לראות את המספרים</button>
+<button class="big" style="margin-top:12px" onclick="closeSheet();go('prog')">לראות את המספרים</button>
 <button class="ghost" onclick="closeSheet();go('home')">סגור</button>`)}
 
 
@@ -1231,38 +1536,60 @@ function shootState(){if(S.shoot.d!==today()){const prev=S.shoot.d,
 fin=(S.shotDays||[]).includes(prev);
 S.shoot={d:today(),w:prev?(fin?(S.shoot.w==='A'?'B':'A'):S.shoot.w):'A',done:[]};save()}
 return S.shoot}
-let persTab=null;
-function persBlocks(){const sh=shootState();
-return{foot:{n:isRestDay()?'רגליים · קל':'רגליים',min:isRestDay()?4:13,
-  list:todayFoot(),done:S.foot.done.length,key:'foot'},
- shoot:{n:'בלוק '+sh.w,min:32,list:sh.w==='A'?SHA:SHB,done:sh.done.length,key:'shoot'}}}
-function persActive(){const b=persBlocks();
-if(persTab&&b[persTab])return persTab;
-return b.foot.done>=b.foot.list.length?'shoot':'foot'}
-function setPers(t){persTab=t;draw();window.scrollTo(0,0)}
+let trainTab=null;
+function trainBlocks(){const sh=shootState(),g=gymSets();
+return{gym:{n:'כוח '+curW(),min:45,done:g[0],tot:g[1],pl:isPl('gym',today(),new Date().getDay())},
+ foot:{n:isRestDay()?'רגליים · קל':'רגליים',min:isRestDay()?4:12,
+       done:S.foot.d===today()?S.foot.done.length:0,tot:todayFoot().length,
+       pl:isPl('foot',today(),new Date().getDay())},
+ shoot:{n:'בלוק '+sh.w,min:32,done:sh.done.length,tot:(sh.w==='A'?SHA:SHB).length,
+        pl:isPl('shot',today(),new Date().getDay())}}}
+function trainActive(){const b=trainBlocks();
+if(trainTab&&b[trainTab])return trainTab;
+// ברירת מחדל: מה שמתוכנן להיום וטרם נסגר
+const order=['foot','gym','shoot'];   // סדר התוכנית: רגליים פותחות, ואז כוח, ואז קליעה
+const open=order.filter(k=>b[k].pl&&b[k].done<b[k].tot);
+if(open.length)return open[0];
+const any=order.filter(k=>b[k].pl);
+return any.length?any[0]:'foot'}
+function setTrain(t){trainTab=t;draw();window.scrollTo(0,0)}
+function goTrain(t){tab='train';trainTab=t;draw();window.scrollTo(0,0)}
 
-function vPers(){dayList('foot');const b=persBlocks(),act=persActive(),cur=b[act];
-const seg=Object.keys(b).map(k=>{const x=b[k],fin=x.done>=x.list.length;
- return `<button class="sg ${act===k?'on':''} ${fin?'fin':''}" onclick="setPers('${k}')">
-<b>${fin?'\u2713 ':''}${x.n}</b><i><span class="ltr">${x.done}</span>/<span class="ltr">${x.list.length}</span> · <span class="ltr">${x.min}</span> דק׳</i></button>`}).join('');
+function vTrain(){dayList('foot');
+const b=trainBlocks(),act=trainActive();
+const seg=['gym','foot','shoot'].map(k=>{const x=b[k],fin=x.tot&&x.done>=x.tot;
+ return `<button class="sg ${act===k?'on':''} ${fin?'fin':''}${x.pl?'':' dim'}" onclick="setTrain('${k}')">
+<b>${fin?'✓ ':''}${x.n}</b><i><span class="ltr">${x.done}</span>/<span class="ltr">${x.tot}</span> · <span class="ltr">${x.min}</span> דק׳</i></button>`}).join('');
+const sub=act==='gym'?'אימון כוח'
+ :(isRestDay()&&act==='foot'
+   ?({fri:'שישי · 4 דקות בלבד',pre:'לפני משחק · 4 דקות בלבד',post:'אחרי משחק · 4 דקות בלבד'})[lightWhy()]
+   :'מה שמתוכנן להיום');
+return `<div class="wrap">
+<div class="h1" style="font-size:26px">אימון</div>
+<div class="sub">${sub}</div><div class="bar"></div>
+<div class="seg">${seg}</div>
+${act==='gym'?bodyGym():bodyBlock(act,b)}
+</div>`}
+
+function bodyBlock(act,b){const cur=b[act];
+const list=act==='foot'?todayFoot():(shootState().w==='A'?SHA:SHB);
 const notes=act==='foot'
  ?`<button class="note warn" onclick="nPain()">אם כואב — מה יורד ראשון</button>
-<button class="note" onclick="nNoise()">המדד הוא רעש, לא מאמץ</button>${isRestDay()?'<button class="note" onclick="nFri()">למה שישי קצר</button>':''}`
+<button class="note" onclick="nNoise()">המדד הוא רעש, לא מאמץ</button>${isRestDay()?'<button class="note" onclick="nFri()">למה היום קצר</button>':''}`
  :`<button class="note" onclick="nShort()">אין לי זמן היום</button>
 <button class="note" onclick="nFree()">חופשה או חג</button>`;
-return `<div class="wrap">
-<div class="h1" style="font-size:26px">הכנה אישית</div>
-<div class="sub">${isRestDay()?'שישי · 4 דקות בלבד':'רגליים 13 דק׳ · קליעה 32 דק׳'}</div><div class="bar"></div>
-<div class="seg">${seg}</div>
-${act==='shoot'?`<div class="row" style="margin:14px 0 2px;align-items:center">
+return `${act==='shoot'?`<div class="row" style="margin:14px 0 2px;align-items:center">
 <div class="sub">${b.shoot.n==='בלוק A'?'קליעה וסיום':'תנועה ומסירה'}</div>
 <button class="note" style="min-height:34px;padding:7px 11px" onclick="askFlipShoot()">החלף בלוק</button></div>`:''}
-${act==='foot'&&isRestDay()?`<div class="warnbox" style="margin:14px 0 2px"><b>שישי — מנוחה מהעומס, לא מהעבודה</b>
-<p>קפיצות, בלימות ונחיתות יורדות היום. שני תרגילים, ארבע דקות, וזהו.</p></div>`:''}
-<div class="list" style="margin-top:12px">${cur.list.map((x,i)=>ck(act,i,x)).join('')}</div>
-<div class="notes">${notes}</div>
-<button class="ghost" style="margin-top:18px" onclick="setPers('${act==='foot'?'shoot':'foot'}')">לבלוק ${act==='foot'?b.shoot.n:b.foot.n}</button>
-</div>`}
+${act==='foot'&&isRestDay()?`<div class="warnbox" style="margin:14px 0 2px">
+<b>${({fri:'שישי — מנוחה מהעומס, לא מהעבודה',
+     pre:'מחר משחק — הרגליים נשארות טריות',
+     post:'אתמול היה משחק — היום הרקמות מתאוששות'})[lightWhy()]}</b>
+<p>${({fri:'קפיצות, בלימות ונחיתות יורדות היום. שני תרגילים, ארבע דקות, וזהו.',
+     pre:'אותה עבודה, בלי קפיצות ונחיתות. הקואורדינציה נשמרת, הקפיץ נשאר למחר.',
+     post:'המשחק הוא העומס הכי גבוה בשבוע. היום שני תרגילים בלי עומס, וזהו.'})[lightWhy()]}</p></div>`:''}
+<div class="list" style="margin-top:12px">${list.map((x,i)=>ck(act,i,x)).join('')}</div>
+<div class="notes">${notes}</div>`}
 
 function nPain(){openSheet(`<div class="grab"></div><div class="h2">אם כואב — מה יורד ראשון</div>
 <div class="sub">הכלל הכי חשוב בבלוק הזה</div><div style="height:14px"></div>
@@ -1280,7 +1607,7 @@ function nShort(){openSheet(`<div class="grab"></div><div class="h2">אין לי
 <div class="sub">יום שנכשל הוא לא שבוע שנכשל</div><div style="height:14px"></div>
 <div class="blk"><p>אם היה מבחן, אם חזרת גמור — <b>תעשה את בלוק הרגליים וזהו.</b> ${isRestDay()?'ארבע דקות':'שלוש עשרה דקות'}. זה נחשב יום מלא ונרשם ככזה.</p></div>
 <div class="warnbox"><b>מה שלא עושים</b><p>לא מדלגים על היום כולו כי אין זמן לכל התוכנית. שלוש עשרה דקות שקרו מנצחות ארבעים וחמש שלא.</p></div>
-<button class="big" style="margin-top:14px" onclick="closeSheet();setPers('foot')">לבלוק הרגליים</button>`)}
+<button class="big" style="margin-top:14px" onclick="closeSheet();goTrain('foot')">לבלוק הרגליים</button>`)}
 function nFree(){openSheet(`<div class="grab"></div><div class="h2">חופשה או חג</div>
 <div class="sub">יום שלם פנוי</div><div style="height:14px"></div>
 <div class="blk"><p>עושים את <b>שני הבלוקים</b>, עם 3-4 שעות מנוחה ביניהם.</p></div>
@@ -1299,8 +1626,9 @@ function doFlipShoot(){S.shoot={d:today(),w:S.shoot.w==='A'?'B':'A',done:[]};sav
 function secsOf(q){let m=/^\s*(\d+)\s*×\s*(\d+)\s*שניות\s*$/.exec(q);if(m)return +m[2];
 m=/^\s*(\d+)\s*שניות\s*$/.exec(q);return m?+m[1]:0}
 function ck(key,i,x){const on=S[key].done.includes(i),sec=secsOf(x[2]);
+const f=focusOn(),isF=f&&chipDrill(f.c)===x[0];
 return `<div class="ckw"><div class="chk ${on?'on':''}" onclick="tg('${key}',${i})"><div class="box">${on?'\u2713':''}</div>
-<div class="ct">${x[0]}<div class="cue">${x[1]}</div></div><div class="qw"><div class="cq">${x[2]}</div>${x[3]?`<button class="vi" onclick="event.stopPropagation();vid('${x[3]}')">\u25B6</button>`:''}</div></div>
+<div class="ct">${x[0]}${isF?' <span class="badge" style="font-size:9.5px;padding:3px 7px">הדגש</span>':''}<div class="cue">${x[1]}</div></div><div class="qw"><div class="cq">${x[2]}</div>${x[3]?`<button class="vi" onclick="event.stopPropagation();vid('${x[3]}')">\u25B6</button>`:''}</div></div>
 ${sec?`<div class="ckact"><button class="tmr" onclick="event.stopPropagation();startT(${sec},'${x[0].replace(/'/g,"")}',5)">\u23F1 הפעל <span class="ltr">${sec}</span> שנ׳</button></div>`:''}</div>`}
 function tg(key,i){const a=S[key].done,k=a.indexOf(i);k<0?a.push(i):a.splice(k,1);
 const dk=BLK[key].day, was=(S[dk]||[]).includes(today()), now=blkDone(key);
@@ -1326,7 +1654,7 @@ ${full?`<div class="warnbox" style="margin-top:14px"><b>יום מלא</b>
 <p>כל מה שהיה מתוכנן להיום — בוצע. זה הדבר שמצטבר.</p></div>`
 :`<div class="tiny" style="text-align:center;margin-top:14px">נשאר להיום: ${left.join(' · ')}</div>`}
 <button class="big" style="margin-top:16px" onclick="closeSheet()">יאללה</button>
-<button class="ghost" onclick="closeSheet();go('nums')">לראות את הלוח</button>`)}
+<button class="ghost" onclick="closeSheet();go('prog')">לראות את הלוח</button>`)}
 
 /* ---------- food ---------- */
 function vFood(){return `<div class="wrap">
@@ -1404,64 +1732,89 @@ function nGain(){openSheet(`<div class="grab"></div><div class="h2">כמה זו 
 <div class="blk"><p>אל תישקל כל יום — המשקל קופץ בשני ק״ג בין בוקר לערב וזה לא אומר כלום. פעם בשבוע, בבוקר, לפני אוכל, אותו יום קבוע.</p></div>`)}
 
 /* ---------- numbers ---------- */
-function vNums(){const prs=Object.keys(EX).map(id=>[EX[id].n,bestFor(id)]).filter(x=>x[1]);
+function vProg(){const prs=Object.keys(EX).map(id=>[EX[id].n,bestFor(id)]).filter(x=>x[1]);
 const bw=[...S.bw].reverse();
 return `<div class="wrap">
-<div class="h1" style="font-size:26px">מספרים</div>
-<div class="sub">אלה לא תלויים בדעה של אף אחד</div><div class="bar"></div>
-<div class="stat"><div><div class="v ltr">${S.sessions.length}</div><div class="k">אימונים</div></div>
-<div><div class="v ltr">${streak()}</div><div class="k">רצף</div></div>
-<div><div class="v ltr">${S.bw.length?S.bw[S.bw.length-1].kg:'—'}</div><div class="k">משקל</div></div></div>
-<div class="sec">הסיכום השבועי</div>
-<div class="card"><div class="cue">כל מה שקרה השבוע, בהודעה אחת לוואטסאפ.</div>
+<div class="row" style="align-items:flex-start">
+<div><div class="h1" style="font-size:26px">התקדמות</div>
+<div class="sub">אלה לא תלויים בדעה של אף אחד</div></div>
+<button class="gear" onclick="openSettings()" aria-label="הגדרות">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button></div>
+<div class="bar"></div>
+
+<div class="zone">השבוע</div>
+<div class="card">${calHTML()}</div>
+<div class="card" style="margin-top:9px"><div class="cue">כל מה שקרה השבוע, בהודעה אחת לוואטסאפ.</div>
 <div class="acts" style="margin-top:11px">
 <button class="act" onclick="openReport()">תצוגה מקדימה</button>
-<button class="act solid" onclick="sendReport()">שלח</button></div></div>
-<div class="sec">השבוע הזה</div>
-<div class="card">${calHTML()}</div>
+<button class="act solid" onclick="sendReport()">שלח לעודד</button></div></div>
+
+<div class="zone">ההוכחות</div>
+<div class="stat" style="margin-top:0">
+<div><div class="v ltr">${S.sessions.length}</div><div class="k">אימונים</div></div>
+<div><div class="v ltr">${streak()}</div><div class="k">רצף</div></div>
+<div><div class="v ltr">${S.bw.length?S.bw[S.bw.length-1].kg:'—'}</div><div class="k">משקל</div></div></div>
+
 <div class="sec">משחקים</div>
-${(S.games||[]).length?`<div class="list">${[...S.games].reverse().slice(0,8).map(g=>
-`<div class="grow"><div class="row" style="align-items:baseline">
-<span style="font-weight:700">${fmt(g.d)}</span>
-<span style="font-weight:800;color:var(--ok)"><span class="ltr">${g.min}</span> דק׳</span></div>
-${g.good?`<div class="cue" style="margin-top:5px">\u2713 ${esc(g.good)}</div>`:''}
-${g.fix?`<div class="cue" style="margin-top:2px">\u2192 ${esc(g.fix)}</div>`:''}</div>`).join('')}</div>`
-:'<div class="card"><div class="cue">אין עדיין משחקים רשומים. המשחק הוא הדבר היחיד שקובע אם אתה עולה קבוצה — כדאי לתעד אותו.</div></div>'}
-<button class="big" onclick="editGame(today())">הוסף משחק</button>
-<div class="sec">המערכת שלי</div>
-<div class="card"><div class="cue">${SKEYS.filter(k=>SCHED[k].length&&k!=='fuel'&&k!=='foot')
-.map(k=>SNAME[k]+': '+SCHED[k].map(i=>DL[i]).join(' ')).join('<br>')}</div></div>
-<button class="ghost" onclick="openSched()">ערוך את המערכת</button>
-<div class="sec">משקל גוף</div>
-<button class="big" onclick="addBw()">רשום משקל היום</button>
-${bw.length?`<div class="list" style="margin-top:10px">${bw.slice(0,12).map(b=>
-`<div class="bwrow"><span>${fmt(b.d)}</span><span style="font-weight:800;color:var(--red2)"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
+${(S.games||[]).length?`<div class="list">${[...S.games].reverse().slice(0,8).map(g=>{
+const mb=(MINB.find(m=>m[0]===g.mb)||MINB[0])[1];
+return `<div class="grow"><div class="row" style="align-items:baseline">
+<span style="font-weight:700">${fmt(g.d)}${g.opp?' · '+esc(g.opp):''}</span>
+<span style="font-weight:800;color:${g.lg?'var(--ok)':'var(--t3)'}">${g.lg?mb:'טרם תועד'}</span></div>
+${g.lg&&g.mb===0&&g.saw?`<div class="cue" style="margin-top:5px">→ ${chipName(g.saw)}</div>`:''}
+${g.lg&&g.good?`<div class="cue" style="margin-top:5px">✓ ${chipName(g.good)}</div>`:''}
+${g.lg&&g.fix?`<div class="cue" style="margin-top:2px">→ ${chipName(g.fix)}</div>`:''}
+${g.prev==='y'?`<div class="cue" style="margin-top:2px;color:var(--ok)">הדגש הקודם נסגר</div>`:''}</div>`}).join('')}</div>`
+:'<div class="card"><div class="cue">המשחק הוא הדבר היחיד שקובע אם אתה עולה קבוצה. כדאי לתעד אותו.</div></div>'}
+<button class="ghost" onclick="editGame(today())">הוסף משחק</button>
+
 <div class="sec">השיאים שלך</div>
 ${prs.length?`<div class="list">${prs.map(p=>
 `<div class="bwrow" style="align-items:center"><span>${p[0]}<div class="tiny">שיא · ${fmt(p[1].d)}</div></span>
 <span class="ltr" style="font-weight:800;color:var(--ok);font-size:15px">${p[1].kg} × ${p[1].rp}</span></div>`).join('')}</div>`
-:'<div class="card"><div class="cue">עדיין אין נתונים. רשום סטים באימון והם יופיעו כאן.</div></div>'}
-<div class="sec">מבחני מיומנות</div>
-<div class="card"><div class="cue" style="margin-bottom:6px">היום · עוד 6 שבועות · עוד 12</div>
-${TESTS.map(t=>`<div style="padding:11px 0;border-bottom:1px solid var(--c2)">
-<div class="nm" style="font-size:14.5px">${t[1]}</div><div class="cue">${t[2]}</div>
-<div class="sets" style="margin-top:8px">${[0,1,2].map(j=>{const v=(S.tests[t[0]]||[])[j];
-return `<button class="set ${v?'on':''}" onclick="setTest('${t[0]}',${j})">${v?esc(v):['היום','6 שב׳','12 שב׳'][j]}</button>`}).join('')}</div>
-</div>`).join('')}</div>
-<div class="sec">היסטוריה</div>
-${S.sessions.length?`<div class="list">${[...S.sessions].reverse().slice(0,15).map(s=>
-`<div class="bwrow"><span>${fmt(s.date)} · אימון ${s.w}</span><span style="color:var(--t2)"><span class="ltr">${Object.values(s.log).flat().length}</span> סטים</span></div>`).join('')}</div>`
-:'<div class="card"><div class="cue">אין עדיין אימונים רשומים.</div></div>'}
+:'<div class="card"><div class="cue">רשום סטים באימון והשיאים יופיעו כאן.</div></div>'}
+
+${(S.focusLog||[]).length?`<div class="sec">דגשים שנסגרו</div>
+<div class="list">${[...S.focusLog].reverse().slice(0,8).map(x=>
+`<div class="bwrow"><span>${chipName(x.c)}</span>
+<span style="font-weight:800;color:var(--ok)">✓ ${fmt(x.d)}</span></div>`).join('')}</div>`:''}
+
+<div class="sec">מדידות</div>
+${(S.rounds||[]).length?roundsTable():'<div class="card"><div class="cue">עוד לא נמדדת. סבב אחד עכשיו הופך כל שיפור לדבר שאפשר להוכיח.</div></div>'}
+<button class="ghost" onclick="openMeasure()">${(S.rounds||[]).length?'סבב מדידה חדש':'בוא נמדוד'}</button>
+
+<div class="sec">משקל גוף</div>
+${bw.length?`<div class="list">${bw.slice(0,6).map(b=>
+`<div class="bwrow"><span>${fmt(b.d)}</span><span style="font-weight:800;color:var(--ok)"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
+<button class="ghost" onclick="addBw()">רשום משקל היום</button>
+
+<div class="notes" style="margin-top:20px">
+<button class="note" onclick="openHist()">היסטוריית אימונים</button>
+<button class="note" onclick="openSettings()">הגדרות וגיבוי</button></div>
+</div>`}
+
+function openHist(){openSheet(`<div class="grab"></div><div class="h2">היסטוריית אימונים</div>
+<div class="sub">${S.sessions.length} אימוני כוח</div><div style="height:12px"></div>
+${S.sessions.length?`<div class="list">${[...S.sessions].reverse().slice(0,25).map(x=>
+`<div class="bwrow"><span>${fmt(x.date)} · אימון ${x.w}</span>
+<span style="color:var(--t2)"><span class="ltr">${Object.values(x.log).flat().length}</span> סטים</span></div>`).join('')}</div>`
+:'<div class="card"><div class="cue">אין עדיין אימונים רשומים.</div></div>'}`)}
+
+function openSettings(){openSheet(`<div class="grab"></div><div class="h2">הגדרות</div>
+<div class="sub">דברים שנוגעים בהם פעם בחודש</div><div style="height:14px"></div>
+<div class="card"><div class="cue">${SKEYS.filter(k=>SCHED[k].length&&k!=='fuel'&&k!=='foot')
+.map(k=>SNAME[k]+': '+SCHED[k].map(i=>DL[i]).join(' ')).join('<br>')}</div></div>
+<button class="ghost" onclick="closeSheet();openSched()">ערוך את המערכת</button>
 <div class="sec">גיבוי</div>
-<div class="card"><div class="cue">כל הנתונים שלך שמורים על הטלפון הזה בלבד. אם תחליף מכשיר או תנקה את הדפדפן — הכל נעלם. תעתיק ותשלח לעצמך בוואטסאפ פעם בשבועיים.</div>
+<div class="card"><div class="cue">הנתונים שמורים על הטלפון הזה בלבד. אם תחליף מכשיר או תנקה את הדפדפן — הכל נעלם.</div>
 ${bkNote()}</div>
 <button class="big" onclick="exportData()">העתק את הנתונים שלי</button>
-<button class="ghost" onclick="openImport()">שחזור מגיבוי</button>
+<button class="ghost" onclick="closeSheet();openImport()">שחזור מגיבוי</button>
 <div class="danger">
 <div class="dtitle">אזור מסוכן</div>
-<button class="dbtn" onclick="delLast()">מחק את האימון האחרון</button>
-<button class="dbtn" onclick="wipe()">מחק את כל הנתונים</button></div>
-</div>`}
+<button class="dbtn" onclick="closeSheet();delLast()">מחק את האימון האחרון</button>
+<button class="dbtn" onclick="closeSheet();wipe()">מחק את כל הנתונים</button></div>`)}
 
 const DL=['א','ב','ג','ד','ה','ו','ש'];
 function dkey(d){return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
@@ -1644,6 +1997,10 @@ document.addEventListener('visibilitychange',()=>{
 if(document.visibilityState!=='visible')return;
 if(tEnd){if(Date.now()>=tEnd){stopT();toast('המנוחה נגמרה')}else{lockScreen();paintT()}}});
 
+/* ── אתחול: הכל מוצהר, עכשיו מריצים ── */
+S=load();
+syncSched();
+rollWeeks();
 draw();
 </script>
 </body>
