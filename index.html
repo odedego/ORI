@@ -279,12 +279,19 @@ display:flex;align-items:flex-end;overflow:hidden}
 .sldl.t{color:#fff}
 .sltg{position:absolute;right:0;left:0;bottom:calc(84px*.8);height:1px;
 background:var(--red);opacity:.6;pointer-events:none}
-.sltg span{position:absolute;right:0;top:-7px;font-size:10px;font-weight:800;
-color:var(--red2);background:var(--c1);padding:0 4px;border-radius:3px}
+/* התווית יושבת מתחת לגרף ולא עליו: תג שצף בפינה נדרס על ידי עמודה גבוהה
+   ונצמד לשפת הכרטיס. מקרא לא מתנגש עם שום נתון. */
+.sltgl{display:flex;align-items:center;gap:6px;margin-top:9px;
+font-size:11px;font-weight:700;color:var(--t3)}
+.sltgl i{flex:0 0 16px;height:1px;background:var(--red);opacity:.6}
 .ngame{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
 .ngame .ngh{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px}
 .ngame .ngt{font-size:19px;font-weight:900;margin-top:5px}
 .ngame .ngd{font-size:12px;color:var(--t2);margin-top:3px}
+.anch{margin-top:9px;padding-top:9px;border-top:1px solid var(--c2)}
+.anch .anh{font-size:11px;font-weight:800;color:var(--t3);letter-spacing:2px}
+.anch .ant{font-size:16px;font-weight:900;margin-top:4px}
+.anch .ans{font-size:12px;color:var(--t2);margin-top:3px;line-height:1.45}
 .fin{width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;
 padding:13px;color:#fff;font-size:15px;min-height:48px}
 .gcard{border:1px solid var(--red);border-radius:12px;padding:13px;margin-top:12px}
@@ -550,14 +557,18 @@ const SHB=[
 
 
 
+/* האיבר החמישי הוא מפתח יציב. אחסון לפי אינדקס הוא בדיוק הבאג שכבר
+   תוקן ב-tests וב-shop: הוספת ארוחה באמצע הרשימה הייתה ממפה נתונים
+   קיימים לארוחה הלא נכונה, בשקט. */
 const MEALS=[
-["07:00","ארוחת בוקר","3 ביצים · 2 פרוסות לחם מלא · גבינה צהובה · כוס חלב",25],
-["10:00","הפסקה בבית ספר","כריך טונה או חומוס · פרי · יוגורט",15],
-["13:00","צהריים","מנת חלבון גדולה (עוף/בשר/דגים) · אורז או פסטה · ירקות",30],
-["16:00","לפני אימון","בננה + חמאת בוטנים · או שייק",8],
-["19:00","אחרי אימון","המנה הכי גדולה ביום · חלבון + פחמימה · אל תדלג על זה",30],
-["21:00","ערב","קוטג׳ או יוגורט יווני · אגוזים · פרי",18],
-["לפני השינה","לילה","כוס חלב או שייק קטן — הגוף בונה בלילה",9]];
+["07:00","ארוחת בוקר","3 ביצים · 2 פרוסות לחם מלא · גבינה צהובה · כוס חלב",25,"bf"],
+["10:00","הפסקה בבית ספר","כריך טונה או חומוס · פרי · יוגורט",15,"school"],
+["13:00","צהריים","מנת חלבון גדולה (עוף/בשר/דגים) · אורז או פסטה · ירקות",30,"lunch"],
+["16:00","לפני אימון","בננה + חמאת בוטנים · או שייק",8,"pre"],
+["19:00","אחרי אימון","המנה הכי גדולה ביום · חלבון + פחמימה · אל תדלג על זה",30,"post"],
+["21:00","ערב","קוטג׳ או יוגורט יווני · אגוזים · פרי",18,"eve"],
+["לפני השינה","לילה","כוס חלב או שייק קטן — הגוף בונה בלילה",9,"night"]];
+function mealOf(id){return MEALS.find(m=>m[4]===id)||null}
 const FUEL_GOAL=6;
 
 const APPETITE=[
@@ -577,14 +588,17 @@ const SHOP=[["eggs","ביצים"],["milk","חלב"],["cottage","קוטג׳ וי�
 ["oats","שיבולת שועל"],["pb","חמאת בוטנים"],["nuts","אגוזים ושקדים"],["banana","בננות"],
 ["oil","שמן זית"],["veg","ירקות קפואים"]];
 
+/* האיבר הרביעי הוא כיוון השיפור: 1 = גבוה יותר טוב, -1 = נמוך יותר טוב.
+   בלעדיו שניות ואיבודים נצבעו הפוך — שיפור באפור ונסיגה בזהב. */
 const TESTS=[
-["jump","קפיצה אנכית","סימון על קיר · ההפרש בין הושטה לקפיצה, בס״מ"],
-["shotCatch","קליעה מקבלה","100 זריקות, 5 תחנות"],
-["shotDrib","קליעה מהכדרור","50 זריקות, ימין ושמאל"],
-["ft","עונשין","50 זריקות רצוף"],
-["stop","בלימה","ריצה 5 מ׳ ועצירה — כמה יציב"],
-["slide","החלקה הגנתית","הלוך־חזור 5 מ׳ × 4, בשניות"],
-["dribL","כדרור יד שמאל","30 שניות, כמה איבודים"]];
+["jump","קפיצה אנכית","סימון על קיר · ההפרש בין הושטה לקפיצה, בס״מ",1],
+["shotCatch","קליעה מקבלה","100 זריקות, 5 תחנות",1],
+["shotDrib","קליעה מהכדרור","50 זריקות, ימין ושמאל",1],
+["ft","עונשין","50 זריקות רצוף",1],
+["stop","בלימה","ריצה 5 מ׳ ועצירה — כמה יציב",1],
+["slide","החלקה הגנתית","הלוך־חזור 5 מ׳ × 4, בשניות",-1],
+["dribL","כדרור יד שמאל","30 שניות, כמה איבודים",-1]];
+function testDir(id){const t=TESTS.find(x=>x[0]===id);return t&&t[3]===-1?-1:1}
 
 const TIPS=[
 ["מתי מוסיפים משקל — הכלל היחיד","אם סיימת את כל הסטים בקצה העליון של הטווח, ועדיין נשארו לך 2-3 חזרות במאגר — <b>בפעם הבאה תוסיף</b>. 2.5 ק״ג ברגליים, 1-2 ק״ג בפלג גוף עליון. אם לא הגעת — אותו משקל שוב. אין לוח זמנים, יש קריטריון. זה ההבדל בין מי שגדל למי שמרים את אותו משקל חצי שנה."],
@@ -593,7 +607,7 @@ const TIPS=[
 ["תצלם את עצמך","פעם בשבועיים, סט אחד של סקוואט או RDL, מהצד, בטלפון. תשווה למה שראית בסרטון. אתה מתאמן לבד, ואין לך מי שיגיד לך שהגב התעגל. המצלמה תופסת מה שמראה לא תופסת."],
 ["אל תקצר את המנוחה","מנוחה קצרה מדי = משקל נמוך יותר בסט הבא = פחות גירוי לצמיחה, על אותה כמות מאמץ בדיוק. הטיימר הוא לא הצעה. אתה לא ממהר לשום מקום."],
 ["כשנתקעים — וזה יקרה","אם משקל לא זז שלושה אימונים ברצף: תרד 10% ותבנה חזרה. זו לא נסיגה, זו הדרך היחידה לעבור תקרה. לרוב תעבור אותה תוך שבועיים ותמשיך הלאה."],
-["המספר היחיד שמעניין","לא כמה מרים מי שלידך. לא כמה מרים מישהו בקבוצה הראשונה. <b>כמה הרמת אתה לפני חודש.</b> זה המספר היחיד שאתה שולט בו, והוא היחיד שמעיד על משהו."]];
+["המספר היחיד שמעניין","לא כמה מרים מי שלידך. לא כמה מרים מישהו ברמה הבאה. <b>כמה הרמת אתה לפני חודש.</b> זה המספר היחיד שאתה שולט בו, והוא היחיד שמעיד על משהו."]];
 
 const INTENTS=[
 ["הגנה","בכל החלקה — האגן נפתח לפני הכתפיים. זה בדיוק מה שאתה עושה בבלוק הרגליים."],
@@ -609,7 +623,9 @@ const INTENTS=[
 ["מאמץ","לסיים כל ריצה עד הקו. גם את האחרונה, גם כשאף אחד לא מסתכל."],
 ["התקפה","המסירה שאתה רואה לפני כולם — תמסור אותה. בלי לחכות לוודא."],
 ["התקפה","יד שמאל בכל הזדמנות. אימון הוא המקום היחיד שבו מותר לטעות איתה."],
-["התקפה","עצירת קפיצה במקום עוד צעד. זה מה שהופך אותך לשחקן שסומכים עליו."]];
+["התקפה","עצירת קפיצה במקום עוד צעד. זה מה שהופך אותך לשחקן שסומכים עליו."],
+["התקפה","אחרי כל טעות — כף אחת, ואז ידיים למעלה. לא להיעלם מהכדור."],
+["התקפה","ברגע שהמשחק נתקע — תבקש את הכדור. זה בדיוק הרגע שבו סופרים אותך."]];
 
 const MINB=[[0,'לא נכנסתי'],[1,'עד 5 דקות'],[2,'5 עד 10'],[3,'10 עד 20'],[4,'20 ומעלה']];
 const CHIPS=[
@@ -622,7 +638,10 @@ const CHIPS=[
 ["talk","דיבור בהגנה",""],
 ["fake","לא קניתי פייק","בלימה"],
 ["feet","רגליים מוכנות לפני הקליטה","בלימה"],
-["pass","המסירה הראשונה","מסירה מהכדרור ביד אחת"]];
+["pass","המסירה הראשונה","מסירה מהכדרור ביד אחת"],
+/* נוכחות התקפית. בקבוצה הזאת כדור שהוא לא מבקש הוא כדור שלא נוצר —
+   ולכן זה נמדד כמו כל דגש אחר, ולא נאמר לו כפגם. */
+["ask","ביקשתי את הכדור ברגע קשה",""]];
 function chipName(id){const c=CHIPS.find(x=>x[0]===id);return c?c[1]:''}
 function chipDrill(id){const c=CHIPS.find(x=>x[0]===id);return c?c[2]:''}
 
@@ -783,7 +802,9 @@ if(typeof o.lastBackup!=='string')o.lastBackup='';
 const D=(k,extra)=>{if(!o[k]||typeof o[k]!=='object')o[k]=Object.assign({d:'',done:[]},extra);
 if(!Array.isArray(o[k].done))o[k].done=[]};
 D('foot');D('fuel');D('shoot',{w:'A'});
-o.fuel.done=[...new Set(o.fuel.done.filter(i=>Number.isInteger(i)&&i>=0&&i<MEALS.length))];
+o.fuel.done=[...new Set(o.fuel.done
+ .map(x=>(Number.isInteger(x)&&x>=0&&x<MEALS.length)?MEALS[x][4]:x)
+ .filter(x=>typeof x==='string'&&MEALS.some(m=>m[4]===x)))];
 o.foot.done=o.foot.done.filter(i=>Number.isInteger(i)&&i>=0);
 o.shoot.done=o.shoot.done.filter(i=>Number.isInteger(i)&&i>=0);
 if(o.shoot.w!=='A'&&o.shoot.w!=='B')o.shoot.w='A';
@@ -845,11 +866,17 @@ return `<svg viewBox="0 0 100 100" class="ringsvg">
 stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
 transform="rotate(-90 50 50)"/></svg>`}
 let sparkedDay='';
-function dayRing(){const p=dayPct(),n=Math.round(p*100),full=n>=100;
+/* יום שנוקה ידנית הוא לא הישג. בלי ההבחנה הזאת חמש נגיעות ב"היום זה לא
+   מתאים" מייצרות טבעת זהב, ניצוץ ורצף שממשיך — על יום שבו לא נעשה כלום. */
+function emptied(w){if(dayParts().length)return false;
+return SKEYS.filter(x=>x!=='team').some(x=>SCHED[x].includes(w))}
+function dayRing(){const p=dayPct(),n=Math.round(p*100);
+const off=emptied(nowD().getDay()),full=n>=100&&!off;
 let sp='';if(full&&sparkedDay!==today()){sparkedDay=today();sp=' spark'}
-return `<div class="ringwrap${sp}">${ring(p)}
+return `<div class="ringwrap${sp}">${ring(off?0:p)}
 <div class="ringtxt">${full?'<div class="rdone">\u2713</div><div class="rlbl">יום מלא</div>'
-:`<div class="rnum${n?'':' zero'}"><span class="ltr">${n}</span><span class="rp">%</span></div><div class="rlbl">מהיום</div>`}</div></div>`}
+:(off?'<div class="rlbl" style="font-size:12px;line-height:1.3">היום<br>כובה</div>'
+:`<div class="rnum${n?'':' zero'}"><span class="ltr">${n}</span><span class="rp">%</span></div><div class="rlbl">מהיום</div>`)}</div></div>`}
 function todayLeft(){const d=nowD().getDay(),S3=sets(),k=today();
 return ROWS.filter(([,key])=>isPl(key,k,d)).filter(([,key])=>!S3[key].has(k)).map(([n])=>n)}
 function daysSinceBw(){if(!S.bw.length)return 99;
@@ -923,10 +950,13 @@ function go(t){tab=t;draw();window.scrollTo(0,0)}
 const VIEWS={home:vHome,train:vTrain,food:vFood,prog:vProg};
 function draw(){drawNav();document.getElementById('app').innerHTML=(VIEWS[tab]||vHome)()}
 
+/* יום ריק לפי המערכת (שישי) לא שובר רצף — הוא באמת יום מנוחה.
+   יום שרוקן ידנית כן נחשב יום שלא נעשה בו כלום. */
 function dayDoneAll(back){const d=nowD();d.setDate(d.getDate()-back);
 const w=d.getDay(),k=dkey(d),S3=sets();
 const pl=ROWS.filter(([,key])=>isPl(key,k,w));
-return !pl.length||pl.every(([,key])=>S3[key].has(k))}
+if(!pl.length)return !SKEYS.filter(x=>x!=='team').some(x=>SCHED[x].includes(w));
+return pl.every(([,key])=>S3[key].has(k))}
 function fullStreak(){let n=0;for(let i=1;i<=90;i++){if(dayDoneAll(i))n++;else break}return n}
 /* רצף ימים מלאים, עם הקפאה אחת לכל שבעה ימים רצופים.
    היום הראשון שנשבר הוא בדרך כלל גם האחרון — ההקפאה קונה לו יום. */
@@ -958,8 +988,8 @@ fresh:[
 "אף אחד לא רואה את השעה הזאת. את התוצאה שלה כולם יראו.",
 "מי שמחכה להרגיש מוכן מתחיל מאוחר מדי. תתחיל, המוטיבציה מגיעה באמצע.",
 "אתה לא צריך להיות בכושר כדי להתחיל. אתה צריך להתחיל כדי להיות בכושר.",
-"מי שהחליט עליך לא יחליט עליך לנצח. תן לו נתונים חדשים.",
-"אתה לא מתאמן כדי להוכיח למישהו. אתה מתאמן כדי שלא תהיה להם ברירה.",
+"בקבוצה הזאת סופרים אותך. זו לא נחמה — זו הבמה.",
+"מי שמוביל היום בונה בדיוק את מה שצריך כדי לשחק ברמה הבאה.",
 ()=>{const b=bestGain();return b?b.n+" עלה "+b.g+" ק״ג מאז שהתחלת. זה לא תחושה, זה מספר.":null},
 ()=>{const g=bwGain();return g?"עלית "+g+" ק״ג מאז שהתחלת. הגוף עושה בדיוק מה שביקשת ממנו.":null}],
 mid:[
@@ -1038,7 +1068,7 @@ function todayList(){const p=dayParts();if(!p.length)return '';
 const open=p.filter(x=>x[2]<1),done=p.filter(x=>x[2]>=1);
 const rows=open.map(([,k])=>{const t=TODO[k],[a,b]=t.c(),[mv,mw]=t.m();
  const sub=a>0?`<span class="ltr">${a}</span> מתוך <span class="ltr">${b}</span> — עוד <span class="ltr">${b-a}</span>`:t.s();
- return `<button class="tdi" onclick="goTrain('${k==='shot'?'shoot':k}')">
+ return `<button class="tdi" onclick="goTodo('${k}')">
 <span class="tdc">${ric(k)}</span>
 <span class="tdt"><b>${t.n()}</b><i>${sub}</i></span>
 <span class="tdm"><span class="ltr">${mv}</span> ${mw}</span></button>`}).join('');
@@ -1073,7 +1103,7 @@ if(mb<0)return openSheet(head+`<button class="ghost" style="margin-top:14px" onc
 if(mb===0)return openSheet(head+
 `<div class="sec">לא נכנסת</div>
 <div class="blk"><p>זה קורה, וזה לא הנתון שמעניין. מה שכן מעניין — מה ראית משם.</p></div>
-<div style="font-size:13.5px;color:#DCDCE0;line-height:1.5">מה ראית מהספסל שאתה יכול לעשות טוב יותר ממי ששיחק?</div>
+<div style="font-size:13.5px;color:#DCDCE0;line-height:1.5">מה ראית מהצד שאתה לוקח איתך למשחק הבא?</div>
 <div class="chips">${CHIPS.map(c=>`<button class="chp ${gDraft.saw===c[0]?'on':''}" onclick="gPick('saw','${c[0]}')">${c[1]}</button>`).join('')}</div>
 <button class="big" style="margin-top:16px" onclick="saveGame()">שמור</button>
 <button class="ghost" onclick="closeSheet()">ביטול</button>`);
@@ -1264,8 +1294,9 @@ return `<div class="card">
 ${w.rows.map(r=>{const h=r.b?sleepHrs(r.b):0;
  const cls=r.b?(h>=SLEEP_OK?'ok':'low'):(r.fut?'fut':'none');
  return `<div class="slbar"><i class="${cls}" style="height:${h?Math.round(h/10*100):0}%"></i></div>`}).join('')}
-<div class="sltg"><span class="ltr">8</span></div></div>
-<div class="sldls">${w.rows.map(r=>`<div class="sldl${r.today?' t':''}">${D[r.w]}</div>`).join('')}</div></div>
+<div class="sltg"></div></div>
+<div class="sldls">${w.rows.map(r=>`<div class="sldl${r.today?' t':''}">${D[r.w]}</div>`).join('')}</div>
+<div class="sltgl"><i></i>היעד — <span class="ltr">8</span> שעות</div></div>
 <div class="cue" style="margin-top:12px">${sleepLine(w)}</div>
 ${sleepOf(today())?'':`<button class="act solid" style="width:100%;margin-top:12px" onclick="fixSleep()">תרשום את הלילה</button>`}</div>`}
 
@@ -1374,11 +1405,18 @@ return `<div class="ngame" onclick="editGame('${g.d}')">
 <div class="ngt">${when}${g.opp?' · '+esc(g.opp):''}</div>
 <div class="ngd">${fmt(g.d)} · ${g.home?'בית':'חוץ'}</div>
 ${n===0&&f?`<div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--c2);
-font-size:14px;font-weight:800;color:var(--ok)">המשימה היום: ${chipName(f.c)}</div>`:''}</div>`}
+font-size:14px;font-weight:800;color:var(--ok)">המשימה היום: ${chipName(f.c)}</div>`:''}
+${n===0?anchorLine():''}</div>`}
+/* העוגן. פעולה, לא מחשבה — בן 14 באמצע משחק לא מעבד, הוא זז.
+   מופיע ביום משחק בלבד, ואותו נוסח בדיוק בכל פעם. הערך שלו בעקביות. */
+function anchorLine(){return `<div class="anch">
+<div class="anh">אחרי טעות</div>
+<div class="ant">כף אחת, ואז ידיים למעלה.</div>
+<div class="ans">הכף סוגרת את הטעות. הידיים אומרות שאתה עדיין רוצה את הכדור.</div></div>`}
 
 function planText(){const P=stampToday(),d=nowD().getDay(),t=(S.times||{})[d];
 const g=(S.games||[]).find(x=>x.d===today());
-if(g)return ['משחק'+(g.opp?' מול '+esc(g.opp):''),'תראה להם'];
+if(g)return ['משחק'+(g.opp?' מול '+esc(g.opp):''),'היום סופרים אותך'];
 // הכותרת נותנת את ההקשר של היום. הפירוט יושב ברשימה מתחתיה — אין טעם לומר אותו פעמיים.
 if(P.team)return ['אימון קבוצה',t?'<span class="ltr">'+esc(t)+'</span>':''];
 if(P.gym)return ['יום כוח',''];
@@ -1568,7 +1606,7 @@ const na=numOf(a),nb=numOf(b);
 const d=(na!==null&&nb!==null)?Math.round((na-nb)*10)/10:null;
 return `<div class="bwrow" style="align-items:center"><span>${t[1]}${b?`<div class="tiny">קודם: ${esc(b)}</div>`:''}</span>
 <span style="text-align:left"><span style="font-weight:800;color:var(--ok);font-size:15px">${esc(a)||'—'}</span>
-${d!==null&&d!==0?`<div class="tiny" style="color:${d>0?'var(--ok)':'var(--t3)'}">${d>0?'+':''}<span class="ltr">${d}</span></div>`:''}</span></div>`}).join('')}</div>
+${d!==null&&d!==0?`<div class="tiny" style="color:${d*testDir(t[0])>0?'var(--ok)':'var(--t3)'}">${d>0?'+':''}<span class="ltr">${d}</span></div>`:''}</span></div>`}).join('')}</div>
 <div class="tiny" style="text-align:center;margin-top:8px">סבב אחרון: ${fmt(cur.d)}${prev?' · קודם: '+fmt(prev.d):''}</div>`}
 
 function coachDue(){if(workDays()<12)return false;
@@ -1682,7 +1720,7 @@ function openWeek6(){openSheet(`<div class="grab"></div><div class="h2">שבוע
 <div class="q"><b style="color:#fff;display:block;margin-bottom:3px">שלושה מתוך ארבעה עלו</b>ממשיכים. לא נוגעים בכלום.</div>
 <div class="q"><b style="color:#fff;display:block;margin-bottom:3px">חדר הכושר עלה, הקליעה לא זזה</b>מוסיפים בלוק קליעה שלישי בסוף שבוע.</div>
 <div class="q"><b style="color:#fff;display:block;margin-bottom:3px">משקל הגוף לא עלה בכלל</b>הבעיה באוכל, לא באימון. לא מוסיפים שום אימון עד שזה מטופל.</div>
-<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">הזריזות לא השתפרה</b>6 דקות רגליים גם בימי קבוצה, ובודקים אם יש כאב בברך או בעקב.</div>
+<div class="q"><b style="color:#fff;display:block;margin-bottom:3px">הזריזות לא השתפרה</b>לא מוסיפים מגעי קפיצה. קודם בודקים כאב בברך או בעקב, ואז עובדים על איכות הבלימה והנחיתה — רעש, לא מאמץ.</div>
 <button class="big" style="margin-top:14px" onclick="closeSheet();go('prog')">ללשונית המספרים</button>`)}
 
 function openRules(){openSheet(`<div class="grab"></div><div class="h2">עשרת חוקי הזהב</div>
@@ -1708,7 +1746,10 @@ const tot=ids.reduce((a,id)=>a+EX[id].s,0);
 const dn=(S.cur&&S.cur.date===today())?Object.values(S.cur.log).flat().filter(Boolean).length:0;
 return[dn,tot]}
 let exIdx=-1,gymList=false;
-function exDone(id){const lg=(S.cur&&S.cur.log[id])||[];return lg.filter(Boolean).length}
+/* בדיקת התאריך חייבת להיות כאן בדיוק כמו ב-gymSets. בלעדיה אימון פתוח
+   מאתמול מציג את הסטים של אתמול כסגורים, והמסך נותן שני מספרים סותרים. */
+function exDone(id){const lg=(S.cur&&S.cur.date===today()&&S.cur.log[id])||[];
+return lg.filter(Boolean).length}
 function nextOpen(ids){for(let i=0;i<ids.length;i++)if(exDone(ids[i])<EX[ids[i]].s)return i;return -1}
 function exAt(ids){if(exIdx>=0&&exIdx<ids.length)return exIdx;
 const n=nextOpen(ids);return n<0?ids.length-1:n}
@@ -1728,7 +1769,8 @@ const all=done>=tot;
 return `${(i===0&&!done)?`<div class="card" style="margin-top:12px" onclick="openWarm()">
 <div class="row"><div class="nm">חימום קבוע</div><div class="cq" style="font-size:15px">6 דק׳</div></div>
 <div class="cue">5 תרגילים · לחץ לפרטים</div></div>`:''}
-<div class="fxhead"><span>תרגיל <span class="ltr">${i+1}</span> מתוך <span class="ltr">${ids.length}</span></span>
+<div class="fxhead"><span>תרגיל <span class="ltr">${i+1}</span> מתוך <span class="ltr">${ids.length}</span>
+<button onclick="flip()" style="color:var(--t2);text-decoration:underline;padding:8px 6px;min-height:44px">אימון ${curW()==='A'?'B':'A'}</button></span>
 <button onclick="toggleGymList()" style="color:var(--t2);text-decoration:underline;padding:8px 4px;min-height:44px">כל האימון</button></div>
 <div class="fxbar"><i style="width:${Math.round(done/tot*100)}%"></i></div>
 <div class="fxcard">
@@ -1750,7 +1792,9 @@ ${e.v?`<button class="act" onclick="vid('${e.v}')">▶ טכניקה${e.d?` · ${
 ${i<ids.length-1?`<button class="${dn>=e.s?'go':''}" onclick="exGo(1)">${dn>=e.s?'לתרגיל הבא':'דלג'}</button>`
  :`<button class="${all?'fin':'go'}" onclick="finish()">סיימתי את האימון</button>`}</div>
 ${all&&i<ids.length-1?`<button class="big" style="margin-top:10px" onclick="finish()">סיימתי את האימון</button>`:''}
-<div class="tiny" style="text-align:center;margin-top:11px">בפעם הבאה תקבל אימון ${curW()==='A'?'B':'A'}</div>`}
+<div class="tiny" style="text-align:center;margin-top:11px">בפעם הבאה תקבל אימון ${curW()==='A'?'B':'A'}</div>
+<div class="notes"><button class="note" onclick="nShort()">אין לי זמן היום</button>
+<button class="note warn" onclick="nPain()">אם כואב — מה יורד ראשון</button></div>`}
 
 function listGym(ids){const w=curW();
 return `<div class="fxhead"><span>כל האימון</span>
@@ -1761,19 +1805,6 @@ return `<button class="tdi" onclick="exJump(${i})">
 <span class="tdm"><span class="ltr">${e.s} × ${e.r}</span></span></button>`}).join('')}
 <button class="big" style="margin-top:12px" onclick="finish()">סיימתי את האימון</button>`}
 
-function exCard(id,i){const e=EX[id];ensure();
-const lg=S.cur.log[id]||[];const lp=lastFor(id);
-return `<div class="card">
-<div class="row" onclick="openEx('${id}')">
-<div style="flex:1"><div class="nm">${e.n}</div><div class="cue">${e.cue}</div></div>
-<div class="sr">${e.s} × ${e.r}</div></div>
-${lp?`<div class="last">אחרונה: <span class="ltr">${lp[0]}</span> ק״ג <span class="ltr">× ${lp[1]}</span></div>`:'<div class="last">פעם ראשונה — תתחיל קל</div>'}
-<div class="sets">${Array.from({length:e.s},(_,k)=>{const v=lg[k];
-return `<button class="set ${v?'on':''}" onclick="tapSet('${id}',${k})">${v?`<span class="ltr">${v[0]}×${v[1]}</span>`:'סט '+(k+1)}</button>`}).join('')}</div>
-<div class="acts">
-${e.v?`<button class="act" onclick="vid('${e.v}')">▶ טכניקה${e.d?` · ${e.d} שנ׳`:``}</button>`:''}
-<button class="act" onclick="startT(${e.rest})">מנוחה ${Math.floor(e.rest/60)}:${String(e.rest%60).padStart(2,'0')}</button>
-</div></div>`}
 function flip(){ensure();const n=Object.values(S.cur.log).flat().filter(Boolean).length;
 if(!n){doFlip();return}
 openSheet(`<div class="grab"></div><div class="h2">להחליף לאימון ${S.cur.w==='A'?'B':'A'}?</div>
@@ -1870,6 +1901,11 @@ const any=order.filter(k=>b[k].pl);
 return any.length?any[0]:'foot'}
 function setTrain(t){trainTab=t;draw();window.scrollTo(0,0)}
 function goTrain(t){tab='train';trainTab=t;draw();window.scrollTo(0,0)}
+/* היעד נלקח מ-TODO ולא מונח מראש. כל שורה ברשימת היום קראה ל-goTrain
+   בלי קשר לסוג, ולכן "אוכל" נחת על לשונית האימון — שנופלת לכוח. */
+function goTodo(k){const t=TODO[k];if(!t)return;
+if(t.tab==='train'){goTrain(k==='shot'?'shoot':k);return}
+go(t.tab)}
 
 function vTrain(){dayList('foot');
 const b=trainBlocks(),act=trainActive();
@@ -1889,9 +1925,14 @@ ${act==='gym'?bodyGym():bodyBlock(act,b)}
 
 function bodyBlock(act,b){const cur=b[act];
 const list=act==='foot'?todayFoot():(shootState().w==='A'?SHA:SHB);
+/* "אין לי זמן היום" הוא המסר שמונע נטישה, והוא היה מחובר לבלוק הקליעה
+   בלבד — למרות שהתוכן שלו מדבר על בלוק הרגליים ומסתיים בכפתור אליו.
+   מעכשיו הוא זמין מכל שלושת הבלוקים. "למה היום קצר" הוסר: הוא היה
+   כפילות מדויקת של התיבה שמוצגת ממילא באותו תנאי, שלוש שורות מעליו. */
 const notes=act==='foot'
  ?`<button class="note warn" onclick="nPain()">אם כואב — מה יורד ראשון</button>
-<button class="note" onclick="nNoise()">המדד הוא רעש, לא מאמץ</button>${isRestDay()?'<button class="note" onclick="nFri()">למה היום קצר</button>':''}`
+<button class="note" onclick="nNoise()">המדד הוא רעש, לא מאמץ</button>
+<button class="note" onclick="nShort()">אין לי זמן היום</button>`
  :`<button class="note" onclick="nShort()">אין לי זמן היום</button>
 <button class="note" onclick="nFree()">חופשה או חג</button>`;
 return `${act==='shoot'?`<div class="row" style="margin:14px 0 2px;align-items:center">
@@ -1915,10 +1956,6 @@ function nNoise(){openSheet(`<div class="grab"></div><div class="h2">המדד כ
 <div class="sub">בלימה ונחיתה על רגל אחת</div><div style="height:14px"></div>
 <div class="blk"><p><b>אם שמעת את הנחיתה, נכשלת.</b> רעש אומר שהגוף לא בלם אלא נחבט. תרד בעוצמה עד שזה שקט, ורק אז תעלה.</p></div>
 <div class="blk"><p>הנחיתה על רגל אחת היא <b>התרגיל הכי מוכח למניעת פציעות ברך</b> אצל מתבגרים, ואתה בדיוק בפרופיל: גבוה, גדל מהר, קל, על פרקט קשה. שתי דקות ביום שמגנות על העונה.</p></div>`)}
-function nFri(){openSheet(`<div class="grab"></div><div class="h2">שישי — מנוחה מהעומס</div>
-<div class="sub">לא מנוחה מהעבודה</div><div style="height:14px"></div>
-<div class="blk"><p>קואורדינציה נבנית בתדירות, אז לא מוותרים עליה. אבל קפיצות, בלימות ונחיתות כן יורדות היום — הן מעמיסות על הקרסול והברך, וזה היום היחיד בשבוע שבו הרקמות מתאוששות.</p></div>
-<div class="blk"><p>ארבע דקות. שני תרגילים. וזהו.</p></div>`)}
 function nShort(){openSheet(`<div class="grab"></div><div class="h2">אין לי זמן היום</div>
 <div class="sub">יום שנכשל הוא לא שבוע שנכשל</div><div style="height:14px"></div>
 <div class="blk"><p>אם היה מבחן, אם חזרת גמור — <b>תעשה את בלוק הרגליים וזהו.</b> ${isRestDay()?'ארבע דקות':'שלוש עשרה דקות'}. זה נחשב יום מלא ונרשם ככזה.</p></div>
@@ -1987,8 +2024,8 @@ ${fuelState().done.length>=FUEL_GOAL?'<span class="badge">\u2713 מיכל מלא
 </div>
 ${fuelBar()}
 </div>
-<div class="list">${MEALS.map((m,i)=>{const on=fuelState().done.includes(i);
-return `<div class="chk ${on?'on':''}" onclick="tgFuel(${i})"><div class="box">${on?'\u2713':''}</div>
+<div class="list">${MEALS.map(m=>{const on=fuelState().done.includes(m[4]);
+return `<div class="chk ${on?'on':''}" onclick="tgFuel('${m[4]}')"><div class="box">${on?'\u2713':''}</div>
 <div class="ct">${m[1]}<div class="cue">${m[2]}</div></div>
 <div class="qw"><div class="cq">${m[0]}</div></div></div>`}).join('')}</div>
 <div class="tiny" style="text-align:center;margin-top:8px">היעד הוא ${FUEL_GOAL} מתוך 7. השביעית היא בונוס.</div>
@@ -2006,10 +2043,11 @@ return `<div class="chk ${on?'on':''}" onclick="tgShop('${x[0]}')"><div class="b
 ${S.shop.length?`<button class="ghost" onclick="clearShop()">רוקן את הרשימה</button>`:''}`:''}
 </div>`}
 function fuelState(){if(S.fuel.d!==today()){S.fuel={d:today(),done:[]};save()}return S.fuel}
-function fuelGrams(){return fuelState().done.reduce((a,i)=>a+((MEALS[i]&&MEALS[i][3])||0),0)}
-function tgFuel(i){const f=fuelState(),k=f.done.indexOf(i);
+function fuelGrams(){return fuelState().done.reduce((a,id)=>{const m=mealOf(id);return a+((m&&m[3])||0)},0)}
+function tgFuel(id){if(!mealOf(id))return;
+const f=fuelState(),k=f.done.indexOf(id);
 const was=f.done.length>=FUEL_GOAL;
-k<0?f.done.push(i):f.done.splice(k,1);
+k<0?f.done.push(id):f.done.splice(k,1);
 const now=f.done.length>=FUEL_GOAL;
 if(now&&!was){mark('fuelDays');winTone();if(navigator.vibrate)navigator.vibrate([0,60,80,60,80,140]);save();draw();fuelWin();return}
 if(!now&&was)unmark('fuelDays');
@@ -2175,7 +2213,11 @@ for(const [lbl,key] of ROWS){
   if(x.fut||x.today)return `<div class="c wait${t}"></div>`;
   return `<div class="c${t}"></div>`}).join('')}
 
-const hist=[1,2,3,4].map(b=>{const days=weekDays(b);
+/* שבוע שהסתיים לפני שהתוכנית התחילה הוא לא "0 מתוך 7" — הוא פשוט לא קיים.
+   בלי השער הזה המסך הדפיס 16 אפסים ביום הראשון של אורי, בדיוק כמו
+   19 "הוחמץ" שכבר תיקנו פעם אחת בלוח עצמו. */
+const hist=[1,2,3,4].filter(b=>!S.start||dnum(weekDays(b)[6].k)>=dnum(S.start))
+ .map(b=>{const days=weekDays(b);
  const f=ROWS.map(([,key])=>{
   const pl=days.filter(x=>!x.fut&&isPl(key,x.k,x.w)).length;
   const dn=days.filter(x=>!x.fut&&S3[key].has(x.k)).length;
@@ -2187,10 +2229,10 @@ ${f.map(x=>`<b class="n ${x.dn>=x.pl&&x.pl?'full':''}">${x.dn}/${x.pl}</b>`).joi
 return `<div class="wk">${g}</div>
 <div class="lgd"><span><i></i>בוצע</span><span><i class="w"></i>לפנינו</span><span><i class="g"></i>הוחמץ</span><span>ריק — לא תוכנן</span></div>
 <div class="lgd" style="margin-top:6px">${ROWS.map(([n,k])=>`<span><span style="color:var(--t2);display:flex;width:15px;height:15px">${ric(k)}</span>${n}</span>`).join('')}</div>
-<div class="hist"><div class="hrow" style="border-bottom:1px solid var(--c3)">
+${hist?`<div class="hist"><div class="hrow" style="border-bottom:1px solid var(--c3)">
 <span class="wl" style="font-weight:700;color:#fff">היסטוריה</span>
 <span class="fr" style="font-size:10px;color:var(--t3)">${ROWS.map(([n])=>`<b>${n}</b>`).join('')}</span></div>
-${hist}</div>`}
+${hist}</div>`:''}`}
 
 function bkDays(){if(!S.lastBackup)return null;
 return Math.floor((dnum(today())-dnum(S.lastBackup))/864e5)}
@@ -2273,7 +2315,9 @@ function tick(n){try{unlockAudio();if(!AC)return;
 tone(n<=3?760:520,AC.currentTime,0.07,0.22)}catch(e){}}
 function goTone(){try{unlockAudio();if(!AC)return;const t0=AC.currentTime;
 tone(1046,t0,0.22,0.34)}catch(e){}}
-function beep(){try{if(!AC)return;const t0=AC.currentTime;
+/* unlockAudio חייב לרוץ גם כאן. ההקשר נכנס ל-suspended כשהמסך ננעל באמצע
+   מנוחה, ובלי resume הצליל שאמור להחזיר אותו לסט פשוט לא מתנגן. */
+function beep(){try{unlockAudio();if(!AC)return;const t0=AC.currentTime;
 [0,0.28,0.56].forEach((off,k)=>{const o=AC.createOscillator(),g=AC.createGain();
 o.type='sine';o.frequency.value=k===2?1180:880;o.connect(g);g.connect(AC.destination);
 g.gain.setValueAtTime(0.0001,t0+off);
