@@ -1,13 +1,13 @@
-/* אורי — עבודה בלי רשת.
+/* HARD WORK — עבודה בלי רשת.
    העמוד עצמו נטען תמיד מהרשת כשיש רשת, כדי שעדכון לעולם לא ייתקע.
    כשאין רשת — מוגש העותק השמור האחרון. */
 
-const V = 'uri-2026-09-1';
+const V = 'hw-2026-10-1';
 
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(V)
-      .then(c => c.addAll(['./', './index.html']))
+      .then(c => c.addAll(['./', './index.html', './apple-touch-icon.png']))
       .then(() => self.skipWaiting())
       .catch(() => self.skipWaiting())
   );
@@ -41,8 +41,8 @@ self.addEventListener('fetch', e => {
             .then(r => r || caches.match('./'))
             .then(r => r || new Response(
               '<!doctype html><html lang="he" dir="rtl"><meta charset="utf-8">' +
-              '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-              '<body style="background:#08080A;color:#fff;font-family:sans-serif;padding:40px 20px;text-align:center">' +
+              '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">' +
+              '<body style="background:#08080A;color:#fff;font-family:sans-serif;padding:max(calc(env(safe-area-inset-top) + 18px),56px) 20px 40px;text-align:center">' +
               '<div style="font-size:22px;font-weight:800">אין חיבור</div>' +
               '<div style="height:3px;width:44px;background:#E10600;margin:10px auto 14px;border-radius:2px"></div>' +
               '<div style="font-size:15px;color:#A1A1A6;line-height:1.6">תתחבר פעם אחת לרשת והאפליקציה תישמר על המכשיר לתמיד.</div>',
