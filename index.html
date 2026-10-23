@@ -11,329 +11,540 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;1,800&family=Rubik:wght@400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Karantina:wght@700&text=%D7%90%D7%91%D7%92%D7%93%D7%94%D7%95%D7%96%D7%97%D7%98%D7%99%D7%9A%D7%9B%D7%9C%D7%9D%D7%9E%D7%9F%D7%A0%D7%A1%D7%A2%D7%A3%D7%A4%D7%A5%D7%A6%D7%A7%D7%A8%D7%A9%D7%AA%D7%B3%D7%B4%D6%BE&display=swap" rel="stylesheet">
 <style>
+/* ═══════════ HARD WORK · שפת עיצוב ═══════════
+   שלוש שכבות צבע (נעולות): שחור = רקע · אדום = פעולה · זהב = הישג.
+   שלושה פונטים, לכל אחד תפקיד אחד:
+   Karantina — כותרות עבריות גדולות בלבד (22px ומעלה; בגודל קטן היא נדחסת מדי).
+   Rubik — כל הטקסט הרץ.
+   Barlow Condensed — מספרים ומילים לועזיות (מותג, A/B). נטוי רק במספרי "רגע" גדולים.
+   אין ריווח אותיות בעברית, אין נטוי בעברית.
+   שני סוגי כפתורים, ולא יותר: גלולה = פעולה (.big .ghost .act .note .chp …),
+   אריח = נתון או בחירה (סט, שעות שינה, לשונית בלוק). כך רואים מה לוחצים ומה קוראים. */
 :root{--red:#E10600;--bg:#08080A;--c1:#151517;--c2:#1E1E21;--c3:#2A2A2E;
 --tx:#FFFFFF;--t2:#A1A1A6;--t3:#8A8A92;--miss:#7A1E1B;--red2:#FF4B45;
 --ok:#E8C24A;--gd:#C9A227;--gl:#F7DC8A;--on:#0A0A0A;
 --gsolid:linear-gradient(135deg,var(--gl) 0%,var(--ok) 45%,var(--gd) 100%);
---nav:calc(58px + env(safe-area-inset-bottom));}
+/* אדום של כפתור: מתחיל באדום של המותג ומעמיק כלפי מטה. הנקודה הבהירה ביותר היא
+   #E10600 — לבן עליה 4.63:1. עצירה בהירה יותר (#F0160E) ירדה ל-4.35:1 ונפסלה. */
+--redg:linear-gradient(180deg,#E10600 0%,#D40500 55%,#C20500 100%);
+--card:linear-gradient(180deg,#19191C 0%,#141416 100%);
+--ctl:#1B1B1E;--ln:rgba(255,255,255,.07);--hi:inset 0 1px 0 rgba(255,255,255,.055);
+--f-b:'Rubik',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+/* Karantina נטען רק עם אותיות עבריות. ספרות, לטינית וסימנים בכותרת נופלים ל-Barlow Condensed */
+--f-d:'Karantina','Barlow Condensed','Rubik',-apple-system,sans-serif;
+--f-n:'Barlow Condensed','Rubik',-apple-system,sans-serif;
+--ease:cubic-bezier(.2,.8,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);--sheet:cubic-bezier(.22,1.1,.36,1);
+--nav:calc(62px + env(safe-area-inset-bottom));}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{background:var(--bg);color:var(--tx);
-font-family:'Heebo',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-font-size:16px;line-height:1.5;overscroll-behavior-y:none}
-body{padding-bottom:var(--nav)}
-button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+html{background:var(--bg)}
+html,body{color:var(--tx);font-family:var(--f-b);
+font-size:16px;line-height:1.5;overscroll-behavior-y:none;-webkit-font-smoothing:antialiased}
+body{padding-bottom:var(--nav);background:transparent}
+/* תאורת זירה: הילה אדומה חלשה מלמעלה. שכבה קבועה, לא נגללת, לא נלחצת. */
+body::before{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;
+background:radial-gradient(110% 42% at 88% -6%,rgba(225,6,0,.15),transparent 72%),
+radial-gradient(70% 30% at 0% 0%,rgba(255,255,255,.035),transparent 70%)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;
+transition:transform .14s var(--ease),background-color .18s,border-color .18s,color .18s,opacity .18s}
+button:active:not([disabled]){transform:scale(.96)}
 input{font:inherit}
 .ltr{direction:ltr;unicode-bidi:bidi-override;display:inline-block}
-@keyframes sweep{0%{transform:translateX(-150%)}100%{transform:translateX(150%)}}
+.num-f{font-family:var(--f-n)}
+
+/* ── רגעי הישג: הבזק אחד, ואז זהב סטטי ── */
+/* left:0 מפורש: ב-RTL אלמנט אבסולוטי בלי left נצמד לימין, והפס נשאר תקוע בקצה. */
+@keyframes sweep{0%{transform:translateX(-150%)}100%{transform:translateX(280%)}}
 .spark{position:relative;overflow:hidden;isolation:isolate}
-.spark::after{content:'';position:absolute;top:-40%;bottom:-40%;width:60%;pointer-events:none;
+.spark::after{content:'';position:absolute;left:0;top:-40%;bottom:-40%;width:60%;pointer-events:none;
 background:linear-gradient(100deg,transparent,rgba(255,255,255,.8),transparent);
-animation:sweep .95s cubic-bezier(.3,0,.2,1) 1 both}
-@media (prefers-reduced-motion:reduce){.spark::after{animation:none;display:none}}
+animation:sweep .95s cubic-bezier(.3,0,.2,1) .15s 1 both}
+@keyframes pop{0%{transform:scale(.55)}55%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes stamp{0%{transform:scale(1.35);opacity:.2}55%{transform:scale(.95);opacity:1}100%{transform:scale(1)}}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes slideL{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+@keyframes slideR{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes medal{0%{transform:scale(.3);opacity:0}62%{transform:scale(1.08);opacity:1}100%{transform:none;opacity:1}}
+@keyframes halo{0%{transform:scale(.6);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+@keyframes slam{0%{transform:scale(1.45);opacity:0}60%{transform:scale(.97);opacity:1}100%{transform:none}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes tick{0%{transform:scale(1.5);opacity:0}30%{opacity:1}100%{transform:scale(1);opacity:1}}
+.fx-pop{animation:pop .44s var(--spring) both}
+.fx-stamp{animation:stamp .4s var(--ease) both}
+.fx-l{animation:slideL .32s var(--ease) both}
+.fx-r{animation:slideR .32s var(--ease) both}
+.fx-seg{animation:rise .3s var(--ease) both}
+#app.enter .wrap>*{animation:rise .34s var(--ease) both}
+.wrap{overflow-x:clip}
+#app.enter .wrap>*:nth-child(2){animation-delay:.03s}#app.enter .wrap>*:nth-child(3){animation-delay:.06s}
+#app.enter .wrap>*:nth-child(4){animation-delay:.09s}#app.enter .wrap>*:nth-child(5){animation-delay:.12s}
+#app.enter .wrap>*:nth-child(n+6){animation-delay:.15s}
+/* חלקיקי זהב — נבנים ב-JS בנקודת ההישג ונמחקים אחרי פחות משנייה */
+.burst{position:fixed;width:0;height:0;z-index:120;pointer-events:none}
+.burst i{position:absolute;left:-2px;top:-7px;width:4px;height:14px;border-radius:2px;background:var(--gsolid)}
+.burst i.w{background:#fff}
+.hap{position:fixed;right:0;top:0;width:1px;height:1px;opacity:0;overflow:hidden;clip-path:inset(50%);pointer-events:none}
+@media (prefers-reduced-motion:reduce){
+*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;animation-iteration-count:1!important;
+transition-duration:.01ms!important;transition-delay:0s!important}
+.spark::after,.medal .gl::after,.burst,.rdl{display:none}}
 
-.wrap{padding:max(calc(env(safe-area-inset-top) + 18px),56px) 16px 24px;max-width:560px;margin:0 auto}
-.h1{font-size:30px;font-weight:900;letter-spacing:-.5px;line-height:1.1}
-.h2{font-size:20px;font-weight:800;margin-bottom:2px}
-.sub{font-size:13px;color:var(--t2)}
-.tiny{font-size:11px;color:var(--t3)}
-.bar{height:3px;width:44px;background:var(--red);margin:9px 0 18px;border-radius:2px}
-.zone{font-family:inherit;font-size:19px;font-weight:900;margin:26px 0 11px;letter-spacing:-.3px}
-.zone:first-of-type{margin-top:20px}
-.gear{flex:0 0 44px;width:44px;height:44px;padding:9px;color:var(--t2)}
+/* ── מבנה וטיפוגרפיה ── */
+.wrap{padding:max(calc(env(safe-area-inset-top) + 18px),56px) 16px 28px;max-width:560px;margin:0 auto}
+.h1{font-family:var(--f-d);font-size:50px;font-weight:700;line-height:.92;letter-spacing:0}
+.h2{font-family:var(--f-d);font-size:31px;font-weight:700;line-height:1;margin-bottom:6px}
+.sub{font-size:13.5px;color:var(--t2);line-height:1.45}
+.tiny{font-size:11.5px;color:var(--t3)}
+/* הקו מתחת לכותרת: חיתוך אלכסוני — תנועה, לא קו של טופס */
+.bar{height:5px;width:42px;background:var(--red);margin:12px 0 20px;border-radius:1px;transform:skewX(-28deg);transform-origin:right}
+/* אזור (בלשונית ההתקדמות): הכותרת הגדולה ביותר אחרי כותרת המסך, עם קו שנמתח עד הקצה */
+.zone{font-family:var(--f-d);font-size:44px;font-weight:700;line-height:1;margin:40px 0 16px;display:flex;align-items:center;gap:14px}
+.zone::after{content:'';flex:1 1 auto;height:1px;background:linear-gradient(270deg,rgba(255,255,255,.16),transparent)}
+.zone:first-of-type{margin-top:24px}
+.gear{flex:0 0 44px;width:44px;height:44px;padding:10px;color:var(--t2);border-radius:12px;background:var(--ctl);border:1px solid var(--ln)}
 .gear svg{width:100%;height:100%}
-.sec{font-size:12px;font-weight:800;color:var(--red2);letter-spacing:2px;margin:26px 0 10px}
+/* תוויות קטנות: בלי ריווח אותיות. סימן אלכסוני אדום בתחילת השורה */
+.sec,.tdh,.ngame .ngh,.slp .slh,.intent .ih,.foc .fh,.anch .anh,.pse .psh,.blk h4,.dtitle{
+font-family:var(--f-b);letter-spacing:0;font-weight:700;padding-right:15px;position:relative}
+/* הסימן האלכסוני הוא אלמנט נפרד ולא רקע: טקסט לא יושב עליו, ובכותרת flex הוא לא תופס מקום. */
+.sec::before,.tdh::before,.ngame .ngh::before,.slp .slh::before,.intent .ih::before,.foc .fh::before,.anch .anh::before,.pse .psh::before,.blk h4::before,.dtitle::before,.fsec>span:first-child::before{
+content:'';position:absolute;right:1px;top:50%;width:5px;height:12px;margin-top:-6px;background:var(--red);transform:skewX(-20deg);border-radius:1px}
+/* כותרת מקטע: Karantina לבנה. התווית הקטנה והאפורה של פעם הייתה הסימן הכי "טופס" במסך */
+.sec,.tdh{font-family:var(--f-d);font-size:29px;font-weight:700;line-height:1;color:#fff;margin:36px 0 13px;padding-right:17px}
+.sec::before,.tdh::before{width:6px;height:19px;margin-top:-11px}
+/* פעולה של מקטע יושבת בשורת הכותרת, לא ככפתור אפור ברוחב מלא מתחתיה */
+.sech{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:36px 0 13px}
+.sech .sec{margin:0}
+.sact{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 4px 0 2px;
+font-family:var(--f-b);font-size:13.5px;font-weight:700;color:var(--red2);min-width:44px;justify-content:center}
+.sec .badge,.sec .tiny,.sec>span:not(:first-child){font-family:var(--f-b)}
+.sec .badge{font-size:11px}
+.sact svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.fsec{padding-right:0}.fsec::before{display:none}
+.fsec>span:first-child{padding-right:15px;position:relative}
 
-.card{background:var(--c1);border-radius:14px;padding:14px;margin-bottom:10px}
-.card.flat{background:none;border:1px solid var(--c3)}
+/* ── משטחים ── */
+.card{background:var(--card);border:1px solid rgba(255,255,255,.045);border-radius:18px;padding:16px;margin-bottom:10px;box-shadow:var(--hi)}
+.card.flat{background:none;border:1px solid var(--c3);box-shadow:none}
+/* מצב ריק: מסגרת מקווקוות ושקופה — "כאן יופיע", לא עוד קופסה אפורה */
+.card.empty{background:none;box-shadow:none;border:1px dashed rgba(255,255,255,.16);padding:14px 16px}
+.card.empty .cue{font-size:13.5px;color:var(--t2);margin:0}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
 .row[onclick]{min-height:44px;align-items:center}
-.nm{font-size:16px;font-weight:700;line-height:1.25}
-.sr{font-size:15px;font-weight:800;color:var(--red2);direction:ltr;unicode-bidi:bidi-override;white-space:nowrap}
-.cue{font-size:12px;color:var(--t3);margin-top:3px;line-height:1.45}
-.last{font-size:12px;color:var(--t2);margin-top:6px}
+.nm{font-size:16px;font-weight:600;line-height:1.25}
+.sr{font-family:var(--f-n);font-size:19px;font-weight:700;color:#fff;direction:ltr;unicode-bidi:bidi-override;white-space:nowrap}
+.cue{font-size:12.5px;color:var(--t3);margin-top:3px;line-height:1.45}
+.last{font-size:12.5px;color:var(--t2);margin-top:6px}
 
-.sets{display:flex;gap:6px;margin-top:11px}
-.set{flex:1;background:var(--c2);border-radius:9px;padding:13px 2px;text-align:center;min-height:44px;
-font-size:12px;font-weight:700;color:var(--t3);transition:transform .08s}
-.set:active{transform:scale(.94)}
-.set.on{background:var(--red);color:#fff}
-.acts{display:flex;gap:6px;margin-top:8px}
-.act{flex:1;border:1px solid var(--c3);border-radius:9px;padding:13px 2px;text-align:center;min-height:44px;
-font-size:12px;font-weight:500;color:var(--t2)}
-.act:active{background:var(--c2)}
-.act.solid{background:var(--red);color:#fff;border-color:var(--red2);font-weight:700}
+.sets{display:flex;gap:7px;margin-top:14px}
+.set{flex:1;background:var(--c2);border:1px solid var(--ln);border-radius:12px;padding:0 2px;text-align:center;min-height:56px;
+font-size:13px;font-weight:600;color:var(--t3)}
+.set.on{background:linear-gradient(180deg,rgba(232,194,74,.14),rgba(232,194,74,.05));border-color:rgba(232,194,74,.45);color:var(--ok);font-family:var(--f-n);font-size:20px;font-weight:700}
+/* הסט הבא הוא הפעולה — רק הוא אדום */
+.set.nx{background:var(--redg);border-color:rgba(255,120,110,.35);color:#fff;font-weight:700;
+box-shadow:0 8px 18px -10px rgba(225,6,0,.9),inset 0 1px 0 rgba(255,255,255,.18)}
+.acts{display:flex;gap:7px;margin-top:9px}
+.act{flex:1;background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:12px 4px;text-align:center;min-height:46px;
+font-size:13.5px;font-weight:600;color:#E4E4E8}
+.act.solid{background:var(--redg);color:#fff;border-color:rgba(255,120,110,.3);font-weight:700;box-shadow:inset 0 1px 0 rgba(255,255,255,.16)}
 
-.chk{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--c2);font-size:15px;min-height:48px}
+.chk{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--ln);font-size:15px;min-height:50px}
 .chk:last-child{border-bottom:none}
-.box{width:24px;height:24px;border-radius:7px;border:2px solid var(--c3);flex:0 0 24px;
-display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900}
-.chk.on .box{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
-.chk.on .ct{color:var(--t3);text-decoration:line-through}
-.chk.on .ct .cue{text-decoration:none}
+.box{width:26px;height:26px;border-radius:8px;border:2px solid #6A6A72;flex:0 0 26px;
+display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--on);transition:border-color .2s}
+.cks{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+.chk.on .box,.srow.on .sbox{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
+/* שורה שנסגרה: שקטה ומקופלת — בלי קו חוצה (סימן של רשימת מטלות, לא של אימון) */
+.chk.on .ct{color:var(--t3)}
+.chk.on .ct .cue{display:none}
+.chk.on .cq{color:var(--t3)}
+.chk.on .cq i{display:none}
+.chk.on .vi{display:none}
+.chk.on .qw{gap:0}
+.ckw:has(.chk.on) .ckact{display:none}
+/* התרגיל הבא: כותרת חזקה, כפתור טכניקה אדום, פס אדום בקצה */
+.ckw.nx{position:relative}
+.ckw.nx::before{content:'';position:absolute;right:-10px;top:14px;bottom:14px;width:3px;border-radius:2px;background:var(--red)}
+.chk.nx .ct{font-weight:700;font-size:16.5px}
+.chk.nx .ct .cue{font-weight:400;font-size:12.5px}
+.chk.nx .vi{background:var(--redg);border-color:transparent;box-shadow:0 8px 16px -8px rgba(225,6,0,.9)}
+/* וי שזה עתה סומן: הקופסה קופצת והסימן נמתח */
+.chk.fx .box,.srow.fx .sbox{animation:pop .44s var(--spring) both}
+.chk.fx .cks path,.srow.fx .cks path,.mdone.fx .cks path{stroke-dasharray:22;stroke-dashoffset:22;animation:draw .3s .12s var(--ease) forwards}
 .ct{flex:1;line-height:1.3}
 .qw{flex:0 0 76px;display:flex;flex-direction:column;align-items:center;gap:7px}
-.cq{font-size:12px;color:var(--red2);font-weight:700;text-align:center;line-height:1.35}
-.vi{width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;font-size:12px;flex:0 0 36px;
+.cq{font-family:var(--f-n);font-size:20px;color:#fff;font-weight:700;text-align:center;line-height:1.05}
+.cq i{display:block;font-family:var(--f-b);font-style:normal;font-size:11px;font-weight:500;color:var(--t2);margin-top:2px}
+.vi{width:38px;height:38px;border-radius:50%;background:#2A2A2E;border:1px solid rgba(255,255,255,.08);color:#fff;flex:0 0 38px;
 display:flex;align-items:center;justify-content:center;position:relative}
+.vi svg{width:12px;height:12px;fill:currentColor;margin-left:-2px}
+/* אייקון בתוך טקסט: SVG ולא תו. ▶ ו-⏱ מוצגים באייפון כאימוג׳י צבעוני. */
+.ic{display:inline-block;width:12px;height:12px;fill:currentColor;vertical-align:-1px;margin-left:6px}
+.tmr .ic{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;vertical-align:-3px;margin-left:2px}
 .vi::after{content:'';position:absolute;inset:-4px;border-radius:50%}
-.chk{align-items:flex-start}
-.chk.on .vi{background:var(--c3)}
+.chk.on .vi{background:var(--c3);box-shadow:none}
 
-.nav{position:fixed;bottom:0;right:0;left:0;background:rgba(10,10,12,.94);
-backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--c2);
+/* ── ניווט תחתון: מחוון שגולש בין הלשוניות ── */
+.nav{position:fixed;bottom:0;right:0;left:0;background:rgba(12,12,14,.84);
+backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-top:1px solid var(--ln);
 display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:60}
-.nb{flex:1;padding:9px 0 7px;text-align:center;font-size:10px;color:var(--t3);font-weight:500}
-.nb.on{color:var(--red2)}
-.ni{display:block;width:23px;height:23px;margin:0 auto 4px}
+.nb{flex:1;padding:10px 0 8px;text-align:center;font-size:11px;color:var(--t3);font-weight:500;min-height:58px;position:relative}
+.nb:active:not([disabled]){transform:scale(.92)}
+.nb.on{color:#fff}
+.nb.on .ni{color:var(--red2)}
+.ni{display:block;width:24px;height:24px;margin:0 auto 4px;transition:transform .3s var(--spring),color .2s}
+.nb.on .ni{transform:translateY(-1px) scale(1.06)}
+.nind{position:absolute;top:-1px;right:0;width:25%;height:3px;pointer-events:none;
+transform:translateX(calc(var(--ti,0) * -100%));transition:transform .42s var(--spring)}
+.nind::before{content:'';position:absolute;top:0;right:50%;width:30px;margin-right:-15px;height:3px;border-radius:0 0 3px 3px;
+background:var(--red);box-shadow:0 0 14px rgba(225,6,0,.75)}
 
-.sheet{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:90;display:none;
-align-items:flex-end;justify-content:center}
-.sheet.on{display:flex}
-.sc{background:#141416;width:100%;max-width:560px;border-radius:20px 20px 0 0;
-padding:20px 18px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto}
-.grab{width:38px;height:4px;background:var(--c3);border-radius:2px;margin:0 auto 16px}
-.blk{margin-bottom:18px}
-.blk h4{font-size:13px;font-weight:800;color:var(--red2);letter-spacing:1px;margin-bottom:7px}
-.blk p,.blk li{font-size:14.5px;color:#D8D8DC;line-height:1.6}
+/* ── גיליון תחתון: עולה עם קפיץ, הרקע מתעמעם ── */
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:90;display:flex;
+align-items:flex-end;justify-content:center;visibility:hidden;opacity:0;
+transition:opacity .24s var(--ease),visibility 0s linear .3s}
+.sheet.on{visibility:visible;opacity:1;transition:opacity .2s var(--ease),visibility 0s}
+.sc{background:linear-gradient(180deg,#18181B,#111113 30%);width:100%;max-width:560px;border-radius:24px 24px 0 0;
+padding:12px 18px calc(24px + env(safe-area-inset-bottom));max-height:88vh;overflow-y:auto;
+border-top:1px solid rgba(255,255,255,.08);transform:translateY(105%);transition:transform .3s var(--ease)}
+.sheet.on .sc{transform:none;transition:transform .46s var(--sheet)}
+.grab{width:40px;height:5px;background:#3A3A40;border-radius:3px;margin:0 auto 18px}
+.blk{margin-bottom:20px}
+.blk h4{font-size:14px;color:#D4D4D8;margin-bottom:8px}
+.blk p,.blk li{font-size:14.5px;color:#D8D8DC;line-height:1.65}
 .blk ol{padding-right:18px}
 .blk li{margin-bottom:6px}
-.feel{background:#241012;border-radius:11px;padding:13px;white-space:pre-line}
+.feel{background:linear-gradient(135deg,rgba(225,6,0,.13),rgba(225,6,0,.04));border:1px solid rgba(255,75,69,.18);border-radius:14px;padding:14px;white-space:pre-line}
 
-.num{display:flex;gap:10px;margin:16px 0}
+.num{display:flex;gap:10px;margin:18px 0}
 .num>div{flex:1}
-.num label{display:block;font-size:12px;color:var(--t2);margin-bottom:5px}
-.num input{width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;
-padding:14px;color:#fff;font-size:22px;font-weight:800;text-align:center;direction:ltr}
-.big{width:100%;background:var(--red);color:#fff;border-radius:12px;padding:15px;
-font-size:16px;font-weight:800;text-align:center}
-.ghost{width:100%;border:1px solid var(--c3);border-radius:12px;padding:13px;
-font-size:14px;font-weight:500;color:var(--t2);text-align:center;margin-top:9px}
+.num label{display:block;font-size:12.5px;color:var(--t2);margin-bottom:6px}
+.num input{width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:14px;
+padding:10px 14px;color:#fff;font-family:var(--f-n);font-size:34px;font-weight:700;text-align:center;direction:ltr;line-height:1.2;
+transition:border-color .2s,box-shadow .2s}
+.num input:focus{outline:none;border-color:var(--red2);box-shadow:0 0 0 3px rgba(225,6,0,.22)}
+.big{width:100%;background:var(--redg);color:#fff;border-radius:999px;padding:15px;min-height:56px;
+font-size:17px;font-weight:700;text-align:center;
+box-shadow:0 14px 28px -14px rgba(225,6,0,.95),inset 0 1px 0 rgba(255,255,255,.2)}
+.big:active:not([disabled]){transform:scale(.98)}
+.ghost+.card{margin-top:10px}
+/* פעולה משנית בגיליון: גלולה שקופה עם קו. בתוך מסך: גלולה קומפקטית בגודל התוכן, לא פס אפור ברוחב מלא */
+.ghost{width:100%;background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:13px;min-height:50px;
+font-size:15px;font-weight:600;color:#E4E4E8;text-align:center;margin-top:10px}
+.wrap .ghost{width:fit-content;max-width:100%;display:flex;align-items:center;justify-content:center;gap:7px;margin:12px 0 0;padding:0 20px;min-height:46px;font-size:14px}
 
-.timer{position:fixed;top:0;right:0;left:0;background:var(--red);color:#fff;
-padding:max(calc(env(safe-area-inset-top) + 9px),48px) 16px 9px;text-align:center;
-font-size:15px;font-weight:800;z-index:70;display:none}
+
+/* ── טיימר ──
+   מנוחה: פס עליון חי — ספרות גדולות ופס שמתרוקן.
+   תרגיל מדוד (עם הכנה): מסך מלא, קריא משני מטרים — הטלפון מונח על הרצפה. */
+.timer{position:fixed;top:0;right:0;left:0;color:#fff;z-index:70;display:none;cursor:pointer}
 .timer.on{display:block}
-.timer.prep{background:var(--c3);font-size:20px;letter-spacing:1px}
+.timer.rest{background:rgba(14,14,16,.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+border-bottom:1px solid rgba(255,255,255,.08);padding:max(calc(env(safe-area-inset-top) + 6px),44px) 16px 10px;
+animation:rise .3s var(--ease) both}
+.tmrow2{display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:560px;margin:0 auto}
+.tml{font-size:14px;font-weight:700;color:var(--t2);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tmn{font-family:var(--f-n);font-weight:800;font-style:italic;font-size:38px;line-height:1;direction:ltr;font-variant-numeric:tabular-nums;letter-spacing:.5px}
+.tmx{font-size:13px;font-weight:600;color:#D8D8DC;border:1px solid rgba(255,255,255,.16);background:transparent;border-radius:999px;padding:0 16px;min-height:44px;display:flex;align-items:center;white-space:nowrap}
+.tmtrack{height:4px;border-radius:2px;background:rgba(255,255,255,.08);margin:9px auto 0;max-width:560px;overflow:hidden}
+.tmtrack i{display:block;height:100%;width:100%;background:var(--red);border-radius:2px;transform-origin:right;transition:transform .2s linear}
+.timer.hot .tmn{color:var(--red2)}
+/* חמש השניות האחרונות: דפיקה אחת בכל שנייה, לא פעימה בלי סוף */
+.tmn.tk{animation:tock .42s var(--ease) both}
+@keyframes tock{0%{transform:scale(1.3)}100%{transform:none}}
+/* סוף מנוחה: הפס מבזיק לבן ונאסף למעלה */
+.timer.rest.bye{animation:barOut .4s .06s cubic-bezier(.5,0,.75,0) both}
+.timer.rest.bye .tmtrack{background:rgba(255,255,255,.75);transition:background .1s}
+@keyframes barOut{to{transform:translateY(-105%);opacity:0}}
+/* סוף תרגיל מדוד: הטבעת מתמלאת בזהב, וי נמתח, ואז המסך נעלם */
+.timer.full.bye .tp{stroke:var(--ok);transition:stroke-dashoffset .4s var(--ease),stroke .2s}
+.timer.full.bye .tfn{color:var(--ok)}
+.timer.full.bye .tfn .cks{width:44%;height:44%;stroke-width:2.6}
+.timer.full.bye .tfn .cks path{stroke-dasharray:22;stroke-dashoffset:22;animation:draw .4s .1s var(--ease) forwards}
+.timer.full.bye .tfk{color:var(--ok);font-weight:700}
+
+@keyframes fadeOut{to{opacity:0}}
+.timer.full{inset:0;bottom:0;background:radial-gradient(90% 60% at 50% 40%,#1A0B0B,#08080A 70%);
+display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
+.timer.full.on{display:flex;animation:rise .25s var(--ease) both}
+.timer.full.on.bye{animation:fadeOut .28s .85s ease both}
+.timer.full.bye .tfstop{visibility:hidden}
+.tfl{font-family:var(--f-d);font-size:34px;font-weight:700;line-height:1;color:#fff;max-width:92%}
+.tfk{font-size:14px;font-weight:600;color:var(--t2);margin-top:8px}
+.tfr{position:relative;width:min(78vw,300px);height:min(78vw,300px);margin:28px 0 22px}
+.tfr>svg{width:100%;height:100%;transform:rotate(-90deg)}
+.tfr circle{fill:none;stroke-width:7}
+.tfr .tr{stroke:rgba(255,255,255,.08)}
+.tfr .tp{stroke:var(--red);stroke-linecap:round;transition:stroke-dashoffset .2s linear}
+.timer.prep .tfr .tp{stroke:#5A5A60}
+.tfn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+font-family:var(--f-n);font-weight:800;font-style:italic;font-size:min(36vw,150px);line-height:1;direction:ltr;font-variant-numeric:tabular-nums}
+.tfn.tk{animation:tick .45s var(--ease) both}
+.timer.prep .tfn{color:var(--t2)}
+.timer.full.hot .tfn{color:var(--red2)}
+.tfstop{min-width:150px;min-height:54px;border-radius:999px;background:transparent;border:1px solid rgba(255,255,255,.2);color:#fff;font-size:16px;font-weight:700}
 
 .tbl{width:100%;border-collapse:collapse;font-size:13.5px}
-.tbl td{padding:10px 6px;border-bottom:1px solid var(--c2);vertical-align:top}
+.tbl td{padding:10px 6px;border-bottom:1px solid var(--ln);vertical-align:top}
 .tbl td:first-child{color:var(--red2);font-weight:700;white-space:nowrap;width:64px}
 .tbl tr:last-child td{border-bottom:none}
-.pill{display:inline-block;background:var(--c2);border-radius:7px;padding:3px 9px;
-font-size:11px;color:var(--t2);margin:0 0 0 5px}
-.hero{background:linear-gradient(0deg,#0E0E10,#18181B);border-radius:18px;padding:20px;margin-bottom:14px}
-.stat{display:flex;gap:9px;margin-top:14px}
-.stat>div{flex:1;background:var(--c1);border-radius:12px;padding:12px;text-align:center}
-.stat .v{font-size:24px;font-weight:900;color:var(--red);line-height:1.1}
-.stat .k{font-size:10.5px;color:var(--t3);margin-top:3px}
+.pill{display:inline-block;background:var(--c2);border-radius:8px;padding:3px 9px;
+font-size:11.5px;color:var(--t2);margin:0 0 0 5px}
+/* ── כרטיס הפתיחה במסך הבית ── */
+.hero{position:relative;overflow:hidden;isolation:isolate;border-radius:24px;padding:20px 20px 18px;margin-bottom:14px;
+background:radial-gradient(120% 80% at 100% 0%,rgba(225,6,0,.2),transparent 55%),linear-gradient(180deg,#1A1A1D,#101012);
+border:1px solid rgba(255,255,255,.06);box-shadow:var(--hi),0 20px 40px -24px rgba(0,0,0,.8)}
+/* קווי מגרש: קשת שלוש הנקודות, כמעט שקופה */
+.hero::before{content:'';position:absolute;z-index:-1;left:-150px;top:-170px;width:340px;height:340px;border-radius:50%;
+border:2px solid rgba(255,255,255,.028)}
+.hero .h1{font-size:58px;margin-top:10px}
+.wtag{background:rgba(255,255,255,.1);color:#fff;font-size:12px;font-weight:700;padding:5px 14px 5px 15px;white-space:nowrap;
+clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%);display:inline-block;line-height:18px}
+.wtag .ltr{font-family:var(--f-n);font-size:15px;line-height:1}
+.stat{display:flex;gap:8px;margin-top:16px}
+.stat{gap:0}
+.stat>div{flex:1;padding:6px 4px 4px;text-align:center;min-width:0}
+.stat>div+div{border-right:1px solid var(--ln)}
+.hero .stat{gap:0;margin-top:18px;padding-top:14px;border-top:1px solid var(--ln)}
+.hero .stat>div{padding:2px 4px}
+.hero .stat .v{font-size:36px}
+.stat .v{font-family:var(--f-n);font-size:42px;font-weight:700;color:#fff;line-height:1}
+.stat .k{font-size:11.5px;color:var(--t3);margin-top:5px}
 .gap{height:8px}
-.list{background:var(--c1);border-radius:14px;padding:4px 14px}
-.bwrow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--c2);font-size:14px}
+/* רשימה יושבת על הרקע עם קווים מפרידים — לא עוד קופסה. הקופסאות נשמרות לדברים שעושים */
+.list{border-top:1px solid var(--ln);border-bottom:1px solid var(--ln)}
+.bwrow{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--ln);font-size:14px}
 .bwrow:last-child{border-bottom:none}
-.q{font-size:14px;color:#D8D8DC;line-height:1.6;padding:11px 0;border-bottom:1px solid var(--c2)}
+.q{font-size:14px;color:#D8D8DC;line-height:1.6;padding:12px 0;border-bottom:1px solid var(--ln)}
 .q:last-child{border-bottom:none}
-.warnbox{border:1px solid var(--red);border-radius:12px;padding:13px;margin-top:12px}
-.warnbox b{color:var(--red2)}
-.warnbox p{font-size:13.5px;color:#D8D8DC;line-height:1.55}
-.two2{display:flex;gap:9px;margin-top:18px}
-.mini{flex:1;border:1px solid var(--c3);border-radius:12px;padding:14px 8px;font-size:13px;font-weight:500;color:var(--t2)}
-.mini:active{background:var(--c1)}
-.wk{display:grid;grid-template-columns:24px repeat(7,1fr);gap:4px;direction:rtl;align-items:center}
-.wk .hd{font-size:11px;color:var(--t3);text-align:center;font-weight:500;padding-bottom:2px}
-.wk .hd.now{color:var(--red2);font-weight:800}
+.warnbox{background:linear-gradient(135deg,rgba(225,6,0,.14),rgba(225,6,0,.03) 70%);border:1px solid rgba(255,75,69,.32);border-radius:15px;padding:14px;margin-top:12px}
+.warnbox b{color:var(--red2);font-weight:700}
+.warnbox p{font-size:13.5px;color:#D8D8DC;line-height:1.55;margin-top:3px}
+.two2{display:flex;gap:9px;margin-top:20px}
+.mini{flex:1;background:transparent;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:14px 8px;min-height:50px;font-size:13.5px;font-weight:500;color:#C8C8CE}
+.wk{display:grid;grid-template-columns:24px repeat(7,1fr);gap:5px;direction:rtl;align-items:center}
+.wk .hd{font-size:11.5px;color:var(--t3);text-align:center;font-weight:500;padding-bottom:3px}
+.wk .hd.now{color:var(--red2);font-weight:700}
 .wk .rl{display:flex;align-items:center;justify-content:center;color:var(--t2)}
 .wk .rl svg{width:16px;height:16px}
-.wk .c{height:19px;border-radius:5px;background:var(--miss)}
+.wk .c{height:20px;border-radius:6px;background:var(--miss)}
 .wk .c.wait{background:#35353B}
 .wk .c.on{background:var(--gsolid)}
 .wk .c.off{background:none;border:1px solid #232326}
 .wk .c.now{outline:1.5px solid var(--red);outline-offset:1.5px}
-.fnum{font-family:inherit;font-size:34px;font-weight:900;color:var(--ok);line-height:1}
-.fnum .fof{font-size:14px;font-weight:700;color:var(--t3)}
+.fnum{font-family:var(--f-n);font-size:52px;font-weight:800;font-style:italic;color:#fff;line-height:.95}
+.fnum.met{color:var(--ok)}
+.fnum .fof{font-family:var(--f-b);font-style:normal;font-size:14px;font-weight:600;color:var(--t3)}
 .fbar{display:flex;gap:5px;margin-top:14px}
 .fbar span{flex:1;height:10px;border-radius:4px;background:var(--c3);transition:background .2s}
 .fbar span.on{background:var(--gsolid)}
-.badge{background:var(--gsolid);color:var(--on);font-size:10.5px;font-weight:800;
-padding:4px 9px;border-radius:7px;letter-spacing:0;white-space:nowrap}
-.ringwrap{position:relative;flex:0 0 104px;width:104px;height:104px}
-.ringsvg{width:104px;height:104px;display:block}
+.badge{display:inline-block;background:var(--gsolid);color:var(--on);font-size:11px;font-weight:700;
+padding:4px 11px;letter-spacing:0;white-space:nowrap;clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%)}
+/* ── טבעת היום ── */
+.ringwrap{position:relative;flex:0 0 116px;width:116px;height:116px;border-radius:50%}
+.ringsvg{width:116px;height:116px;display:block;filter:drop-shadow(0 0 10px rgba(232,194,74,.18))}
 .ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;
-align-items:center;justify-content:center;gap:1px}
-.rnum{font-size:27px;font-weight:900;line-height:1;color:var(--ok);direction:ltr}
+align-items:center;justify-content:center;gap:2px}
+.rnum{font-family:var(--f-n);font-size:40px;font-weight:800;font-style:italic;line-height:.9;color:var(--ok);direction:ltr}
 .rnum.zero{color:var(--t3)}
-.rnum .rp{font-size:14px;font-weight:700}
-.rdone{font-size:30px;color:var(--ok);line-height:1}
-.rlbl{font-size:10.5px;color:var(--t3);font-weight:500}
-.today{display:flex;gap:14px;align-items:center;margin-top:14px}
+.rnum .rp{font-size:18px;font-weight:700}
+.rdone{width:34px;height:34px;color:var(--ok);line-height:1}
+.rdone svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.rdone .dr{stroke-dasharray:21;stroke-dashoffset:21;animation:draw .4s .6s var(--ease) forwards}
+.rlbl{font-size:11.5px;color:var(--t3);font-weight:500}
+.rdone+.rlbl{color:var(--ok);font-weight:700;font-size:12.5px}
+.today{display:flex;gap:16px;align-items:center;margin-top:16px}
 .today .tx{flex:1;min-width:0}
-.mot{border-right:2px solid var(--red);padding:1px 12px 1px 0;margin:18px 0 2px;
-font-size:14.5px;line-height:1.55;color:#DCDCE0}
+.dayn{font-family:var(--f-d);font-size:30px;font-weight:700;line-height:1}
+.mot{border-right:3px solid var(--red);padding:2px 13px 2px 0;margin:20px 0 4px;
+font-size:15px;line-height:1.55;color:#DCDCE0}
 .tdl{margin-top:12px}
-.tdh{font-size:12px;font-weight:800;color:var(--red2);letter-spacing:2px;margin:20px 0 9px}
-.tdi{display:flex;width:100%;align-items:center;gap:11px;background:var(--c1);
-border:1px solid var(--c2);border-radius:12px;padding:11px 13px;margin-bottom:7px;
-text-align:right;min-height:58px}
-.tdi:active{background:var(--c2)}
-.tdi .tdc{flex:0 0 21px;height:21px;color:var(--red2);display:flex}
+.tdh{margin:28px 0 12px}
+/* ── רשימת "היום" ── */
+.tdi{position:relative;overflow:hidden;display:flex;width:100%;align-items:center;gap:13px;background:var(--card);
+border:1px solid rgba(255,255,255,.05);border-radius:18px;padding:13px 14px 15px;margin-bottom:8px;
+text-align:right;min-height:72px;box-shadow:var(--hi)}
+.tdi:active:not([disabled]){transform:scale(.985);background:var(--c2)}
+.tdi .tdc{flex:0 0 44px;height:44px;color:var(--red2);display:flex;align-items:center;justify-content:center;
+border:1.5px solid rgba(255,75,69,.42);border-radius:50%}
+.tdi .tdc svg{width:21px;height:21px}
+/* הבא בתור: פס אדום בקצה, אייקון מלא — זו הפעולה של עכשיו. השאר מחכים בשקט */
+.tdi.nx{border-color:rgba(255,75,69,.4);background:linear-gradient(270deg,rgba(225,6,0,.17),rgba(225,6,0,0) 62%),var(--card)}
+.tdi.nx::before{content:'';position:absolute;right:0;top:0;bottom:0;width:4px;background:var(--red)}
+.tdi.nx .tdc{background:var(--redg);border-color:transparent;color:#fff;box-shadow:0 8px 18px -8px rgba(225,6,0,.9)}
+/* פס התקדמות בתחתית השורה: כמה מהבלוק כבר נסגר */
+.tdp{position:absolute;right:14px;left:14px;bottom:7px;height:3px;border-radius:2px;background:rgba(255,255,255,.07);overflow:hidden}
+.tdp i{display:block;height:100%;border-radius:2px;background:var(--gsolid)}
 .tdi .tdt{flex:1;min-width:0}
-.tdi .tdt b{display:block;font-size:15px;font-weight:700;line-height:1.25}
-.tdi .tdt i{display:block;font-style:normal;font-size:11.5px;color:var(--t2);margin-top:3px}
-.tdi .tdm{flex:0 0 auto;font-size:12.5px;font-weight:800;color:#C8C8CE;background:var(--c2);
-border-radius:8px;padding:6px 10px;white-space:nowrap}
+.tdi .tdt b{display:block;font-size:16.5px;font-weight:700;line-height:1.25}
+.tdi .tdt i{display:block;font-style:normal;font-size:12.5px;color:var(--t2);margin-top:3px}
+.tdi .tdm{flex:0 0 auto;font-size:12px;font-weight:600;color:var(--t2);text-align:center;line-height:1;min-width:44px}
+.tdi .tdm .ltr{display:block;font-family:var(--f-n);font-size:30px;font-weight:800;font-style:italic;color:#fff;margin-bottom:1px;padding:0 .06em}
 .tdd{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
-.tdd span{font-size:12.5px;font-weight:800;color:var(--ok);background:rgba(232,194,74,.12);
-border:1px solid rgba(232,194,74,.38);border-radius:9px;padding:7px 11px}
-.allin{background:rgba(232,194,74,.10);border:1px solid rgba(232,194,74,.36);border-radius:12px;
-padding:13px;text-align:center;font-size:14px;font-weight:800;color:var(--ok)}
-.fxhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;
-color:var(--t2);margin:16px 0 8px}
-.fxbar{height:5px;background:var(--c2);border-radius:3px;overflow:hidden;margin-bottom:13px}
-.fxbar i{display:block;height:100%;background:var(--gsolid);border-radius:3px}
-.fxcard{background:var(--c1);border:1px solid var(--c2);border-radius:16px;padding:17px 15px}
-.fxname{font-size:23px;font-weight:900;line-height:1.15}
-.fxcue{font-size:13px;color:var(--t2);margin-top:6px;line-height:1.45}
-.fxtar{font-size:27px;font-weight:900;color:var(--red2);margin-top:11px;
-direction:ltr;text-align:right;letter-spacing:-.5px}
-.stall{margin-top:9px;border-right:2px solid var(--gd);padding:7px 10px 7px 0;
+.tdd span{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--ok);background:rgba(232,194,74,.1);
+border:1px solid rgba(232,194,74,.36);border-radius:999px;padding:8px 14px 8px 12px}
+.tdd .cks{width:14px;height:14px;flex:0 0 14px}
+.allin{background:linear-gradient(135deg,rgba(232,194,74,.16),rgba(232,194,74,.04));border:1px solid rgba(232,194,74,.4);border-radius:15px;
+padding:14px;text-align:center;font-size:15px;font-weight:700;color:var(--ok)}
+/* ── אימון כוח: תרגיל אחד על המסך ── */
+.fxhead{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;
+color:var(--t2);margin:16px 0 6px}
+.fxbar{height:6px;background:var(--c2);border-radius:3px;overflow:hidden;margin-bottom:14px}
+.fxbar i{display:block;height:100%;background:var(--gsolid);border-radius:3px;transition:width .5s var(--ease)}
+.fxcard{background:var(--card);border:1px solid rgba(255,255,255,.055);border-radius:22px;padding:20px 17px 17px;box-shadow:var(--hi)}
+.fxname{font-family:var(--f-d);font-size:40px;font-weight:700;line-height:.98;min-height:44px}
+.fxcue{font-size:13.5px;color:var(--t2);margin-top:8px;line-height:1.45}
+.fxtar{font-family:var(--f-n);font-size:52px;font-weight:800;font-style:italic;color:#fff;margin-top:12px;
+direction:ltr;text-align:right;letter-spacing:0;line-height:1}
+.stall{margin-top:10px;border-right:3px solid var(--gd);padding:7px 11px 7px 0;
 font-size:12.5px;line-height:1.45;color:var(--t2)}
-.fxnav{display:flex;gap:7px;margin-top:11px}
-.fxnav button{flex:1;border:1px solid var(--c3);border-radius:11px;padding:13px 6px;
-font-size:14px;font-weight:700;color:var(--t2);min-height:48px}
-.fxnav button.go{background:var(--red);color:#fff;border-color:var(--red)}
-.fxnav button.fin{background:var(--gsolid);color:var(--on);border-color:var(--gd)}
-.fxnav button.off{opacity:.35}
-.seg{display:flex;gap:7px;margin:14px 0 4px}
-.sg{flex:1;border:1px solid var(--c2);background:var(--c1);border-radius:12px;
-padding:11px 6px;text-align:center;min-height:58px}
-.sg b{display:block;font-size:14px;font-weight:700;color:var(--t2);line-height:1.2}
-.sg i{display:block;font-style:normal;font-size:11.5px;color:var(--t3);margin-top:3px;font-weight:700}
-.sg.on{border-color:var(--red2);background:#1C1416}
+.fxnav{display:flex;gap:8px;margin-top:12px}
+.fxnav button{flex:1;background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:13px 6px;
+font-size:14.5px;font-weight:600;color:#C8C8CE;min-height:52px}
+.fxnav button.go{background:var(--redg);color:#fff;border-color:rgba(255,120,110,.3);box-shadow:0 10px 22px -14px rgba(225,6,0,.95),inset 0 1px 0 rgba(255,255,255,.18)}
+.fxnav button.fin{background:var(--gsolid);color:var(--on);border-color:var(--gd);font-weight:700}
+/* "הקודם" כבוי: אפור על אפור, אבל קריא (4.6:1). השקיפות הישנה ירדה ל-1.86:1. */
+.fxnav button.off{opacity:1;color:#808088;background:transparent;border-color:rgba(255,255,255,.08)}
+.seg{display:flex;gap:7px;margin:16px 0 4px}
+.sg{flex:1;background:var(--card);border:1px solid rgba(255,255,255,.05);border-radius:15px;
+padding:11px 6px;text-align:center;min-height:62px;box-shadow:var(--hi)}
+.sg b{display:block;font-size:14.5px;font-weight:700;color:var(--t2);line-height:1.2}
+.sg i{display:block;font-style:normal;font-size:11.5px;color:var(--t3);margin-top:4px;font-weight:500}
+.sg.on{border-color:rgba(255,75,69,.7);background:linear-gradient(180deg,rgba(225,6,0,.2),rgba(225,6,0,.06))}
 .sg.on b{color:#fff}
-.sg.on i{color:var(--red2)}
-.sg.fin{border-color:var(--gd)}
+.sg.on i{color:#FF8A85}
+.sg.fin{border-color:rgba(201,162,39,.7)}
 .sg.fin b,.sg.fin i{color:var(--ok)}
-.notes{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}
-.intent{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
-.intent .ih{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px;margin-bottom:8px}
-.intent .it{font-size:14.5px;line-height:1.55;color:#DCDCE0}
-.intent.on{border-color:var(--gd);background:rgba(232,194,74,.07)}
-.intent.on .ih{color:var(--ok)}
+.notes{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+/* ── כרטיסים עם הקשר ── */
+.intent,.slp,.ngame,.pse{background:var(--card);border:1px solid rgba(255,255,255,.05);border-radius:18px;padding:15px;margin-top:12px;box-shadow:var(--hi)}
+.intent .ih{font-size:13px;color:#D4D4D8;margin-bottom:8px}
+.intent .it{font-size:15px;line-height:1.55;color:#E2E2E6}
+.intent.on,.slp.on,.foc{background:linear-gradient(135deg,rgba(232,194,74,.15),rgba(232,194,74,.03) 65%),#141416;border:1px solid rgba(232,194,74,.4)}
+.intent.on .ih,.slp.on .slh,.foc .fh{color:var(--ok)}
+.intent.on .ih::before,.slp.on .slh::before,.foc .fh::before{background:var(--ok)}
+/* בתוך כרטיס זהב האפור המושתק יורד מתחת ל-4.5:1 — עולים לאפור הבהיר */
+.slp.on .tiny,.intent.on .tiny,.foc .tiny,.slp.on .slm{color:var(--t2)}
 .iact{display:flex;gap:7px;margin-top:12px}
-.iact button{flex:1;border:1px solid var(--c3);border-radius:10px;padding:12px 6px;
-font-size:13px;font-weight:700;color:var(--t2);min-height:44px}
-.iact button.go{background:var(--red);color:#fff;border-color:var(--red)}
+.iact button{flex:1;background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:12px 6px;
+font-size:13.5px;font-weight:600;color:#C8C8CE;min-height:46px}
+.iact button.go{background:var(--redg);color:#fff;border-color:rgba(255,120,110,.3)}
 .dsel{display:flex;gap:5px;margin:14px 0 12px}
-.dbt{flex:1;border:1px solid var(--c2);background:var(--c1);border-radius:10px;padding:12px 0;
-font-size:14px;font-weight:700;color:var(--t2);min-height:44px}
-.dbt.on{background:var(--red);color:#fff;border-color:var(--red)}
-.srow{display:flex;width:100%;align-items:center;gap:11px;border:1px solid var(--c2);
-background:var(--c1);border-radius:11px;padding:12px 13px;margin-bottom:7px;min-height:48px;text-align:right}
-.srow .sbox{width:24px;height:24px;border-radius:7px;border:2px solid var(--c3);flex:0 0 24px;
-display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
-.srow.on .sbox{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
-.srow .snm{flex:1;font-size:15px;font-weight:700}
+.dbt{flex:1;background:var(--ctl);border:1px solid var(--ln);border-radius:11px;padding:12px 0;
+font-size:14px;font-weight:600;color:var(--t2);min-height:46px}
+.dbt.on{background:var(--redg);color:#fff;border-color:rgba(255,120,110,.3)}
+.srow{display:flex;width:100%;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.05);
+background:var(--card);border-radius:14px;padding:12px 13px;margin-bottom:7px;min-height:52px;text-align:right}
+.srow .sbox{width:26px;height:26px;border-radius:8px;border:2px solid #6A6A72;flex:0 0 26px;
+display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--on)}
+.srow .snm{flex:1;font-size:15px;font-weight:600}
 .srow.on .snm{color:#fff}
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
-.chp{border:1px solid var(--c3);background:var(--c1);border-radius:10px;padding:11px 13px;
-font-size:13px;font-weight:600;color:var(--t2);min-height:44px}
-.chp.on{background:var(--gsolid);border-color:var(--gd);color:var(--on);font-weight:800}
-.chp.fx.on{background:var(--red);border-color:var(--red);color:#fff}
-.mb{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.mbb{flex:1 1 30%;border:1px solid var(--c3);background:var(--c1);border-radius:10px;padding:12px 4px;
-font-size:13px;font-weight:700;color:var(--t2);min-height:46px}
-.mbb.on{background:var(--red);border-color:var(--red);color:#fff}
-.foc{border:1px solid var(--gd);background:rgba(232,194,74,.07);border-radius:12px;padding:13px;margin-top:12px}
-.foc .fh{font-size:11px;font-weight:800;color:var(--ok);letter-spacing:2px}
-.foc .ft{font-size:17px;font-weight:900;margin-top:5px}
-.foc .fs{font-size:12px;color:var(--t2);margin-top:4px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.chp{background:var(--ctl);border:1px solid var(--ln);border-radius:999px;padding:11px 14px;
+font-size:13.5px;font-weight:500;color:#C8C8CE;min-height:46px}
+.chp.on{background:var(--gsolid);border-color:var(--gd);color:var(--on);font-weight:700}
+.chp.fx.on{background:var(--redg);border-color:rgba(255,120,110,.3);color:#fff}
+.mb{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.mbb{flex:1 1 30%;background:var(--ctl);border:1px solid var(--ln);border-radius:12px;padding:12px 4px;
+font-size:13.5px;font-weight:600;color:#C8C8CE;min-height:48px}
+.mbb.on{background:var(--redg);border-color:rgba(255,120,110,.3);color:#fff}
+.foc{border-radius:15px;padding:14px;margin-top:12px}
+.foc .fh{font-size:13px}
+.foc .ft{font-family:var(--f-d);font-size:28px;font-weight:700;line-height:1.05;margin-top:6px}
+.foc .fs{font-size:12.5px;color:var(--t2);margin-top:4px}
 /* ---------- שינה ---------- */
-.slp{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
-.slp.on{border-color:var(--gd);background:rgba(232,194,74,.07)}
-.slp .slh{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px}
-.slp.on .slh{color:var(--ok)}
-.slb{display:flex;gap:6px;margin-top:11px}
-.slb button{flex:1 1 0;min-width:0;border:1px solid var(--c3);background:var(--c1);
-border-radius:11px;min-height:52px;font-size:20px;font-weight:900;color:#fff}
-.slb button:active{background:var(--red);border-color:var(--red)}
+.slp .slh{font-size:14px;color:#D4D4D8}
+.slb{display:flex;gap:7px;margin-top:12px}
+.slb button{flex:1 1 0;min-width:0;background:var(--ctl);border:1px solid var(--ln);
+border-radius:14px;min-height:60px;font-family:var(--f-n);font-size:28px;font-weight:700;color:#fff}
+.slb button:active:not([disabled]){background:var(--red);border-color:var(--red)}
 .slb button.on{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
-.slr{display:flex;align-items:center;gap:11px;margin-top:9px}
-.slv{flex:0 0 auto;font-size:38px;font-weight:900;line-height:1;color:var(--ok)}
-.slm{flex:1 1 auto;min-width:0;font-size:13px;font-weight:700;color:var(--t2)}
-.sle{flex:0 0 auto;border:1px solid var(--c3);border-radius:9px;padding:0 13px;
-min-height:44px;font-size:12px;font-weight:700;color:var(--t2)}
+.slr{display:flex;align-items:center;gap:12px;margin-top:10px}
+.slv{flex:0 0 auto;font-family:var(--f-n);font-size:56px;font-weight:800;font-style:italic;line-height:.9;color:#fff}
+.slp.on .slv{color:var(--ok)}
+.slp.spark .slv{animation:stamp .5s var(--ease) both}
+.slm{flex:1 1 auto;min-width:0;font-size:13.5px;font-weight:600;color:var(--t2)}
+.sle{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:0 14px;
+min-height:44px;font-size:12.5px;font-weight:600;color:#C8C8CE}
 .slc{margin-top:16px}
 /* שורת העמודות היא מיכל בגובה קבוע ומדויק, כדי שקו היעד יישען על מספר
    ידוע ולא על ניחוש של גובה התווית שמתחתיו. */
 .slbars{position:relative;display:flex;gap:6px;align-items:flex-end;height:84px}
-.slbar{flex:1 1 0;min-width:0;height:100%;border-radius:7px;background:var(--c2);
+.slbar{flex:1 1 0;min-width:0;height:100%;border-radius:8px;background:var(--c2);
 display:flex;align-items:flex-end;overflow:hidden}
-.slbar i{display:block;width:100%;border-radius:7px}
+.slbar i{display:block;width:100%;border-radius:8px;transform-origin:bottom}
+#app.enter .slbar i{animation:growY .6s var(--ease) both}
+@keyframes growY{from{transform:scaleY(0)}to{transform:none}}
 .slbar i.ok{background:var(--gsolid)}
 /* לילה קצר נראה — הוא פשוט לא זוהר. אפור ולא אדום: אין כאן כישלון לסמן. */
 .slbar i.low{background:#6E6E73}
 .slbar i.none,.slbar i.fut{background:transparent}
 .sldls{display:flex;gap:6px;margin-top:6px}
-.sldl{flex:1 1 0;min-width:0;text-align:center;font-size:11px;font-weight:700;color:var(--t3)}
+.sldl{flex:1 1 0;min-width:0;text-align:center;font-size:11.5px;font-weight:600;color:var(--t3)}
 .sldl.t{color:#fff}
 .sltg{position:absolute;right:0;left:0;bottom:calc(84px*.8);height:1px;
 background:var(--red);opacity:.6;pointer-events:none}
 /* התווית יושבת מתחת לגרף ולא עליו: תג שצף בפינה נדרס על ידי עמודה גבוהה
    ונצמד לשפת הכרטיס. מקרא לא מתנגש עם שום נתון. */
-.sltgl{display:flex;align-items:center;gap:6px;margin-top:9px;
-font-size:11px;font-weight:700;color:var(--t3)}
+.sltgl{display:flex;align-items:center;gap:6px;margin-top:10px;
+font-size:11.5px;font-weight:600;color:var(--t3)}
 .sltgl i{flex:0 0 16px;height:1px;background:var(--red);opacity:.6}
-.ngame{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
-.ngame .ngh{font-size:11px;font-weight:800;color:var(--red2);letter-spacing:2px}
-.ngame .ngt{font-size:19px;font-weight:900;margin-top:5px}
-.ngame .ngd{font-size:12px;color:var(--t2);margin-top:3px}
-.anch{margin-top:9px;padding-top:9px;border-top:1px solid var(--c2)}
-.anch .anh{font-size:11px;font-weight:800;color:var(--t3);letter-spacing:2px}
-.anch .ant{font-size:16px;font-weight:900;margin-top:4px}
-.anch .ans{font-size:12px;color:var(--t2);margin-top:3px;line-height:1.45}
-.fin{width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:11px;
+/* מידע ולא בקשה: כרטיס ניטרלי. האדום שמור לכפתור */
+.ngame{background:var(--card)}
+.ngame .ngh{font-size:13px;color:#D4D4D8}
+.ngame .ngt{font-family:var(--f-d);font-size:32px;font-weight:700;line-height:1;margin-top:7px}
+.ngame .ngd{font-size:12.5px;color:var(--t2);margin-top:4px}
+.anch{margin-top:11px;padding-top:11px;border-top:1px solid var(--ln)}
+.anch .anh{font-size:12.5px;color:var(--t2)}
+.anch .ant{font-family:var(--f-d);font-size:26px;font-weight:700;line-height:1.05;margin-top:5px}
+.anch .ans{font-size:12.5px;color:var(--t2);margin-top:3px;line-height:1.45}
+.fin{width:100%;background:var(--c2);border:1px solid var(--c3);border-radius:12px;
 padding:13px;color:#fff;font-size:15px;min-height:48px}
-.gcard{border:1px solid var(--red);border-radius:12px;padding:13px;margin-top:12px}
-.grow{padding:11px 0;border-bottom:1px solid var(--c2)}
+/* כרטיס שמבקש פעולה: ניטרלי, עם קו אדום דק למעלה. אדום מלא רק על הכפתור שבו */
+.gcard{position:relative;overflow:hidden;background:radial-gradient(70% 60% at 100% 0%,rgba(225,6,0,.12),transparent 70%),var(--card);
+border:1px solid rgba(255,255,255,.07);border-radius:18px;padding:15px;margin-top:12px;box-shadow:inset 0 2px 0 var(--red)}
+.grow{padding:12px 0;border-bottom:1px solid var(--ln)}
 .grow:last-child{border-bottom:none}
-.danger{border:1px solid #4A1512;border-radius:12px;padding:13px;margin-top:28px}
-.dtitle{font-size:11px;font-weight:800;color:#C0625C;letter-spacing:2px;margin-bottom:10px}
-.dbtn{width:100%;border:1px solid #5A1C18;border-radius:10px;padding:12px;font-size:13.5px;
+.danger{border:1px solid #4A1512;border-radius:15px;padding:14px;margin-top:30px}
+.dtitle{font-size:12.5px;color:#CC6E68;margin-bottom:10px}.dtitle::before{background:#CC6E68}
+.dbtn{width:100%;border:1px solid #5A1C18;border-radius:12px;padding:12px;font-size:13.5px;
 font-weight:600;color:#E8908B;margin-bottom:7px;min-height:46px}
 .dbtn:last-child{margin-bottom:0}
-.dbtn:active{background:#2A1210}
-.note{border:1px solid var(--c3);border-radius:9px;padding:9px 11px;font-size:12px;
-font-weight:500;color:var(--t2);min-height:44px}
-.note:active{background:var(--c1)}
-.note.warn{border-color:#5A2320;color:#E8908B}
-.ckw{border-bottom:1px solid var(--c2)}
+.dbtn:active:not([disabled]){background:#2A1210}
+.note{background:transparent;border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:9px 15px;font-size:12.5px;
+font-weight:500;color:#B8B8BE;min-height:44px}
+.note.warn{border-color:#5A2320;color:#E8908B;background:rgba(225,6,0,.06)}
+.ckw{border-bottom:1px solid var(--ln)}
 .ckw:last-child{border-bottom:none}
 .ckw .chk{border-bottom:none}
-.ckact{display:flex;justify-content:flex-start;padding:0 0 11px 35px}
-.tmr{display:flex;align-items:center;gap:6px;border:1px solid var(--c3);border-radius:9px;
-padding:11px 13px;font-size:12.5px;font-weight:700;color:var(--t2);min-height:44px}
-.tmr:active{background:var(--c2)}
+.ckact{display:flex;justify-content:flex-start;padding:0 0 12px 38px}
+.tmr{display:flex;align-items:center;gap:6px;background:transparent;border:1px solid rgba(255,255,255,.16);border-radius:999px;
+padding:10px 14px;font-size:13px;font-weight:600;color:#C8C8CE;min-height:44px}
+.tmr .ltr{font-family:var(--f-n);font-size:17px;font-weight:700}
 .tmr.run{border-color:var(--red2);color:var(--red2)}
-.lgd{display:flex;justify-content:center;gap:14px;font-size:10.5px;color:var(--t3);margin-top:10px}
+.lgd{display:flex;justify-content:center;gap:14px;font-size:11px;color:var(--t3);margin-top:11px}
 .lgd span{display:flex;align-items:center;gap:5px}
 .lgd i{width:14px;height:8px;border-radius:3px;background:var(--gsolid);display:block}
 .lgd i.g{background:var(--miss)}
 .lgd i.w{background:#35353B}
 .hist{margin-top:16px}
-.hrow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;
-border-bottom:1px solid var(--c2);font-size:12.5px}
+.hrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;
+border-bottom:1px solid var(--ln);font-size:13px}
 .hrow:last-child{border-bottom:none}
 .hrow .wl{color:var(--t2)}
 .hrow .fr{display:flex;gap:6px;flex:0 0 auto}
-.hrow .fr b{font-weight:700;flex:0 0 46px;min-width:0;text-align:center;
+.hrow .fr b{font-weight:600;flex:0 0 46px;min-width:0;text-align:center;
 white-space:nowrap;overflow:hidden;text-overflow:clip}
-.hrow .fr b.n{direction:ltr;unicode-bidi:bidi-override}
+.hrow .fr b.n{direction:ltr;unicode-bidi:bidi-override;font-family:var(--f-n);font-size:16px;font-weight:700}
 .hrow .fr .full{color:var(--ok)}
 .toast{position:fixed;bottom:calc(var(--nav) + 14px);right:16px;left:16px;max-width:520px;margin:0 auto;
-background:var(--c2);border:1px solid var(--c3);border-radius:12px;padding:13px;text-align:center;
-font-size:14px;font-weight:500;z-index:95;opacity:0;transform:translateY(12px);
-transition:opacity .2s,transform .2s;pointer-events:none}
+background:rgba(32,32,36,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:14px;text-align:center;
+font-size:14.5px;font-weight:500;z-index:95;opacity:0;transform:translateY(16px) scale(.97);
+transition:opacity .2s var(--ease),transform .32s var(--spring);pointer-events:none;box-shadow:0 18px 40px -18px rgba(0,0,0,.9)}
 .toast.on{opacity:1;transform:none}
 /* ---------- שורת הסטטוס ----------
    האפליקציה מותקנת במסך הבית עם black-translucent: התוכן נגלל מתחת לשעון
@@ -341,79 +552,188 @@ transition:opacity .2s,transform .2s;pointer-events:none}
 .topcap{position:fixed;top:0;right:0;left:0;height:env(safe-area-inset-top,0px);
 background:var(--bg);z-index:65;pointer-events:none}
 /* ---------- מותג ---------- */
-.brand{display:flex;align-items:center;gap:9px;min-width:0}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
 /* הלוגו נלקח מאייקון מסך הבית (פעם אחת, למשתנה CSS) — בלי עותק שני של התמונה בקובץ */
-.blogo{flex:0 0 34px;width:34px;height:34px;border-radius:9px;display:block;
-background:var(--logo,none) center/cover no-repeat}
-.btx{display:flex;flex-direction:column;line-height:1.15;text-align:left;min-width:0}
-.btx b{font-size:13px;font-weight:900;letter-spacing:1.5px;color:#fff;white-space:nowrap}
-.btx i{font-style:normal;font-size:10.5px;font-weight:500;color:var(--t3);margin-top:2px;white-space:nowrap}
+.blogo{flex:0 0 38px;width:38px;height:38px;border-radius:11px;display:block;
+background:var(--logo,none) center/cover no-repeat;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 6px 16px -6px rgba(225,6,0,.6)}
+.btx{display:flex;flex-direction:column;line-height:1;text-align:left;min-width:0}
+.btx b{font-family:var(--f-n);font-size:19px;font-weight:800;font-style:italic;letter-spacing:.6px;color:#fff;white-space:nowrap}
+.btx i{font-style:normal;font-size:11px;font-weight:500;color:var(--t3);margin-top:3px;white-space:nowrap}
 /* ---------- אוכל: רגעים ומנות ----------
    רגע הוא כיוון, לא שעה. כל רגע נסגר בנגיעה אחת — מנה גדולה או קטנה. */
-.fsec{letter-spacing:0}
-.fpips{display:flex;gap:5px;margin-top:14px;align-items:flex-end}
+.fpips{display:flex;gap:5px;margin-top:16px;align-items:flex-end}
 .fpips span{flex:1 1 0;min-width:0;border-radius:4px;background:var(--c3);height:10px}
-.fpips span.bg{height:14px}
+.fpips span.bg{height:16px}
+.fpips span.bg+span:not(.bg){margin-right:8px}
 .fpips span.on{background:var(--gsolid)}
 .fpips span.x{flex:0 0 14px;background:var(--gsolid)}
-.fmore{color:var(--ok);font-weight:800}
-.mo{border-bottom:1px solid var(--c2)}
+.fpips span.fx-pop{animation:pop .5s var(--spring) both;transform-origin:bottom}
+.fmore{color:var(--ok);font-weight:700}
+.mo{border-bottom:1px solid var(--ln)}
 .mo:last-child{border-bottom:none}
-.mor{display:flex;align-items:center;gap:8px;min-height:58px}
+.mor{display:flex;align-items:center;gap:8px;min-height:60px}
 .mon{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:8px;min-height:44px;
-padding:0;text-align:right;font-size:15px;font-weight:700;line-height:1.25}
+padding:0;text-align:right;font-size:15.5px;font-weight:600;line-height:1.25}
 .chev{flex:0 0 auto;width:7px;height:7px;border-left:2px solid var(--t3);border-bottom:2px solid var(--t3);
 transform:rotate(-45deg);margin-top:-4px;transition:transform .25s ease}
 .mo.open .chev{transform:rotate(135deg);margin-top:3px}
 .szs{flex:0 0 auto;display:flex;gap:6px}
-.szb{min-width:64px;min-height:44px;border:1px solid var(--c3);border-radius:10px;background:var(--c1);
-padding:0 9px;font-size:13px;font-weight:700;color:var(--t2)}
-.szb:active{background:var(--red);border-color:var(--red);color:#fff}
+.szb{min-width:66px;min-height:46px;background:var(--ctl);border:1px solid var(--ln);border-radius:999px;
+padding:0 9px;font-size:13.5px;font-weight:600;color:#C8C8CE}
+.szb:active:not([disabled]){background:var(--red);border-color:var(--red);color:#fff}
+.mo .szb{background:transparent;border-color:rgba(255,255,255,.16);color:#E4E4E8}
 .ideas{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
 .ideas>div{overflow:hidden;min-height:0}
 .mo.open .ideas{grid-template-rows:1fr}
 .idt{font-size:12.5px;color:var(--t2);line-height:1.55;padding:0 0 12px}
-@media (prefers-reduced-motion:reduce){.ideas,.chev{transition:none}}
-.mdone{display:flex;align-items:center;gap:11px;min-height:50px;border-bottom:1px solid var(--c2)}
+.mdone{display:flex;align-items:center;gap:12px;min-height:52px;border-bottom:1px solid var(--ln)}
 .mdone:last-child{border-bottom:none}
 .mdone .box{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
+.mdone.fx .box{animation:pop .44s var(--spring) both}
 .mdone .mdn{flex:1 1 auto;min-width:0;font-size:14px;color:var(--t3)}
-.mdone .msz{flex:0 0 auto;font-size:12px;font-weight:800;color:var(--ok)}
-.undo{flex:0 0 auto;min-height:44px;min-width:44px;padding:0 10px;font-size:12px;color:var(--t2);text-decoration:underline}
+.mdone .msz{flex:0 0 auto;font-size:12.5px;font-weight:700;color:var(--ok)}
+.undo{flex:0 0 auto;min-height:44px;min-width:44px;padding:0 10px;font-size:12.5px;font-weight:600;color:var(--t2)}
 .xtra{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.xchip{display:flex;align-items:center;gap:7px;min-height:44px;border:1px solid var(--gd);border-radius:10px;
-background:rgba(232,194,74,.10);padding:0 12px;font-size:13px;font-weight:700;color:var(--ok)}
+.xchip{display:flex;align-items:center;gap:7px;min-height:44px;border:1px solid rgba(232,194,74,.45);border-radius:999px;
+background:rgba(232,194,74,.10);padding:0 12px;font-size:13.5px;font-weight:600;color:var(--ok)}
 .xchip i{font-style:normal;color:var(--t3);font-weight:500}
 /* ---------- נוכחות באימון קבוצה ---------- */
-.tmrow{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--c2)}
-.tmrow .tmt{flex:1 1 auto;min-width:0;font-size:14px;font-weight:700}
-.tmb{flex:0 0 auto;min-height:44px;min-width:96px;border:1px solid var(--red);border-radius:10px;background:var(--red);
-color:#fff;font-size:14px;font-weight:800;padding:0 14px}
+.tmrow{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--ln)}
+.tmrow .tmt{flex:1 1 auto;min-width:0;font-size:14.5px;font-weight:600}
+.tmb{flex:0 0 auto;min-height:46px;min-width:100px;border:1px solid rgba(255,120,110,.3);border-radius:999px;background:var(--redg);
+color:#fff;font-size:14.5px;font-weight:700;padding:0 14px}
 .tmb.on{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
 /* ---------- שינה: קדימה, ולילות חסרים ---------- */
-.slft{font-size:15px;line-height:1.5;color:#DCDCE0;margin-top:7px}
-.slft b{color:#fff;font-weight:800}
-.slact{display:flex;gap:7px;margin-top:10px}
-.sldy{margin-top:14px;padding-top:12px;border-top:1px solid var(--c2)}
+.slft{font-size:15px;line-height:1.55;color:#DCDCE0;margin-top:8px}
+.slft b{color:#fff;font-weight:700;font-family:var(--f-n);font-size:19px}
+.slact{display:flex;gap:7px;margin-top:11px}
+.sldy{margin-top:14px;padding-top:12px;border-top:1px solid var(--ln)}
 .sldy:first-of-type{border-top:none;padding-top:0}
-.sldy .sln{font-size:14px;font-weight:800}
+.sldy .sln{font-size:14px;font-weight:700}
 .sldy .sln.got{color:var(--ok)}
 .wk2{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
 .wk2 .chp{flex:1 1 28%}
 /* ---------- הפסקה ---------- */
-.pse{border:1px solid var(--c3);border-radius:12px;padding:13px;margin-top:12px}
-.pse .psh{font-size:11px;font-weight:800;color:var(--t2);letter-spacing:2px}
-.pse .pst{font-size:16px;font-weight:800;margin-top:4px}
+.pse .psh{font-size:13px;color:var(--t2)}
+.pse .pst{font-size:16px;font-weight:700;margin-top:4px}
 .big[disabled]{opacity:.35}
+
+/* ── רגע הישג בגיליון ──
+   מדליה שנכנסת עם קפיץ, וי שנמתח, הבזק אחד, ספרות שעולות מאפס. ואז שקט. */
+.cel{text-align:center;padding:6px 0 2px;position:relative}
+.medal{position:relative;width:88px;height:88px;margin:0 auto;border-radius:50%;background:var(--gsolid);color:var(--on);
+display:flex;align-items:center;justify-content:center;animation:medal .62s var(--spring) both;
+box-shadow:0 0 0 8px rgba(232,194,74,.08),0 16px 40px -12px rgba(232,194,74,.6),inset 0 2px 0 rgba(255,255,255,.45),inset 0 -3px 0 rgba(0,0,0,.12)}
+.medal svg{width:46px;height:46px;fill:none;stroke:currentColor;stroke-width:4.6;stroke-linecap:round;stroke-linejoin:round}
+.medal .mk{stroke-dasharray:21;stroke-dashoffset:21;animation:draw .36s .4s var(--ease) forwards}
+.medal .star{fill:currentColor;stroke:none;animation:pop .5s .35s var(--spring) both}
+.medal .gl{position:absolute;inset:0;border-radius:50%;overflow:hidden;isolation:isolate}
+.medal .gl::after{content:'';position:absolute;left:0;top:-40%;bottom:-40%;width:60%;pointer-events:none;
+background:linear-gradient(100deg,transparent,rgba(255,255,255,.85),transparent);animation:sweep .9s cubic-bezier(.3,0,.2,1) .55s 1 both}
+.medal::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--ok);animation:halo .8s .25s var(--ease) both;pointer-events:none}
+.medal.lite::after{display:none}
+.celk{display:inline-block;margin-top:18px;font-size:12px;font-weight:700;color:var(--ok);
+padding:3px 12px;background:rgba(232,194,74,.12);clip-path:polygon(5px 0,100% 0,calc(100% - 5px) 100%,0 100%);animation:rise .4s .3s var(--ease) both}
+.celh{font-family:var(--f-d);font-size:44px;font-weight:700;line-height:.95;margin-top:10px;animation:slam .5s .2s var(--ease) both}
+.cel .sub{margin-top:6px;animation:rise .4s .38s var(--ease) both}
+.celn{font-family:var(--f-n);font-size:104px;font-weight:800;font-style:italic;line-height:.85;
+color:var(--ok);text-shadow:0 6px 30px rgba(232,194,74,.28);
+animation:slam .55s .1s var(--ease) both;padding:0 .08em}
+.celst{animation:rise .45s .45s var(--ease) both}
+.sc .stat .v.gold{color:var(--ok)}
+/* ── קישור טקסט: תווית אפורה + חץ, בלי קו תחתון ── */
+.lnk{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 6px;font-size:13px;font-weight:600;color:var(--t2)}
+.lnk::after{content:'';flex:0 0 6px;width:6px;height:6px;border-left:1.8px solid currentColor;border-bottom:1.8px solid currentColor;transform:rotate(45deg);margin-top:1px}
+.lnk.sw::after{display:none}
+.lnk .ltr{font-family:var(--f-n);font-size:15px;font-weight:700}
+/* ── עלייה במשקל: הישג, לא אזהרה ── */
+.upbox{display:flex;gap:12px;align-items:flex-start;margin-top:12px;padding:13px 14px;border-radius:15px;
+background:linear-gradient(135deg,rgba(232,194,74,.15),rgba(232,194,74,.03) 65%),#141416;border:1px solid rgba(232,194,74,.4)}
+.upbox .upi{flex:0 0 34px;height:34px;border-radius:50%;background:var(--gsolid);color:var(--on);display:flex;align-items:center;justify-content:center}
+.upbox .upi svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.upbox b{color:var(--ok);font-weight:700}
+.upbox p{font-size:13.5px;color:#D8D8DC;line-height:1.55;margin-top:2px}
+/* ── מספר השבוע כמספר גופייה בפינה הריקה של הכרטיס ── */
+.hero::after{content:attr(data-wk);position:absolute;z-index:-1;left:-2px;top:50px;pointer-events:none;
+font-family:var(--f-n);font-weight:800;font-style:italic;font-size:124px;line-height:.8;direction:ltr;
+color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,.075)}
+/* ── שיאים: אריחים, החדש קודם ── */
+/* שם המחלקה wkdd ולא wk2: .wk2 כבר תפוס (שבבי הלילות החסרים) */
+.hero.wkdd::after{font-size:96px;top:58px}
+.prg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.prt{min-width:0;background:var(--card);border:1px solid rgba(255,255,255,.05);border-radius:16px;padding:12px 13px 12px;box-shadow:var(--hi)}
+.prt .pn{font-size:12.5px;font-weight:600;color:var(--t2);line-height:1.3;height:2.6em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.prt .pv{display:flex;align-items:baseline;gap:5px;margin-top:6px}
+.prt .pv .ltr{font-family:var(--f-n);font-size:38px;font-weight:700;line-height:1;color:#fff}
+.prt .pv i{font-style:normal;font-size:13px;font-weight:600;color:var(--t2)}
+.prt .pr2{font-size:12px;color:var(--t2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prt .pr2 .ltr{font-family:var(--f-n);font-size:14px;font-weight:700;color:#fff}
+.prt.new{border-color:rgba(232,194,74,.42);background:linear-gradient(160deg,rgba(232,194,74,.15),rgba(232,194,74,.02) 62%),#141416}
+.prt.new .pv .ltr{color:var(--ok)}
+.prt.new .pr2 b{color:var(--ok);font-weight:700}
+/* ── נתוני גוף: לבן, לא זהב ── */
+.bwv{font-weight:600;color:var(--t2)}
+.bwv .ltr{font-family:var(--f-n);font-size:20px;font-weight:700;color:#fff;margin-left:3px}
+
+/* ── סבב 4: רגעים ── */
+/* שיא אישי בסט: האריח הופך לזהב מלא, עם התווית "שיא". ברגע השמירה — חותמת, הבזק אחד וחלקיקים */
+.set.pr{background:var(--gsolid);border-color:var(--gd);color:var(--on)}
+.set .prb{display:block;font-family:var(--f-b);font-size:10.5px;font-weight:700;line-height:1;margin-top:2px}
+.set{display:flex;flex-direction:column;align-items:center;justify-content:center}
+.set.fx-pr{animation:prIn .55s var(--spring) both}
+@keyframes prIn{0%{transform:scale(1.4) rotate(-4deg);opacity:.3}55%{transform:scale(.94) rotate(1deg);opacity:1}100%{transform:none}}
+/* הסט הבא נדלק כשהמנוחה נגמרת */
+.set.fx-nudge{animation:nudge .75s var(--ease) 1}
+@keyframes nudge{0%{transform:none;box-shadow:0 0 0 0 rgba(255,75,69,.9)}28%{transform:scale(1.08)}70%{box-shadow:0 0 0 14px rgba(255,75,69,0)}100%{transform:none;box-shadow:0 0 0 0 rgba(255,75,69,0)}}
+/* הלוח השבועי נבנה עמודה אחרי עמודה כשנכנסים ללשונית */
+#app.enter .wk .c{animation:cellIn .42s var(--spring) both}
+@keyframes cellIn{from{transform:scale(.35);opacity:0}to{transform:none;opacity:1}}
+#app.enter .wk>:nth-child(8n+2){animation-delay:.10s}#app.enter .wk>:nth-child(8n+3){animation-delay:.14s}
+#app.enter .wk>:nth-child(8n+4){animation-delay:.18s}#app.enter .wk>:nth-child(8n+5){animation-delay:.22s}
+#app.enter .wk>:nth-child(8n+6){animation-delay:.26s}#app.enter .wk>:nth-child(8n+7){animation-delay:.30s}
+#app.enter .wk>:nth-child(8n+8){animation-delay:.34s}
+/* אריחי השיאים נכנסים אחד אחרי השני */
+#app.enter .prt{animation:rise .4s var(--ease) both}
+#app.enter .prt:nth-child(2){animation-delay:.05s}#app.enter .prt:nth-child(3){animation-delay:.1s}#app.enter .prt:nth-child(4){animation-delay:.15s}
+/* כמה הטבעת עלתה מאז הפעם הקודמת שראית אותה */
+.rdl{position:absolute;left:50%;top:-6px;z-index:2;pointer-events:none;font-family:var(--f-n);font-size:20px;font-weight:800;font-style:italic;
+color:var(--ok);text-shadow:0 2px 12px rgba(0,0,0,.8);transform:translateX(-50%);animation:delta 1.5s .25s var(--ease) both}
+@keyframes delta{0%{opacity:0;transform:translate(-50%,10px) scale(.8)}22%{opacity:1;transform:translate(-50%,-4px) scale(1.06)}
+70%{opacity:1;transform:translate(-50%,-10px)}100%{opacity:0;transform:translate(-50%,-22px)}}
+/* פתיחת האפליקציה: הלוגו מקבל הבזק אחד, השם נוחת */
+#app.boot .blogo{animation:logoIn .7s var(--spring) both}
+@keyframes logoIn{0%{transform:scale(.5) rotate(-12deg);opacity:0}100%{transform:none;opacity:1}}
+#app.boot .hero .h1{animation:slam .55s .12s var(--ease) both}
+#app.boot .hero::after{animation:wkIn 1s .2s var(--ease) both}
+@keyframes wkIn{from{opacity:0;transform:translateX(-40px)}to{opacity:1;transform:none}}
+/* סיכום אחרי הישג: המספרים עולים אחד אחרי השני */
+.stat.celst{animation:none}
+.stat.celst>div{animation:rise .42s var(--ease) both;animation-delay:.42s}
+.stat.celst>div:nth-child(2){animation-delay:.52s}.stat.celst>div:nth-child(3){animation-delay:.62s}
+/* סוף אימון כוח: הילה זהובה מאחורי המספר הגדול */
+.celx{padding-top:18px}
+.celx::before{content:'';position:absolute;z-index:-1;left:50%;top:-10px;width:320px;height:240px;transform:translateX(-50%);pointer-events:none;
+background:radial-gradient(closest-side,rgba(232,194,74,.22),transparent);animation:rise .8s var(--ease) both}
+.cel{isolation:isolate}
+/* טלפון נמוך (SE): גיליון היום המלא נכנס בלי גלילה */
+@media (max-height:700px){.medal{width:74px;height:74px}.medal svg{width:40px;height:40px}
+.celk{margin-top:12px}.celh{font-size:38px}.stat.celst{margin-top:14px!important}.celst+.allin,.allin.celst{margin-top:10px!important}}
+
+/* טוען מראש כל משקל וכתב של הפונטים, כדי שבפעם הראשונה בלי קליטה לא יחסר אף אחד מהם במטמון */
+/* לא left שלילי: במסמך RTL גלישה שמאלה נגללת, ו-9999px היו מוסיפים גלילה אופקית ענקית */
+.fwarm{position:absolute;right:0;top:0;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);opacity:0;pointer-events:none;white-space:nowrap}
+.fwarm b{font-family:var(--f-d);font-weight:700}.fwarm i{font-family:var(--f-n);font-weight:800;font-style:italic}
+.fwarm s{font-family:var(--f-n);font-weight:700;text-decoration:none}.fwarm u{font-family:var(--f-b);font-weight:500;text-decoration:none}
 </style>
 </head>
 <body>
 
 <div class="topcap"></div>
-<div class="timer" id="tm" onclick="stopT()"></div>
+<div class="timer" id="tm" onclick="tmTap()"></div>
 <div id="app"></div>
 <div class="nav" id="nav"></div>
 <div class="toast" id="toast"></div>
+<div class="fwarm" aria-hidden="true"><b>אבA1</b><i>A1:</i><s>A1×</s><u>Ab</u></div>
 <div class="sheet" id="sh" onclick="if(event.target===this)closeSheet()"><div class="sc" id="shc"></div></div>
 
 <script>
@@ -424,7 +744,7 @@ window.__crash=function(msg){
  if(!document.body||document.getElementById('crash'))return;
  var d=document.createElement('div');d.id='crash';
  d.setAttribute('style','position:fixed;inset:0;z-index:999;background:#08080A;color:#fff;'+
-  'padding:max(calc(env(safe-area-inset-top) + 18px),56px) 18px 26px;font-family:Heebo,sans-serif;direction:rtl;overflow:auto');
+  'padding:max(calc(env(safe-area-inset-top) + 18px),56px) 18px 26px;font-family:Rubik,sans-serif;direction:rtl;overflow:auto');
  d.innerHTML='<div style="font-size:23px;font-weight:800">משהו נשבר</div>'+
   '<div style="height:3px;width:44px;background:#E10600;margin:9px 0 14px;border-radius:2px"></div>'+
   '<div style="font-size:14.5px;color:#A1A1A6;line-height:1.6">הנתונים שלך עדיין שמורים על המכשיר הזה ולא אבדו. '+
@@ -1006,19 +1326,19 @@ if(r&&!Object.keys(r.m).length&&!r.x.length){
 function foodAfter(k,added){const res=fuelSync(k);foodTidy(k);save();
 if(res==='won'){draw();try{winTone()}catch(e){}
  if(navigator.vibrate)navigator.vibrate([0,60,80,60,80,140]);fuelWin();return}
-if(added)stepTone(foodCounts(foodOf(k)).tot);
+if(added){stepTone(foodCounts(foodOf(k)).tot);haptic(1)}
 draw()}
 function setPortion(id,sz){if(!momentOf(id)||(sz!=='b'&&sz!=='s'))return;
 const k=today(),r=foodToday();
 if(r.m[id]===sz){delete r.m[id];foodAfter(k,false);return}
 if(!r.m[id]&&foodCounts(r).tot>=FOOD_MAX){foodTidy(k);toast('עד '+FOOD_MAX+' מנות ביום');return}
-r.m[id]=sz;ideasOpen.delete(id);foodAfter(k,true)}
+r.m[id]=sz;ideasOpen.delete(id);FX.food=id;foodAfter(k,true)}
 function unPortion(id){const k=today(),r=foodOf(k);if(!r||!r.m[id])return;
 delete r.m[id];foodAfter(k,false)}
 function addExtra(sz){if(sz!=='b'&&sz!=='s')return;
 const k=today(),r=foodToday();
 if(foodCounts(r).tot>=FOOD_MAX){foodTidy(k);toast('עד '+FOOD_MAX+' מנות ביום');return}
-r.x.push(sz);foodAfter(k,true)}
+r.x.push(sz);FX.food='x';foodAfter(k,true)}
 function delExtra(i){const k=today(),r=foodOf(k);if(!r||!(i>=0&&i<r.x.length))return;
 r.x.splice(i,1);foodAfter(k,false)}
 const BLK={foot:{list:()=>todayFoot(),day:'footDays',name:()=>isRestDay()?'רגליים · גרסה קלה':'רגליים'},
@@ -1046,16 +1366,17 @@ if(P.fuel){const c=foodCounts(foodOf(k));out.push(['אוכל','fuel',F('fuel',c.
 return out.map(x=>[x[0],x[1],Math.max(0,Math.min(1,x[2]))])}
 function dayPct(){const p=dayParts();if(!p.length)return 1;
 return p.reduce((a,x)=>a+x[2],0)/p.length}
-function ring(pct){const r=40,c=2*Math.PI*r,off=c*(1-pct);
+function ring(pct,from){const r=40,c=2*Math.PI*r,off=c*(1-pct);
+const fa=(typeof from==='number'&&Math.abs(from-pct)>.004)?` data-from="${(c*(1-from)).toFixed(1)}"`:'';
 return `<svg viewBox="0 0 100 100" class="ringsvg">
 <defs><linearGradient id="gmet" x1="0" y1="0" x2="1" y2="1">
 <stop offset="0" stop-color="#F7DC8A"/><stop offset=".45" stop-color="#E8C24A"/>
 <stop offset="1" stop-color="#C9A227"/></linearGradient></defs>
-<circle cx="50" cy="50" r="${r}" fill="none" stroke="var(--c2)" stroke-width="10"/>
-<circle cx="50" cy="50" r="${r}" fill="none" stroke="url(#gmet)" stroke-width="10"
+<circle cx="50" cy="50" r="${r}" fill="none" stroke="#2A2A2E" stroke-width="9"/>
+<circle class="rprog"${fa} cx="50" cy="50" r="${r}" fill="none" stroke="url(#gmet)" stroke-width="9"
 stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
 transform="rotate(-90 50 50)"/></svg>`}
-let sparkedDay='';
+let sparkedDay='',ringShown=null;
 /* יום שנוקה ידנית הוא לא הישג. בלי ההבחנה הזאת חמש נגיעות ב"היום זה לא
    מתאים" מייצרות טבעת זהב, ניצוץ ורצף שממשיך — על יום שבו לא נעשה כלום. */
 function emptied(w){if(dayParts().length)return false;
@@ -1065,9 +1386,10 @@ if(pausedOn(today()))return `<div class="ringwrap">${ring(0)}
 <div class="ringtxt"><div class="rlbl" style="font-size:13px;font-weight:800;color:var(--t2)">הפסקה</div></div></div>`;
 const p=dayPct(),n=Math.round(p*100);
 const off=emptied(nowD().getDay()),full=n>=100&&!off;
-let sp='';if(full&&sparkedDay!==today()){sparkedDay=today();sp=' spark'}
-return `<div class="ringwrap${sp}">${ring(off?0:p)}
-<div class="ringtxt">${full?'<div class="rdone">\u2713</div><div class="rlbl">יום מלא</div>'
+let sp='';if(full&&sparkedDay!==today()){sparkedDay=today();sp=' spark';FX.ringWin=1}
+const val=off?0:p,quiet=ringQuiet,from=quiet?val:(ringShown===null?0:ringShown),dl=(!quiet&&ringShown!==null&&val>from+.004)?Math.round((val-from)*100):0;ringQuiet=false;ringShown=val;
+return `<div class="ringwrap${sp}">${ring(val,from)}${dl&&!RM()?`<span class="rdl ltr" aria-hidden="true">+${dl}%</span>`:''}
+<div class="ringtxt">${full?`<div class="rdone"><svg viewBox="0 0 24 24"><path${sp?' class="dr"':''} d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="rlbl">יום מלא</div>`
 :(off?'<div class="rlbl" style="font-size:12px;line-height:1.3">היום<br>כובה</div>'
 :`<div class="rnum${n?'':' zero'}"><span class="ltr">${n}</span><span class="rp">%</span></div><div class="rlbl">מהיום</div>`)}</div></div>`}
 function todayLeft(){const d=nowD().getDay(),S3=sets(),k=today();
@@ -1091,7 +1413,7 @@ S.sleep.sort((x,y)=>dnum(x.d)-dnum(y.d));
 if(S.sleep.length>90)S.sleep=S.sleep.slice(-90);
 save();return true}
 function setSleep(b){if(!putSleep(today(),b))return;
-sleepPop=sleepHrs(b)>=SLEEP_OK?1:0;draw();sleepPop=0;
+sleepPop=sleepHrs(b)>=SLEEP_OK?1:0;haptic(1);draw();sleepPop=0;
 toast(SLEEP_MSG[b]||'נרשם');popMile()}
 /* לילות חסרים בשבעת הימים האחרונים (לא כולל הלילה האחרון, שיש לו רצועה
    משלו). ימי הפסקה וימים לפני ההתחלה לא נחשבים חסרים. */
@@ -1155,11 +1477,22 @@ gym:'<g fill="currentColor" stroke="none"><rect x="1.6" y="9.1" width="2.7" heig
 food:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
 nums:'<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>'};
 const TABS=[['home','היום'],['train','אימון'],['food','אוכל'],['prog','התקדמות']];
-function drawNav(){document.getElementById('nav').innerHTML=TABS.map(t=>
-`<button class="nb ${tab===t[0]?'on':''}" onclick="go('${t[0]}')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${IC[t[0]]}</svg>${t[1]}</button>`).join('')}
-function go(t){tab=t;draw();window.scrollTo(0,0)}
+/* הניווט נבנה פעם אחת. אחר כך משתנות רק המחלקות והמחוון — כך המחוון גולש
+   בין הלשוניות במקום להיעלם ולהופיע. */
+function drawNav(){const n=document.getElementById('nav'),i=Math.max(0,TABS.findIndex(t=>t[0]===tab));
+if(!n.querySelector('.nind'))n.innerHTML='<i class="nind" aria-hidden="true"></i>'+TABS.map(t=>
+`<button class="nb" data-t="${t[0]}" onclick="go('${t[0]}')"><svg class="ni" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${IC[t[0]]}</svg>${t[1]}</button>`).join('');
+n.style.setProperty('--ti',i);
+n.querySelectorAll('.nb').forEach(b=>b.classList.toggle('on',b.dataset.t===tab))}
+function go(t){tab=t;FX.enter=1;draw();window.scrollTo(0,0)}
 const VIEWS={home:vHome,train:vTrain,food:vFood,prog:vProg};
-function draw(){drawNav();document.getElementById('app').innerHTML=(VIEWS[tab]||vHome)()}
+/* FX נקרא פעם אחת בזמן הציור ומתאפס בסוף — אנימציה לא חוזרת בציור הבא. */
+function draw(){try{drawNav();const a=document.getElementById('app');
+if(!FX.enter)a.classList.remove('enter');if(!FX.boot)a.classList.remove('boot');
+a.innerHTML=(VIEWS[tab]||vHome)();
+if(FX.enter&&!RM()){a.classList.remove('enter');void a.offsetWidth;a.classList.add('enter');
+ clearTimeout(enterT);enterT=setTimeout(()=>a.classList.remove('enter'),900)}
+afterDraw()}finally{FX={}}}
 
 /* יום ריק לפי המערכת (שישי) לא שובר רצף — הוא באמת יום מנוחה.
    יום שרוקן ידנית כן נחשב יום שלא נעשה בו כלום. */
@@ -1239,7 +1572,8 @@ week6:[
 "שישה שבועות מאחוריך. השבוע המספרים יגידו את האמת — לטובתך או לרעתך.",
 "חצי הדרך. עכשיו בודקים מה עבד, ומשנים רק את מה שלא."],
 late:[
-()=>"נשארו "+(13-progWeek())+" שבועות. מי שמסיים תוכנית שלמה הוא כבר מיעוט קטן.",
+()=>{const n=13-progWeek();return n>1?"נשארו "+n+" שבועות. מי שמסיים תוכנית שלמה הוא כבר מיעוט קטן."
+ :n===1?"נשאר שבוע אחד. מי שמסיים תוכנית שלמה הוא כבר מיעוט קטן.":null},
 "זה השלב שבו רוב האנשים מוותרים כי הם כבר לא רואים שינוי. השינוי קורה בדיוק עכשיו."],
 first:[
 "בשבועות הראשונים לא מרגישים כלום. זה נורמלי, וזה בדיוק כשרוב האנשים עוזבים.",
@@ -1254,7 +1588,7 @@ pause:[
 function ctxKey(){const d=nowD().getDay();
 if(pausedOn(today()))return 'pause';
 const pct=dayPct();
-if(d===6)return 'game';
+if(gameOn(today()))return 'game';
 if(d===5&&pct<1)return 'rest';
 if(pct>=1)return 'done';
 if(pct>0)return 'mid';
@@ -1290,13 +1624,16 @@ fuel:{tab:'food',n:()=>'אוכל',
 
 function todayList(){const p=dayParts();if(!p.length)return '';
 const open=p.filter(x=>x[2]<1),done=p.filter(x=>x[2]>=1);
-const rows=open.map(([,k])=>{const t=TODO[k],[a,b]=t.c(),[mv,mw]=t.m();
+const rows=open.map(([,k],j)=>{const t=TODO[k],[a,b]=t.c(),[mv,mw]=t.m();
  const sub=a>0?`<span class="ltr">${a}</span> מתוך <span class="ltr">${b}</span> — עוד <span class="ltr">${b-a}</span>`:t.s();
- return `<button class="tdi" onclick="goTodo('${k}')">
+ const pf=b>0?Math.max(0,Math.min(1,a/b)):0;
+ return `<button class="tdi${j===0?' nx':''}" onclick="goTodo('${k}')">
 <span class="tdc">${ric(k)}</span>
 <span class="tdt"><b>${t.n()}</b><i>${sub}</i></span>
-<span class="tdm"><span class="ltr">${mv}</span> ${mw}</span></button>`}).join('');
-const chk=done.length?`<div class="tdd">${done.map(([,k])=>`<span>✓ ${TODO[k].n()}</span>`).join('')}</div>`:'';
+<span class="tdm"><span class="ltr">${mv}</span> ${mw}</span><span class="tdp" aria-hidden="true"><i style="width:${(pf*100).toFixed(1)}%"></i></span></button>`}).join('');
+/* מה שנסגר מאז הציור הקודם של המסך — השבב שלו קופץ פעם אחת. ההשוואה לפי יום. */
+const dk=today(),dnow=done.map(([,k])=>k),dprev=doneShown.d===dk?doneShown.k:null;doneShown={d:dk,k:dnow};
+const chk=done.length?`<div class="tdd">${done.map(([,k])=>`<span${dprev&&!dprev.includes(k)&&!RM()?' class="fx-pop"':''}>${CKS}${TODO[k].n()}</span>`).join('')}</div>`:'';
 return `<div class="tdl"><div class="tdh">היום</div>
 ${rows||'<div class="allin">הכל נסגר היום. כל מה שהיה מתוכנן — בוצע.</div>'}
 ${chk}</div>`}
@@ -1319,7 +1656,7 @@ function teamOn(k){return (S.teamDays||[]).includes(k)}
 function tgTeam(k){if(!isKey(k))return;
 if(!Array.isArray(S.teamDays))S.teamDays=[];
 const i=S.teamDays.indexOf(k);
-if(i<0){S.teamDays.push(k);S.teamDays.sort((a,b)=>dnum(a)-dnum(b));save();draw();
+if(i<0){S.teamDays.push(k);S.teamDays.sort((a,b)=>dnum(a)-dnum(b));save();FX.team=k;haptic(1);draw();
  try{unlockAudio();winTone()}catch(e){}
  toast('נרשם. נספר בכמות האימונים');popMile();return}
 S.teamDays.splice(i,1);save();draw();toast('בוטל')}
@@ -1342,7 +1679,7 @@ function teamNot(k){if(!isKey(k))return;if(!Array.isArray(S.teamNo))S.teamNo=[];
 if(!S.teamNo.includes(k))S.teamNo.push(k);S.teamNo=S.teamNo.slice(-30);save();draw()}
 function teamRow(){const k=today(),on=teamOn(k),t=(S.times||{})[nowD().getDay()];
 return `<div class="tmrow"><div class="tmt">אימון קבוצה${t?`<div class="tiny" style="margin-top:2px"><bdi>${esc(t)}</bdi></div>`:''}</div>
-<button class="tmb${on?' on':''}" onclick="tgTeam('${k}')">${on?'✓ הגעתי':'הגעתי'}</button></div>`}
+<button class="tmb${on?' on':''}${on&&FX.team===k?' fx-pop':''}" onclick="tgTeam('${k}')">${on?'✓ הגעתי':'הגעתי'}</button></div>`}
 
 let gDraft={mb:-1,good:'',fix:'',saw:'',prev:''};
 function askGame(k){const g=(S.games||[]).find(x=>x.d===k)||{};
@@ -1559,7 +1896,7 @@ if(eveningNow()){const wk=WAKES.includes(S.wake)?S.wake:WAKE_DEF;
 <div class="slft">הלילה <b class="ltr">${SLEEP_OK}</b> שעות. קם ב-<b class="ltr">${wk}</b>? במיטה ב-<b class="ltr">${hhmm(bedMin())}</b>.</div>
 <div class="slact"><button class="sle" onclick="openWake()">שעת קימה אחרת</button></div></div>`}
 if(b){const w=sleepWeek(),h=sleepHrs(b);
- return `<div class="slp on${sleepPop?' spark':''}">
+ return `<div class="slp${h>=SLEEP_OK?' on':''}${sleepPop?' spark':''}">
 <div class="slh">השינה של אתמול</div>
 <div class="slr">
 <div class="slv ltr">${h}${b==='s9'?'+':''}</div>
@@ -1621,7 +1958,7 @@ ${w.rows.map(r=>{const h=r.b?sleepHrs(r.b):0;
 <div class="sldls">${w.rows.map(r=>`<div class="sldl${r.today?' t':''}">${D[r.w]}</div>`).join('')}</div>
 <div class="sltgl"><i></i>היעד — <span class="ltr">8</span> שעות</div></div>
 <div class="cue" style="margin-top:12px">${sleepLine(w)}</div>
-${sleepOf(today())?`<div style="text-align:center;margin-top:6px"><button class="tiny" style="color:var(--t2);text-decoration:underline;padding:12px 16px;min-height:44px" onclick="fixSleep()">לשנות את הלילה האחרון</button></div>`
+${sleepOf(today())?`<div style="text-align:center;margin-top:6px"><button class="lnk" onclick="fixSleep()">לשנות את הלילה האחרון</button></div>`
 :`<button class="act solid" style="width:100%;margin-top:12px" onclick="fixSleep()">תרשום את הלילה</button>`}
 ${(()=>{const n=missingNights().length;return n?`<button class="act" style="width:100%;margin-top:8px" onclick="openMissing()">לילות חסרים · <span class="ltr">${n}</span></button>`:''})()}</div>`}
 
@@ -1654,14 +1991,14 @@ const bw=S.bw.length?S.bw[S.bw.length-1].kg:'—';
 const open=S.cur?Object.values(S.cur.log).flat().filter(Boolean).length:0;
 const gymToday=isPl('gym',today(),nowD().getDay());
 return `<div class="wrap">
-<div class="hero">
+<div class="hero${progWeek()>=10?" wkdd":""}" data-wk="${progWeek()}">
 <div class="row" style="align-items:center"><div class="brand"><i class="blogo"></i><div class="btx" dir="ltr"><b>HARD WORK</b><i>Earn your dream</i></div></div>
-<div onclick="devTap()" style="background:var(--red);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:7px;white-space:nowrap">שבוע ${progWeek()}${progWeek()<=12?' מתוך 12':''}</div></div>
+<div class="wtag" onclick="devTap()">שבוע&nbsp;<span class="ltr">${progWeek()}</span>${progWeek()<=12?'&nbsp;מתוך&nbsp;<span class="ltr">12</span>':''}</div></div>
 ${DEVOFF?`<div onclick="openDev()" style="margin-top:10px;border:1px solid var(--red);border-radius:9px;padding:8px 11px;font-size:12px;font-weight:800;color:var(--red2)">מצב בדיקה · הסטה של <span class="ltr">${DEVOFF}</span> ימים</div>`:''}
 <div class="h1" style="margin-top:6px">אורי<span style="color:var(--red2)">.</span></div>
 <div class="bar"></div>
 <div class="today">${dayRing()}
-<div class="tx"><div style="font-size:17px;font-weight:800">${p[0]}</div>
+<div class="tx"><div class="dayn">${p[0]}</div>
 ${p[1]?`<div class="sub" style="margin-top:2px">${p[1]}</div>`:''}
 </div></div>
 <div class="stat">
@@ -1686,8 +2023,8 @@ ${(S.cur&&open)?`<div class="card" style="border:1px solid var(--red);margin-top
 :(gymToday?`<button class="big" style="margin-top:12px" onclick="goTrain('gym')">התחל אימון ${nextW()}</button>`:'')}
 ${homeHorizon()}
 <div style="text-align:center;margin-top:14px">
-${activePause()?`<button class="tiny" style="color:var(--t3);text-decoration:underline;padding:12px 16px;min-height:44px" onclick="askEndPause()">לסיים את ההפסקה</button>`
-:`<button class="tiny" style="color:var(--t3);text-decoration:underline;padding:12px 16px;min-height:44px" onclick="openToday()">היום זה לא מתאים</button>`}</div>
+${activePause()?`<button class="lnk" onclick="askEndPause()">לסיים את ההפסקה</button>`
+:`<button class="lnk" onclick="openToday()">היום זה לא מתאים</button>`}</div>
 <div class="two2">
 <button class="mini" onclick="openRules()">עשרת חוקי הזהב</button>
 <button class="mini" onclick="openTips()">טיפים מקצועיים</button>
@@ -1778,7 +2115,7 @@ openSheet(`<div class="grab"></div><div class="h2">המערכת שלי</div>
 <div class="dsel">${DL.map((n,i)=>`<button class="dbt ${i===d?'on':''}" onclick="schPick(${i})">${n}</button>`).join('')}</div>
 ${SKEYS.map(k=>{const on=SCHED[k].includes(d);
 return `<button class="srow ${on?'on':''}" onclick="schTog('${k}')">
-<span class="sbox">${on?'\u2713':''}</span><span class="snm">${SNAME[k]}</span></button>`}).join('')}
+<span class="sbox">${on?CKS:''}</span><span class="snm">${SNAME[k]}</span></button>`}).join('')}
 ${SCHED.team.includes(d)?`<div style="margin-top:12px">
 <label style="display:block;font-size:12px;color:var(--t2);margin-bottom:5px">שעת אימון הקבוצה</label>
 <input class="fin" id="stime" type="text" value="${esc((S.times||{})[d]||'')}" placeholder="17:30-19:00"
@@ -1799,14 +2136,14 @@ openSheet(`<div class="grab"></div><div class="h2">היום זה לא מתאים
 <div style="height:14px"></div>
 ${SKEYS.map(x=>{const on=!!P[x];
 return `<button class="srow ${on?'on':''}" onclick="togToday('${x}')">
-<span class="sbox">${on?'\u2713':''}</span><span class="snm">${SNAME[x]}</span></button>`}).join('')}
+<span class="sbox">${on?CKS:''}</span><span class="snm">${SNAME[x]}</span></button>`}).join('')}
 <button class="ghost" style="margin-top:12px" onclick="resetToday()">חזרה למערכת הקבועה</button>
 <button class="big" style="margin-top:8px" onclick="closeSheet()">סיימתי</button>
 <button class="ghost" onclick="openPause()">חולה או במבחנים כמה ימים? הפסקה</button>`)}
 function togToday(x){const k=today();stampToday();
-S.dayplan[k][x]=!S.dayplan[k][x];save();draw();openToday()}
+S.dayplan[k][x]=!S.dayplan[k][x];save();ringQuiet=true;draw();openToday()}
 function resetToday(){const k=today();
-if(S.dayplan)delete S.dayplan[k];stampToday();save();draw();openToday()}
+if(S.dayplan)delete S.dayplan[k];stampToday();save();ringQuiet=true;draw();openToday()}
 
 /* ---------- הפסקה ----------
    חולי, מבחנים, חופשה או אחר · 3, 7 או 14 ימים · בלי טקסט חופשי.
@@ -1912,7 +2249,7 @@ function saveHt(){const h=parseInt(document.getElementById('iht2').value);
 if(!numOk(h,120,220)){toast('גובה בין 120 ל-220');return}
 const i=S.ht.findIndex(x=>x.d===today());
 if(i>-1)S.ht[i].cm=h;else S.ht.push({d:today(),cm:h});
-save();closeSheet();draw();toast('נרשם <span>'+h+'</span> ס״מ'.replace(/<[^>]+>/g,''))}
+save();closeSheet();draw();toast('נרשם '+h+' ס״מ')}
 function pickPhoto(){try{
 const i=document.createElement('input');i.type='file';i.accept='image/*';
 i.onchange=function(){const f=i.files&&i.files[0];if(!f)return;
@@ -2033,13 +2370,11 @@ if(!got.length)return null;
 const m=got[0];S.miles.push({k:m[0],d:today()});save();return m}
 function mileSheet(m){try{unlockAudio();winTone()}catch(e){}
 openSheet(`<div class="grab"></div>
-<div style="text-align:center;padding:12px 0 2px">
-<div class="spark" style="width:84px;height:84px;margin:0 auto;border-radius:50%;
-background:var(--gsolid);display:flex;align-items:center;justify-content:center;
-font-size:40px;color:var(--on)">\u2605</div>
-<div class="h2" style="margin-top:18px">${m[2]}</div>
-<div class="sub" style="margin-top:6px">${m[3]}</div></div>
-<button class="big" style="margin-top:20px" onclick="closeSheet()">יאללה</button>`)}
+<div class="cel">${MEDAL_STAR}
+<div class="celk">אבן דרך</div>
+<div class="celh">${m[2]}</div>
+<div class="sub">${m[3]}</div></div>
+<button class="big" style="margin-top:22px" onclick="closeSheet()">יאללה</button>`);celFx(3)}
 function popMile(){const m=checkMiles();if(m)mileSheet(m);return !!m}
 function sheetDone(next){closeSheet();if(!popMile()&&next)go(next)}
 
@@ -2133,7 +2468,7 @@ function nextOpen(ids){for(let i=0;i<ids.length;i++)if(exDone(ids[i])<EX[ids[i]]
 function exAt(ids){if(exIdx>=0&&exIdx<ids.length)return exIdx;
 const n=nextOpen(ids);return n<0?ids.length-1:n}
 function exGo(d){const ids=curW()==='A'?WA:WB;
-exIdx=Math.max(0,Math.min(exAt(ids)+d,ids.length-1));draw();window.scrollTo(0,0)}
+const was=exAt(ids);exIdx=Math.max(0,Math.min(was+d,ids.length-1));if(exIdx!==was)FX.slide=d;draw();window.scrollTo(0,0)}
 function exJump(i){exIdx=i;gymList=false;draw();window.scrollTo(0,0)}
 function toggleGymList(){gymList=!gymList;draw();window.scrollTo(0,0)}
 
@@ -2141,7 +2476,7 @@ function bodyGym(){ensure();const ids=curW()==='A'?WA:WB;
 return gymList?listGym(ids):focusGym(ids)}
 
 function focusGym(ids){const i=exAt(ids),id=ids[i],e=EX[id];
-const dn=exDone(id),lg=(S.cur.log[id]||[]),lp=lastFor(id);
+const dn=exDone(id),lg=(S.cur.log[id]||[]),lp=lastFor(id),nxk=Array.from({length:e.s},(_,q)=>q).find(q=>!lg[q]);
 const tot=ids.reduce((a,x)=>a+EX[x].s,0);
 const done=ids.reduce((a,x)=>a+exDone(x),0);
 const all=done>=tot;
@@ -2149,21 +2484,22 @@ return `${(i===0&&!done)?`<div class="card" style="margin-top:12px" onclick="ope
 <div class="row"><div class="nm">חימום קבוע</div><div class="cq" style="font-size:15px">6 דק׳</div></div>
 <div class="cue">5 תרגילים · לחץ לפרטים</div></div>`:''}
 <div class="fxhead"><span>תרגיל <span class="ltr">${i+1}</span> מתוך <span class="ltr">${ids.length}</span>
-<button onclick="flip()" style="color:var(--t2);text-decoration:underline;padding:8px 6px;min-height:44px">אימון ${curW()==='A'?'B':'A'}</button></span>
-<button onclick="toggleGymList()" style="color:var(--t2);text-decoration:underline;padding:8px 4px;min-height:44px">כל האימון</button></div>
+<button class="lnk sw" onclick="flip()"><span>החלף ל-<span class="ltr">${curW()==='A'?'B':'A'}</span></span></button></span>
+<button class="lnk" onclick="toggleGymList()">כל האימון</button></div>
 <div class="fxbar"><i style="width:${Math.round(done/tot*100)}%"></i></div>
-<div class="fxcard">
+<div class="fxcard${FX.slide?(FX.slide>0?' fx-l':' fx-r'):''}">
 <div class="fxname" onclick="openEx('${id}')">${e.n}</div>
 <div class="fxcue">${e.cue}</div>
 <div class="fxtar"><span class="ltr">${e.s} × ${e.r}</span></div>
-${lp?`<div class="last">אחרונה: <span class="ltr">${lp[0]}</span> ק״ג <span class="ltr">× ${lp[1]}</span></div>`
+${lp?`<div class="last">אחרונה: <span class="ltr">${lp[0]}</span> ק״ג · <span class="ltr">${lp[1]}</span> חזרות</div>`
    :'<div class="last">פעם ראשונה — תתחיל קל</div>'}
 ${exStall(id)?`<div class="stall">אותו משקל <span class="ltr">${exStall(id)}</span> אימונים.
 תוסיף חזרה אחת לסט לפני שאתה מוסיף משקל.</div>`:''}
 <div class="sets">${Array.from({length:e.s},(_,k)=>{const v=lg[k];
-return `<button class="set ${v?'on':''}" onclick="tapSet('${id}',${k})">${v?`<span class="ltr">${v[0]}×${v[1]}</span>`:'סט '+(k+1)}</button>`}).join('')}</div>
+const pr=v&&isPR(id,k,v[0],v[1]);
+return `<button class="set ${v?'on':''}${!v&&k===nxk?' nx':''}${pr?' pr':''}${v&&FX.set===id+':'+k?(pr&&FX.pr?' fx-pr spark':' fx-stamp'):''}" onclick="tapSet('${id}',${k})">${v?`<span class="ltr">${v[0]}×${v[1]}</span>${pr?'<b class="prb">שיא</b>':''}`:'סט '+(k+1)}</button>`}).join('')}</div>
 <div class="acts">
-${e.v?`<button class="act" onclick="vid('${e.v}')">▶ טכניקה${e.d?` · ${e.d} שנ׳`:``}</button>`:''}
+${e.v?`<button class="act" onclick="vid('${e.v}')">${PLAY}טכניקה${e.d?` · ${e.d} שנ׳`:``}</button>`:''}
 <button class="act" onclick="startT(${e.rest})">מנוחה ${Math.floor(e.rest/60)}:${String(e.rest%60).padStart(2,'0')}</button>
 </div></div>
 <div class="fxnav">
@@ -2177,10 +2513,10 @@ ${all&&i<ids.length-1?`<button class="big" style="margin-top:10px" onclick="fini
 
 function listGym(ids){const w=curW();
 return `<div class="fxhead"><span>כל האימון</span>
-<button onclick="toggleGymList()" style="color:var(--t2);text-decoration:underline;padding:8px 4px;min-height:44px">חזרה לתרגיל</button></div>
+<button class="lnk" onclick="toggleGymList()">חזרה לתרגיל</button></div>
 ${ids.map((id,i)=>{const e=EX[id],dn=exDone(id),fin=dn>=e.s;
 return `<button class="tdi" onclick="exJump(${i})">
-<span class="tdt"><b>${fin?'\u2713 ':''}${e.n}</b><i><span class="ltr">${dn}</span>/<span class="ltr">${e.s}</span> סטים</i></span>
+<span class="tdt"><b>${fin?'\u2713 ':''}${e.n}</b><i><span class="ltr">${dn}/${e.s}</span> סטים</i></span>
 <span class="tdm"><span class="ltr">${e.s} × ${e.r}</span></span></button>`}).join('')}
 <button class="big" style="margin-top:12px" onclick="finish()">סיימתי את האימון</button>`}
 
@@ -2200,8 +2536,8 @@ const sg=(k===0&&!lg.length)?suggestKg(id):null;
 const prev=lg[k]||lg[k-1]||(sg?[sg,e.r]:null)||lastFor(id)||[0,e.r];
 openSheet(`<div class="grab"></div>
 <div class="h2">${e.n}</div><div class="sub">סט ${k+1} מתוך ${e.s}</div>
-${sg?`<div class="warnbox" style="margin-top:12px"><b>הגיע הזמן להוסיף משקל</b>
-<p>בפעם הקודמת השלמת את כל ${e.s} הסטים ב-${e.r} חזרות. הצעתי לך <span class="ltr">${sg}</span> ק״ג. אם זה מרגיש כבד מדי — תרד, זה לא ציון.</p></div>`:''}
+${sg?`<div class="upbox"><span class="upi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></span><div><b>הגיע הזמן להוסיף משקל</b>
+<p>בפעם הקודמת השלמת את כל ${e.s} הסטים ב-${e.r} חזרות. הצעתי לך <span class="ltr">${sg}</span> ק״ג. אם זה מרגיש כבד מדי — תרד, זה לא ציון.</p></div></div>`:''}
 <div class="num">
 <div><label>משקל (ק״ג)</label><input id="ikg" type="number" inputmode="decimal" value="${prev[0]||''}"></div>
 <div><label>חזרות</label><input id="irp" type="number" inputmode="numeric" value="${prev[1]||e.r}"></div>
@@ -2213,7 +2549,9 @@ const kg=parseFloat(document.getElementById('ikg').value);
 const rp=parseInt(document.getElementById('irp').value);
 if(!numOk(kg,0,300)){toast('משקל לא הגיוני — בין 0 ל-300');return}
 if(!numOk(rp,1,200)){toast('חזרות חייבות להיות לפחות 1');return}
-ensure();if(!S.cur.log[id])S.cur.log[id]=[];S.cur.log[id][k]=[kg,rp];save();closeSheet();draw();startT(EX[id].rest)}
+ensure();if(!S.cur.log[id])S.cur.log[id]=[];const old=S.cur.log[id][k];S.cur.log[id][k]=[kg,rp];save();closeSheet();FX.set=id+':'+k;
+const pr=prNew(id,k,kg,rp,old);if(pr)FX.pr=1;haptic(pr?2:1);draw();startT(EX[id].rest);
+if(pr){toast('שיא חדש · '+kg+' ק״ג, '+(rp===1?'חזרה אחת':rp+' חזרות'));try{winTone()}catch(e){}}}
 function clrSet(){const{id,k}=sheetCtx;if(S.cur.log[id])delete S.cur.log[id][k];save();closeSheet();draw()}
 function finish(){if(!S.cur||!Object.values(S.cur.log).flat().filter(Boolean).length){toast('לא רשמת אף סט');return}
 S.cur.log=Object.fromEntries(Object.entries(S.cur.log).map(([k,v])=>[k,v.filter(Boolean)]));
@@ -2222,23 +2560,23 @@ const vol=Math.round(allSets.reduce((a,b)=>a+b[0]*b[1],0));
 const w=S.cur.w;S.sessions.push(S.cur);S.cur=null;exIdx=-1;gymList=false;save();
 const n=S.sessions.length,st=streak();
 openSheet(`<div class="grab"></div>
-<div style="text-align:center;padding:6px 0 4px">
-<div style="font-size:44px;font-weight:900;color:var(--red2);line-height:1" class="ltr">${n}</div>
+<div class="cel celx">
+<div class="celn ltr" data-n="${n}">${n}</div>
 <div class="sub" style="margin-top:4px">האימון ה-${n} שלך</div>
-<div class="h2" style="margin-top:14px">אימון ${w} הושלם</div></div>
-<div class="stat" style="margin:16px 0 4px">
-<div><div class="v ltr">${allSets.length}</div><div class="k">סטים</div></div>
-<div><div class="v ltr">${vol}</div><div class="k">נפח ק״ג</div></div>
-<div><div class="v ltr">${st}</div><div class="k">רצף</div></div></div>
+<div class="celh" style="margin-top:14px">אימון ${w} הושלם</div></div>
+<div class="stat celst" style="margin:20px 0 4px">
+<div><div class="v ltr" data-n="${allSets.length}">${allSets.length}</div><div class="k">סטים</div></div>
+<div><div class="v ltr" data-n="${vol}">${vol}</div><div class="k">ק״ג שהרמת</div></div>
+<div><div class="v ltr" data-n="${st}">${st}</div><div class="k">רצף</div></div></div>
 <div class="tiny" style="text-align:center;margin:14px 0 4px">בפעם הבאה: אימון ${w==='A'?'B':'A'}</div>
 <button class="big" style="margin-top:12px" onclick="sheetDone('prog')">לראות את המספרים</button>
-<button class="ghost" onclick="sheetDone('home')">סגור</button>`)}
+<button class="ghost" onclick="sheetDone('home')">סגור</button>`);celFx(3)}
 
 
 function openWarm(){openSheet(`<div class="grab"></div><div class="h2">חימום קבוע · 6-8 דקות</div>
 <div class="sub">זהה בכל אימון · הקפיצות רק בימי A</div><div style="height:14px"></div>
 ${WARMUP.map(w=>`<div class="chk"><div class="ct"><b>${w[0]}</b><div class="cue">${w[1]}</div></div>
-<div class="qw"><div class="cq">${w[2]}</div>${w[3]?`<button class="vi" onclick="vid('${w[3]}')">\u25B6</button>`:''}</div></div>`).join('')}
+<div class="qw"><div class="cq">${cqF(w[2])}</div>${w[3]?`<button class="vi" onclick="vid('${w[3]}')" aria-label="טכניקה">${VI}</button>`:''}</div></div>`).join('')}
 <div class="warnbox" style="margin-top:16px"><b>אל תדלג</b><p>כאן נמצאת כל העבודה שמגנה על הברכיים, הקרסוליים והמפשעות.</p></div>
 <div class="warnbox" style="margin-top:10px"><b>הקפיצה האנכית — חמישה כללים שאסור לשבור</b>
 <p><b>1. כל חזרה בכוונה מקסימלית.</b> חמש חזרות זו לא סדרת כושר. כל אחת היא ניסיון לגעת בנקודה הכי גבוהה שאתה יכול. אם החמישית נמוכה מהראשונה — עצור.<br><br>
@@ -2254,7 +2592,7 @@ function openEx(id){const e=EX[id];openSheet(`<div class="grab"></div>
 <div class="blk"><h4>מה אתה אמור להרגיש</h4><div class="feel"><p>${e.feel}</p></div></div>
 <div class="blk"><h4>הטעות הנפוצה</h4><p>${e.mis}</p></div>
 <div class="blk"><h4>אם המכשיר תפוס</h4><p>${e.alt}</p></div>
-${e.v?`<button class="big" onclick="vid('${e.v}')">▶ טכניקה · ${e.ch}${e.d?` · ${e.d} שנ׳`:``}</button>`:''}`)}
+${e.v?`<button class="big" onclick="vid('${e.v}')">${PLAY}טכניקה · ${e.ch}${e.d?` · ${e.d} שנ׳`:``}</button>`:''}`)}
 
 /* ---------- personal ---------- */
 function dayList(key,def){if(S[key].d!==today()){S[key]={d:today(),done:[],w:S[key].w||def};save()}return S[key]}
@@ -2278,7 +2616,7 @@ const open=order.filter(k=>b[k].pl&&b[k].done<b[k].tot);
 if(open.length)return open[0];
 const any=order.filter(k=>b[k].pl);
 return any.length?any[0]:'foot'}
-function setTrain(t){trainTab=t;draw();window.scrollTo(0,0)}
+function setTrain(t){if(t!==trainTab)FX.seg=1;trainTab=t;draw();window.scrollTo(0,0)}
 function goTrain(t){tab='train';trainTab=t;draw();window.scrollTo(0,0)}
 /* היעד נלקח מ-TODO ולא מונח מראש. כל שורה ברשימת היום קראה ל-goTrain
    בלי קשר לסוג, ולכן "אוכל" נחת על לשונית האימון — שנופלת לכוח. */
@@ -2290,16 +2628,16 @@ function vTrain(){dayList('foot');
 const b=trainBlocks(),act=trainActive();
 const seg=['gym','foot','shoot'].map(k=>{const x=b[k],fin=x.tot&&x.done>=x.tot;
  return `<button class="sg ${act===k?'on':''} ${fin?'fin':''}" onclick="setTrain('${k}')">
-<b>${fin?'✓ ':''}${x.n}</b><i><span class="ltr">${x.done}</span>/<span class="ltr">${x.tot}</span> · <span class="ltr">${x.min}</span> דק׳</i></button>`}).join('');
+<b>${fin?'✓ ':''}${x.n}</b><i><span class="ltr">${x.done}/${x.tot}</span> · <span class="ltr">${x.min}</span> דק׳</i></button>`}).join('');
 const sub=act==='gym'?'אימון כוח'
  :(isRestDay()&&act==='foot'
    ?({fri:'שישי · 4 דקות בלבד',pre:'לפני משחק · 4 דקות בלבד',post:'אחרי משחק · 4 דקות בלבד'})[lightWhy()]
    :'מה שמתוכנן להיום');
 return `<div class="wrap">
-<div class="h1" style="font-size:26px">אימון</div>
+<div class="h1">אימון</div>
 <div class="sub">${sub}</div><div class="bar"></div>
 <div class="seg">${seg}</div>
-${act==='gym'?bodyGym():bodyBlock(act,b)}
+<div${FX.seg?' class="fx-seg"':''}>${act==='gym'?bodyGym():bodyBlock(act,b)}</div>
 </div>`}
 
 function bodyBlock(act,b){const cur=b[act];
@@ -2324,7 +2662,8 @@ ${act==='foot'&&isRestDay()?`<div class="warnbox" style="margin:14px 0 2px">
 <p>${({fri:'קפיצות, בלימות ונחיתות יורדות היום. שני תרגילים, ארבע דקות, וזהו.',
      pre:'אותה עבודה, בלי קפיצות ונחיתות. הקואורדינציה נשמרת, הקפיץ נשאר למחר.',
      post:'המשחק הוא העומס הכי גבוה בשבוע. היום שני תרגילים בלי עומס, וזהו.'})[lightWhy()]}</p></div>`:''}
-<div class="list" style="margin-top:12px">${list.map((x,i)=>ck(act,i,x)).join('')}</div>
+<div class="list" style="margin-top:12px">${(()=>{const nxi=list.findIndex((_,i)=>!S[act].done.includes(i));
+return list.map((x,i)=>ck(act,i,x,i===nxi)).join('')})()}</div>
 <div class="notes">${notes}</div>`}
 
 function nPain(){openSheet(`<div class="grab"></div><div class="h2">אם כואב — מה יורד ראשון</div>
@@ -2357,12 +2696,13 @@ function doFlipShoot(){S.shoot={d:today(),w:S.shoot.w==='A'?'B':'A',done:[]};sav
 
 function secsOf(q){let m=/^\s*(\d+)\s*×\s*(\d+)\s*שניות\s*$/.exec(q);if(m)return +m[2];
 m=/^\s*(\d+)\s*שניות\s*$/.exec(q);return m?+m[1]:0}
-function ck(key,i,x){const on=S[key].done.includes(i),sec=secsOf(x[2]);
+function ck(key,i,x,nx){const on=S[key].done.includes(i),sec=secsOf(x[2]);
 const f=focusOn(),isF=f&&chipDrill(f.c)===x[0];
-return `<div class="ckw"><div class="chk ${on?'on':''}" onclick="tg('${key}',${i})"><div class="box">${on?'\u2713':''}</div>
-<div class="ct">${x[0]}${isF?' <span class="badge" style="font-size:9.5px;padding:3px 7px">הדגש</span>':''}<div class="cue">${x[1]}</div></div><div class="qw"><div class="cq">${x[2]}</div>${x[3]?`<button class="vi" onclick="event.stopPropagation();vid('${x[3]}')">\u25B6</button>`:''}</div></div>
-${sec?`<div class="ckact"><button class="tmr" onclick="event.stopPropagation();startT(${sec},'${x[0].replace(/'/g,"")}',5)">\u23F1 הפעל <span class="ltr">${sec}</span> שנ׳</button></div>`:''}</div>`}
+return `<div class="ckw${nx?' nx':''}"><div class="chk ${on?'on':''}${nx?' nx':''}${on&&FX.chk===key+':'+i?' fx':''}" onclick="tg('${key}',${i})"><div class="box">${on?CKS:''}</div>
+<div class="ct">${x[0]}${isF?' <span class="badge" style="font-size:9.5px;padding:3px 7px">הדגש</span>':''}<div class="cue">${x[1]}</div></div><div class="qw"><div class="cq">${cqF(x[2])}</div>${x[3]?`<button class="vi" onclick="event.stopPropagation();vid('${x[3]}')" aria-label="טכניקה">${VI}</button>`:''}</div></div>
+${sec?`<div class="ckact"><button class="tmr" onclick="event.stopPropagation();startT(${sec},'${x[0].replace(/'/g,"")}',5)">${WATCH}הפעל <span class="ltr">${sec}</span> שנ׳</button></div>`:''}</div>`}
 function tg(key,i){const a=S[key].done,k=a.indexOf(i);k<0?a.push(i):a.splice(k,1);
+if(k<0){FX.chk=key+':'+i;haptic(1)}
 const dk=BLK[key].day, was=(S[dk]||[]).includes(today()), now=blkDone(key);
 if(now&&!was){mark(dk);save();draw();celebrate(key);return}
 if(!now&&was)unmark(dk);
@@ -2372,21 +2712,20 @@ function celebrate(key){const w=weekCount(key),left=todayLeft();
 const full=left.length===0;
 try{unlockAudio();beep()}catch(e){}
 if(navigator.vibrate)navigator.vibrate(full?[0,60,80,60,80,140]:[0,50,70,90]);
+const tot=(S[BLK[key].day]||[]).length;
 openSheet(`<div class="grab"></div>
-<div style="text-align:center;padding:10px 0 2px">
-<div class="spark" style="width:74px;height:74px;margin:0 auto;border-radius:50%;background:var(--gsolid);
-display:flex;align-items:center;justify-content:center;font-size:38px;color:var(--on)">\u2713</div>
-<div class="h2" style="margin-top:16px">${BLK[key].name()} הושלם</div>
-<div class="sub" style="margin-top:3px">${full?'וסיימת את כל מה שהיה היום':'נרשם ונספר במעקב השבועי'}</div></div>
-<div class="stat" style="margin:18px 0 4px">
+<div class="cel">${MEDAL}
+${full?'<div class="celk">יום מלא</div>':''}
+<div class="celh"${full?'':' style="margin-top:20px"'}>${BLK[key].name()} הושלם</div>
+<div class="sub">${full?'וסיימת את כל מה שהיה היום':'נרשם ונספר במעקב השבועי'}</div></div>
+<div class="stat celst" style="margin:20px 0 4px">
 <div><div class="v ltr">${w.dn}/${w.pl}</div><div class="k">השבוע</div></div>
-<div><div class="v ltr">${(S[BLK[key].day]||[]).length}</div><div class="k">סה״כ ימים</div></div>
+<div><div class="v ltr gold" data-n="${tot}">${tot}</div><div class="k">סה״כ ימים</div></div>
 </div>
-${full?`<div class="warnbox" style="margin-top:14px"><b>יום מלא</b>
-<p>כל מה שהיה מתוכנן להיום — בוצע. זה הדבר שמצטבר.</p></div>`
+${full?`<div class="allin celst" style="margin-top:14px">כל מה שהיה מתוכנן להיום — בוצע. זה הדבר שמצטבר.</div>`
 :`<div class="tiny" style="text-align:center;margin-top:14px">נשאר להיום: ${left.join(' · ')}</div>`}
 <button class="big" style="margin-top:16px" onclick="sheetDone()">יאללה</button>
-<button class="ghost" onclick="sheetDone('prog')">לראות את הלוח</button>`)}
+<button class="ghost" onclick="sheetDone('prog')">לראות את הלוח</button>`);celFx(full?3:1)}
 
 /* ---------- food ----------
    רגעים בלי שעון — כיוון והשראה. כל רגע נסגר בנגיעה אחת: "גדולה" או "קטנה",
@@ -2409,8 +2748,10 @@ const out=[];
 for(let i=0;i<c.tb;i++)out.push(`<span class="bg${i<bf?' on':''}"></span>`);
 for(let i=0;i<c.ts;i++)out.push(`<span class="${i<sf?'on':''}"></span>`);
 const ex=c.met?Math.min(4,c.tot-c.need):0;
-for(let i=0;i<ex;i++)out.push('<span class="x"></span>');
-return `<div class="fpips" aria-hidden="true">${out.join('')}</div>`}
+for(let i=0;i<ex;i++)out.push('<span class="x on"></span>');
+/* פיפ שזה עתה התמלא קופץ פעם אחת. המצב הקודם נשמר לפי יום. */
+const k=today(),now=out.map(x=>/ on|"on"|x on/.test(x)),prev=(pipShown.d===k)?pipShown.on:null;pipShown={d:k,on:now};
+return `<div class="fpips" aria-hidden="true">${out.map((x,i)=>(FX.food&&prev&&now[i]&&!prev[i])?x.replace('<span class="','<span class="fx-pop '):x).join('')}</div>`}
 /* legacy: יום ההמרה. אם בגרסה הישנה היום כבר נספר כמיכל מלא (6 ארוחות), הוא
    נשאר מלא גם כאן — כמו בטבעת ובלוח — גם אם ההמרה נתנה 2 גדולות ו-4 קטנות. */
 function vFood(){const r=foodOf(today()),c=foodCounts(r);
@@ -2418,14 +2759,14 @@ const legacy=!c.met&&(S.fuelDays||[]).includes(today())&&!(r&&r.won);
 const met=c.met||legacy,over=met&&c.tot>c.need;
 const marked=MOMENTS.filter(m=>r&&r.m[m[0]]),open=MOMENTS.filter(m=>!(r&&r.m[m[0]]));
 return `<div class="wrap">
-<div class="h1" style="font-size:26px">אוכל</div>
+<div class="h1">אוכל</div>
 <div class="sub">זה חצי מהתוכנית. בלי זה אין מסה.</div><div class="bar"></div>
 <div class="sec fsec" style="display:flex;justify-content:space-between;align-items:center;gap:8px">
 <span>הדלק של היום</span>
 ${met?'<span class="badge">✓ מיכל מלא</span>':''}</div>
 <div class="card">
 <div class="row" style="align-items:flex-end">
-<div class="fnum"><span class="ltr">${met?c.tot:c.filled}</span><span class="fof"> ${met?'מנות':'מתוך '+c.need}</span></div>
+<div class="fnum${met?' met':''}"><span class="ltr">${met?c.tot:c.filled}</span><span class="fof"> ${met?'מנות':'מתוך '+c.need}</span></div>
 <div class="tiny" style="text-align:left;font-size:12px">${met?(over?'<span class="fmore">מעל היעד</span>':'<span class="fmore">הגעת ליעד</span>'):foodLeft(c)}</div>
 </div>
 <div class="cue" style="margin-top:4px"><span class="ltr">${c.b}</span> ${c.b===1?'גדולה':'גדולות'} · <span class="ltr">${c.s}</span> ${c.s===1?'קטנה':'קטנות'} · בערך <span class="ltr">${c.g}</span> גרם חלבון</div>
@@ -2439,7 +2780,7 @@ return `<div class="mo${o?' open':''}" id="mo_${m[0]}">
 <div class="szs"><button class="szb" onclick="setPortion('${m[0]}','b')">גדולה</button>
 <button class="szb" onclick="setPortion('${m[0]}','s')">קטנה</button></div></div>
 <div class="ideas"><div><div class="idt">${m[2]}</div></div></div></div>`}).join('')}
-${marked.map(m=>`<div class="mdone"><div class="box">✓</div>
+${marked.map(m=>`<div class="mdone${FX.food===m[0]?' fx':''}"><div class="box">${CKS}</div>
 <div class="mdn">${m[1]}</div><div class="msz">${szName(r.m[m[0]])}</div>
 <button class="undo" onclick="unPortion('${m[0]}')">ביטול</button></div>`).join('')}
 </div>
@@ -2460,21 +2801,19 @@ ${r&&r.x.length?`<div class="xtra">${r.x.map((v,i)=>`<button class="xchip" oncli
 <span class="tiny"><span class="ltr">${S.shop.length}/${SHOP.length}</span></span></div>
 <button class="ghost" onclick="toggleShop()">${shopOpen?'סגור את הרשימה':'פתח את הרשימה'}</button>
 ${shopOpen?`<div class="list" style="margin-top:9px">${SHOP.map(x=>{const on=S.shop.includes(x[0]);
-return `<div class="chk ${on?'on':''}" onclick="tgShop('${x[0]}')"><div class="box">${on?'✓':''}</div><div class="ct">${x[1]}</div></div>`}).join('')}</div>
+return `<div class="chk ${on?'on':''}" onclick="tgShop('${x[0]}')"><div class="box">${on?CKS:''}</div><div class="ct">${x[1]}</div></div>`}).join('')}</div>
 ${S.shop.length?`<button class="ghost" onclick="clearShop()">רוקן את הרשימה</button>`:''}`:''}
 </div>`}
 function fuelWin(){const c=foodCounts(foodOf(today())),w=weekCount('fuel');
 openSheet(`<div class="grab"></div>
-<div style="text-align:center;padding:10px 0 2px">
-<div class="spark" style="width:74px;height:74px;margin:0 auto;border-radius:50%;background:var(--gsolid);
-display:flex;align-items:center;justify-content:center;font-size:38px;color:var(--on)">✓</div>
-<div class="h2" style="margin-top:16px">מיכל מלא</div>
-<div class="sub" style="margin-top:3px">הגעת ליעד הדלק של היום</div></div>
-<div class="stat" style="margin:18px 0 4px">
+<div class="cel">${MEDAL}
+<div class="celh" style="margin-top:20px">מיכל מלא</div>
+<div class="sub">הגעת ליעד הדלק של היום</div></div>
+<div class="stat celst" style="margin:20px 0 4px">
 <div><div class="v ltr">~${c.g}</div><div class="k">גרם חלבון</div></div>
 <div><div class="v ltr">${w.dn}/${w.pl}</div><div class="k">ימים השבוע</div></div></div>
 <div class="tiny" style="text-align:center;margin-top:14px">אכילה היא חצי מהתוכנית. היום עשית את החצי הזה.</div>
-<button class="big" style="margin-top:16px" onclick="sheetDone()">יאללה</button>`)}
+<button class="big" style="margin-top:16px" onclick="sheetDone()">יאללה</button>`);celFx(1)}
 
 function tgShop(i){const k=S.shop.indexOf(i);k<0?S.shop.push(i):S.shop.splice(k,1);save();draw()}
 let shopOpen=false;
@@ -2497,7 +2836,7 @@ function vProg(){const prs=Object.keys(EX).map(id=>[EX[id].n,bestFor(id)]).filte
 const bw=[...S.bw].reverse();
 return `<div class="wrap">
 <div class="row" style="align-items:flex-start">
-<div><div class="h1" style="font-size:26px">התקדמות</div>
+<div><div class="h1">התקדמות</div>
 <div class="sub">אלה לא תלויים בדעה של אף אחד</div></div>
 <button class="gear" onclick="openSettings()" aria-label="הגדרות">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
@@ -2526,20 +2865,25 @@ ${(S.games||[]).length?`<div class="list">${[...S.games].reverse().slice(0,8).ma
 const mb=(MINB.find(m=>m[0]===g.mb)||MINB[0])[1];
 return `<div class="grow"><div class="row" style="align-items:baseline">
 <span style="font-weight:700">${fmt(g.d)}${g.opp?' · '+esc(g.opp):''}</span>
-<span style="font-weight:800;color:${g.lg?'var(--ok)':'var(--t3)'}">${g.lg?mb:'טרם תועד'}</span></div>
+${(()=>{const dd=Math.round((dnum(g.d)-dnum(today()))/864e5);
+return g.lg?`<span style="font-weight:700;color:var(--ok)">${mb}</span>`
+:dd>0?`<span style="font-weight:600;color:var(--t2)">${dd===1?'מחר':dd===2?'בעוד יומיים':`בעוד <span class="ltr">${dd}</span> ימים`}</span>`
+:`<span style="font-weight:600;color:var(--t3)">${dd===0?'היום':'טרם תועד'}</span>`})()}</div>
 ${g.lg&&g.mb===0&&g.saw?`<div class="cue" style="margin-top:5px">→ ${chipName(g.saw)}</div>`:''}
 ${g.lg&&g.good?`<div class="cue" style="margin-top:5px">✓ ${chipName(g.good)}</div>`:''}
 ${g.lg&&g.fix?`<div class="cue" style="margin-top:2px">→ ${chipName(g.fix)}</div>`:''}
 ${g.note?`<div class="cue" style="margin-top:4px">${esc(g.note)}</div>`:''}
 ${g.prev==='y'?`<div class="cue" style="margin-top:2px;color:var(--ok)">הדגש הקודם נסגר</div>`:''}</div>`}).join('')}</div>`
-:'<div class="card"><div class="cue">המשחק הוא הדבר היחיד שקובע אם אתה עולה קבוצה. כדאי לתעד אותו.</div></div>'}
+:'<div class="card empty"><div class="cue">המשחק הוא הדבר היחיד שקובע אם אתה עולה קבוצה. כדאי לתעד אותו.</div></div>'}
 <button class="ghost" onclick="editGame(today())">הוסף משחק</button>
 
-<div class="sec">השיאים שלך</div>
-${prs.length?`<div class="list">${prs.map(p=>
-`<div class="bwrow" style="align-items:center"><span>${p[0]}<div class="tiny">שיא · ${fmt(p[1].d)}</div></span>
-<span class="ltr" style="font-weight:800;color:var(--ok);font-size:15px">${p[1].kg} × ${p[1].rp}</span></div>`).join('')}</div>`
-:'<div class="card"><div class="cue">רשום סטים באימון והשיאים יופיעו כאן.</div></div>'}
+${(()=>{const L=[...prs].sort((a,b)=>dnum(b[1].d)-dnum(a[1].d)),show=prAll?L:L.slice(0,4),lastD=S.sessions.length?S.sessions[S.sessions.length-1].date:null;
+return `<div class="sech"><div class="sec">השיאים שלך</div>${L.length>4?`<button class="sact" onclick="togPR()"><span>${prAll?'פחות':`כל ה-<span class="ltr">${L.length}</span>`}</span></button>`:''}</div>
+${L.length?`<div class="prg">${show.map(p=>{const nw=lastD&&p[1].d===lastD;
+return `<div class="prt${nw?' new':''}"><div class="pn">${p[0]}</div>
+<div class="pv"><span class="ltr">${p[1].kg}</span><i>ק״ג</i></div>
+<div class="pr2"><span class="ltr">${p[1].rp}</span> חזרות · ${nw?'<b>באימון האחרון</b>':fmt(p[1].d)}</div></div>`}).join('')}</div>`
+:'<div class="card empty"><div class="cue">רשום סטים באימון והשיאים יופיעו כאן.</div></div>'}`})()}
 
 ${(S.focusLog||[]).length?`<div class="sec">דגשים שנסגרו</div>
 <div class="list">${[...S.focusLog].reverse().slice(0,8).map(x=>
@@ -2547,22 +2891,22 @@ ${(S.focusLog||[]).length?`<div class="sec">דגשים שנסגרו</div>
 <span style="font-weight:800;color:var(--ok)">✓ ${fmt(x.d)}</span></div>`).join('')}</div>`:''}
 
 <div class="sec">מדידות</div>
-${(S.rounds||[]).length?roundsTable():'<div class="card"><div class="cue">עוד לא נמדדת. סבב אחד עכשיו הופך כל שיפור לדבר שאפשר להוכיח.</div></div>'}
+${(S.rounds||[]).length?roundsTable():'<div class="card empty"><div class="cue">עוד לא נמדדת. סבב אחד עכשיו הופך כל שיפור לדבר שאפשר להוכיח.</div></div>'}
 <button class="ghost" onclick="openMeasure()">${(S.rounds||[]).length?'סבב מדידה חדש':'בוא נמדוד'}</button>
 
 <div class="sec">ההתחלה</div>
 ${S.why?`<div class="card"><div class="cue" style="font-size:14px;color:#DCDCE0;line-height:1.5">"${esc(S.why)}"</div>
 <div class="tiny" style="margin-top:6px">מה שכתבת ביום הראשון</div></div>`
-:'<div class="card"><div class="cue">עוד לא כתבת למה אתה עושה את זה.</div></div>'}
+:'<div class="card empty"><div class="cue">עוד לא כתבת למה אתה עושה את זה.</div></div>'}
 <button class="ghost" onclick="openWhy()">${S.why?'לשנות את המשפט':'לכתוב את המשפט'}</button>
 ${photoCard()}
 
 <div class="sec">גוף</div>
 ${S.ht.length?`<div class="list"><div class="bwrow"><span>גובה${htGain()?`<div class="tiny">+<span class="ltr">${htGain()}</span> ס״מ מאז ההתחלה</div>`:''}</span>
-<span style="font-weight:800;color:var(--ok)"><span class="ltr">${S.ht[S.ht.length-1].cm}</span> ס״מ</span></div></div>`:''}
+<span class="bwv"><span class="ltr">${S.ht[S.ht.length-1].cm}</span> ס״מ</span></div></div>`:''}
 <button class="ghost" onclick="addHt()">${S.ht.length?'עדכן גובה':'רשום גובה'}</button>
 ${bw.length?`<div class="list" style="margin-top:9px">${bw.slice(0,6).map(b=>
-`<div class="bwrow"><span>${fmt(b.d)}</span><span style="font-weight:800;color:var(--ok)"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
+`<div class="bwrow"><span>${fmt(b.d)}</span><span class="bwv"><span class="ltr">${b.kg}</span> ק״ג</span></div>`).join('')}</div>`:''}
 <button class="ghost" onclick="addBw()">רשום משקל היום</button>
 ${(S.miles||[]).length?`<div class="sec">אבני דרך</div>
 <div class="list">${[...S.miles].reverse().map(x=>{const m=MILES.find(y=>y[0]===x.k);
@@ -2899,31 +3243,159 @@ document.head.appendChild(lk)}catch(e){}
 if('serviceWorker' in navigator){window.addEventListener('load',function(){
 try{navigator.serviceWorker.register('sw.js').catch(function(){})}catch(e){}})}
 
+/* ---------- תנועה ----------
+   draw() בונה את המסך מחדש בכל נגיעה. אנימציה שיושבת רק ב-CSS הייתה מתנגנת
+   שוב בכל ציור — ולכן כל אנימציה כאן חד-פעמית: הפעולה קובעת דגל ב-FX, הציור
+   קורא אותו פעם אחת, ו-draw() מאפס אותו בסוף. בלי דגל — אין תנועה.
+   prefers-reduced-motion מכבה הכל: CSS דרך המדיה, JS דרך RM(). */
+let FX={},enterT=null,HAP=null,pipShown={d:'',on:[]};
+const CKS='<svg class="cks" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const MEDAL='<div class="medal" aria-hidden="true"><i class="gl"></i><svg viewBox="0 0 24 24"><path class="mk" d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>';
+const MEDAL_STAR='<div class="medal" aria-hidden="true"><i class="gl"></i><svg viewBox="0 0 24 24"><path class="star" d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.2 6.1L12 16.9l-5.5 3 1.2-6.1-4.5-4.2 6.1-.8z"/></svg></div>';
+/* כמות בשורת תרגיל: המספר גדול, היחידה קטנה מתחתיו. רצף הספרות והכפל עטוף ב-ltr —
+   אחרת ב-RTL "3 × 15" מוצג "15 × 3". עברית לעולם לא נכנסת לעטיפה. */
+function cqF(q){const m=/^\s*(\d+(?:\s*×\s*\d+)?)\s*(.*)$/.exec(String(q));
+if(!m)return esc(q);return `<span class="ltr">${m[1]}</span>${m[2]?`<i>${esc(m[2])}</i>`:''}`}
+/* אייקונים בתוך טקסט — SVG. התווים ▶ ו-⏱ מוצגים באייפון כאימוג׳י צבעוני. */
+const PLAY='<svg class="ic" viewBox="0 0 12 12" aria-hidden="true"><path d="M2.6 1.3v9.4L10.6 6z"/></svg>';
+const VI='<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.4v9.2L10.6 6z"/></svg>';
+const WATCH='<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4l2.6 1.8M9.5 2.8h5"/></svg>';
+function RM(){try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}}
+/* רטט. באנדרואיד navigator.vibrate. באייפון אין vibrate — אבל ספארי (iOS 18 ומעלה)
+   מפיק "טיק" כשמתג (input switch) מתחלף מנגיעה. המתג מוסתר מחוץ למסך ולא שומר
+   שום דבר. עובד רק בתוך נגיעה של המשתמש; בכל מקום אחר פשוט לא קורה כלום. */
+function haptic(n){n=n||1;try{
+if(navigator.vibrate){navigator.vibrate(n>1?[0,22,70,22,70,40]:14);return}
+if(!HAP){HAP=document.createElement('label');HAP.className='hap';HAP.setAttribute('aria-hidden','true');
+ const i=document.createElement('input');i.type='checkbox';i.setAttribute('switch','');i.tabIndex=-1;
+ HAP.appendChild(i);document.body.appendChild(HAP)}
+HAP.click();for(let k=1;k<n;k++)setTimeout(()=>{try{HAP.click()}catch(e){}},k*110)}catch(e){}}
+/* חלקיקי זהב מנקודת ההישג. בונים, מנגנים פעם אחת, מוחקים. */
+function burst(el,n){if(RM()||!el||!el.isConnected||!el.getBoundingClientRect)return;try{
+const r=el.getBoundingClientRect(),b=document.createElement('div');b.className='burst';
+b.style.left=(r.left+r.width/2)+'px';b.style.top=(r.top+r.height/2)+'px';
+const R0=Math.max(r.width,r.height)/2;n=n||16;
+for(let k=0;k<n;k++){const p=document.createElement('i');if(k%4===3)p.className='w';b.appendChild(p);
+ const a=(k/n)*Math.PI*2+(Math.random()-.5)*.35,d=R0+24+Math.random()*36,cx=Math.cos(a),sy=Math.sin(a),deg=a*180/Math.PI+90;
+ const T=(m,s)=>`translate(${(cx*m).toFixed(1)}px,${(sy*m).toFixed(1)}px) rotate(${deg.toFixed(0)}deg) scale(${s})`;
+ if(p.animate)p.animate([{transform:T(R0*.7,.3),opacity:1},{transform:T(d,1),opacity:1,offset:.55},{transform:T(d*1.18,.2),opacity:0}],
+  {duration:780+Math.random()*260,easing:'cubic-bezier(.15,.7,.3,1)',fill:'forwards'})}
+document.body.appendChild(b);setTimeout(()=>{try{b.remove()}catch(e){}},1200)}catch(e){}}
+/* ספרות שעולות מאפס עד הערך — רק ברגעי הישג. הטקסט הסופי הוא בדיוק מה שהיה. */
+function countUp(root){if(RM())return;
+(root||document).querySelectorAll('[data-n]').forEach(el=>{const to=parseFloat(el.dataset.n);
+ if(!isFinite(to)||to<=0)return;const fin=el.textContent,dec=(String(el.dataset.n).split('.')[1]||'').length;
+ const f=v=>dec?v.toFixed(dec):String(Math.round(v)),t0=performance.now(),D=Math.min(1100,520+to*14);
+ el.textContent=f(0);
+ const st=t=>{const k=Math.min(1,(t-t0)/D),e=1-Math.pow(1-k,3);
+  if(k<1){el.textContent=f(to*e);requestAnimationFrame(st)}else el.textContent=fin};
+ requestAnimationFrame(st)})}
+/* רגע הישג בגיליון. שתי דרגות, כדי שיום מלא לא ייראה כמו עוד וי:
+   1 — בלוק או יעד אוכל: מדליה, וי נמתח, רטט אחד. בלי חלקיקים.
+   2 ומעלה — יום מלא, אימון כוח שהסתיים, אבן דרך: גם הילה, ספירה ופרץ זהב. */
+function celFx(n){n=n||1;haptic(n>1?2:1);const sc=document.getElementById('shc');
+if(n<2)sc.querySelectorAll('.medal').forEach(x=>x.classList.add('lite'));
+if(RM())return;setTimeout(()=>countUp(sc),380);
+if(n<2)return;const m=sc.querySelector('.medal,.celn');if(m)setTimeout(()=>burst(m,m.classList.contains('celn')?22:18),480)}
+/* אחרי כל ציור: הטבעת מתמלאת מהערך הקודם, ויום מלא מקבל פרץ זהב. */
+function afterDraw(){if(RM())return;
+const c=document.querySelector('#app .rprog[data-from]');
+if(c&&c.animate){try{c.animate([{strokeDashoffset:c.dataset.from+'px'},{strokeDashoffset:c.getAttribute('stroke-dashoffset')+'px'}],
+ {duration:950,easing:'cubic-bezier(.2,.8,.2,1)'})}catch(e){}}
+if(FX.ringWin){const w=document.querySelector('#app .ringwrap');if(w)setTimeout(()=>burst(w,20),700)}
+afterDraw4()}
+
+/* ── סבב 4 ── */
+let doneShown={d:'',k:[]},prAll=false,ringQuiet=false;
+function togPR(){prAll=!prAll;draw()}
+/* שיא אישי בסט: גבוה מכל מה שנרשם אי פעם בתרגיל (באימונים שנסגרו). "גבוה" = יותר ק״ג, או אותו
+   משקל ויותר חזרות — בדיוק כמו "השיאים שלך". פעם ראשונה בתרגיל היא לא שיא: אין מול מה.
+   סט עם הרבה פחות חזרות מהיעד (יותר מ-2 מתחת) לא נחגג, גם אם המשקל גבוה: התוכנית בנויה
+   על 2-3 חזרות במאגר, ושיא של חזרה בודדת הוא בדיוק מה שלא רוצים לעודד.
+   על האריח מסומן סט אחד בלבד — הגבוה באימון, ובתיקו הראשון שבהם. */
+function prReps(id,rp){const r=EX[id]&&EX[id].r;return typeof r!=='number'||rp>=r-2}
+function isPR(id,k,kg,rp){if(!prReps(id,rp))return false;const b=bestFor(id);if(!b)return false;
+const beat=(x,y)=>kg>x||(kg===x&&rp>y);if(!beat(b.kg,b.rp))return false;
+const lg=(S.cur&&S.cur.log&&S.cur.log[id])||[];
+for(let q=0;q<lg.length;q++){const v=lg[q];if(q===k||!v)continue;
+ if(q<k&&!beat(v[0],v[1]))return false;
+ if(q>k&&(v[0]>kg||(v[0]===kg&&v[1]>rp)))return false}
+return true}
+/* רגע השיא בשמירה — מחמיר יותר מהסימון על האריח: הסט החדש חייב לעבור את השיא ההיסטורי,
+   את מה שהיה שמור באותו סט (שמירה חוזרת או תיקון כלפי מטה לא חוגגים), ואת כל שאר הסטים
+   השמורים באימון — בכל מיקום, לא רק לפניו. */
+function prNew(id,k,kg,rp,old){if(!prReps(id,rp))return false;const b=bestFor(id);if(!b)return false;
+const beat=(x,y)=>kg>x||(kg===x&&rp>y);if(!beat(b.kg,b.rp))return false;
+if(old&&!beat(old[0],old[1]))return false;
+const lg=(S.cur&&S.cur.log&&S.cur.log[id])||[];
+return lg.every((v,q)=>q===k||!v||beat(v[0],v[1]))}
+/* סוף מנוחה: הסט הבא נדלק פעם אחת, כדי שהעין תדע לאן ללכת */
+function nudgeNext(){if(RM())return;const t=document.querySelector('#app .set.nx');
+if(!t)return;t.classList.remove('fx-nudge');void t.offsetWidth;t.classList.add('fx-nudge')}
+/* אחרי ציור — רגעים של סבב 4 */
+function afterDraw4(){if(RM())return;
+if(FX.pr){const t=document.querySelector('#app .set.fx-pr');if(t)setTimeout(()=>burst(t,16),140)}
+if(FX.boot){const a=document.getElementById('app');a.classList.add('boot');setTimeout(()=>a.classList.remove('boot'),1600)}}
+
 /* ---------- sheet + timer ---------- */
 function openSheet(h){document.getElementById('shc').innerHTML=h;document.getElementById('sh').classList.add('on')}
 function closeSheet(){document.getElementById('sh').classList.remove('on')}
-let tEnd=0, tLead=0, tLbl='מנוחה', lastN=-1, WL=null;
+/* טיימר. שני מצבים:
+   מנוחה (בלי הכנה) — פס עליון: ספרות גדולות ופס שמתרוקן. הטלפון ביד.
+   תרגיל מדוד (עם 5 שניות הכנה) — מסך מלא: הטלפון מונח על הרצפה, וצריך לקרוא
+   את המספר משני מטרים. במסך המלא עוצרים רק בכפתור: נגיעה מקרית כשמניחים את
+   הטלפון, או לחיצה כפולה על "הפעל", לא עוצרות אותו. בפס המנוחה — נגיעה בפס,
+   אבל לא ב-600 האלפיות הראשונות. */
+/* השומר של 600 האלפיות נמדד ב-performance.now: זמן שעבר באמת, מונוטוני, ולא שעון הקיר */
+function tmTap(){if(tFull)return;if(performance.now()-tTap<600)return;stopT()}
+let tEnd=0, tLead=0, tLbl='מנוחה', lastN=-1, WL=null, tDur=0, tFull=false, tStart=0, tLeadMs=1, tByeT=null, tTap=-1e9;
+const TC=2*Math.PI*46;
 async function lockScreen(){try{if('wakeLock' in navigator)WL=await navigator.wakeLock.request('screen')}catch(e){}}
 function unlockScreen(){try{if(WL){const r=WL.release();if(r&&r.catch)r.catch(()=>{});WL=null}}catch(e){}}
+function tmSet(el,prep,num,frac,hot){
+el.classList.toggle('prep',prep);el.classList.toggle('hot',!!hot&&!prep);
+if(tFull){const f=el.querySelector('.tfn'),k=el.querySelector('.tfk'),p=el.querySelector('.tp');
+ if(k)k.textContent=prep?'תתכונן':'';
+ if(f&&f.textContent!==num){f.textContent=num;if(prep||hot){f.classList.remove('tk');void f.offsetWidth;f.classList.add('tk')}}
+ if(p)p.style.strokeDashoffset=(TC*(1-frac)).toFixed(1)}
+else{const f=el.querySelector('.tmn'),b=el.querySelector('.tmtrack i');
+ if(f&&f.textContent!==num){f.textContent=num;if(hot){f.classList.remove('tk');void f.offsetWidth;f.classList.add('tk')}}
+ if(b)b.style.transform='scaleX('+Math.max(0,Math.min(1,frac)).toFixed(3)+')'}}
 function paintT(){const el=document.getElementById('tm'),now=Date.now();
 if(tLead){const n=Math.ceil((tLead-now)/1000);
- if(n>0){if(n!==lastN){lastN=n;tick(n)}
-  el.textContent='תתכונן · '+n;el.classList.add('prep');return}
- tLead=0;lastN=-1;el.classList.remove('prep');goTone()}
+ if(n>0){if(n!==lastN){lastN=n;tick(n)}tmSet(el,true,String(n),Math.max(0,(tLead-now)/tLeadMs),false);return}
+ tLead=0;lastN=-1;goTone()}
 const n=Math.round((tEnd-now)/1000);
-if(n<=0){stopT();beep();if(navigator.vibrate)navigator.vibrate([200,100,200]);
- toast(tLbl==='מנוחה'?'סיימת מנוחה':'סיימת · '+tLbl);return}
-el.textContent=tLbl+' · '+Math.floor(n/60)+':'+String(n%60).padStart(2,'0')+'  ·  לחץ לעצור'}
+if(n<=0){beep();if(navigator.vibrate)navigator.vibrate([200,100,200]);
+ toast(tLbl==='מנוחה'?'סיימת מנוחה':'סיימת · '+tLbl);
+ if(RM()){stopT();return}
+ const full=tFull;if(tint)clearInterval(tint);tint=null;tEnd=0;tLead=0;lastN=-1;unlockScreen();
+ if(full){const f=el.querySelector('.tfn'),p=el.querySelector('.tp'),k=el.querySelector('.tfk');
+  if(f)f.innerHTML=CKS;if(p)p.style.strokeDashoffset='0';if(k)k.textContent='סיימת'}
+ el.classList.remove('hot','prep');el.classList.add('bye');
+ tByeT=setTimeout(()=>{tByeT=null;if(!tint)el.className='timer'},full?1100:460);
+ if(!full)nudgeNext();return}
+const frac=Math.max(0,(tEnd-now)/1000)/(tDur||1);
+tmSet(el,false,(tFull&&n<60)?String(n):Math.floor(n/60)+':'+String(n%60).padStart(2,'0'),frac,n<=5)}
 function startT(sec,label,lead){stopT();unlockAudio();lockScreen();
-tLbl=label||'מנוחה';lastN=-1;
+tLbl=label||'מנוחה';lastN=-1;tDur=sec;tFull=!!lead;tStart=Date.now();tLeadMs=(lead||1)*1000;try{tTap=performance.now()}catch(e){tTap=-1e9}
 const now=Date.now();
 tLead=lead?now+lead*1000:0;
 tEnd=(tLead||now)+sec*1000;
-document.getElementById('tm').classList.add('on');
+const el=document.getElementById('tm');
+el.className='timer '+(tFull?'full':'rest');
+el.innerHTML=tFull
+?`<div class="tfl">${esc(tLbl)}</div><div class="tfk"></div>
+<div class="tfr"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="tr" cx="50" cy="50" r="46"/>
+<circle class="tp" cx="50" cy="50" r="46" stroke-dasharray="${TC.toFixed(1)}" stroke-dashoffset="0"/></svg><div class="tfn"></div></div>
+<button class="tfstop" onclick="event.stopPropagation();stopT()">עצור</button>`
+:`<div class="tmrow2"><div class="tml">${esc(tLbl)}</div><div class="tmn"></div><div class="tmx">עצור</div></div>
+<div class="tmtrack"><i></i></div>`;
+el.classList.add('on');
 paintT();tint=setInterval(paintT,200)}
-function stopT(){if(tint)clearInterval(tint);tint=null;tEnd=0;tLead=0;lastN=-1;
+function stopT(){if(tint)clearInterval(tint);tint=null;tEnd=0;tLead=0;lastN=-1;if(tByeT){clearTimeout(tByeT);tByeT=null}
 unlockScreen();const el=document.getElementById('tm');
-el.classList.remove('on');el.classList.remove('prep')}
+el.className='timer'}
 /* חזרה לאפליקציה אחרי חמש דקות ומעלה היא "פתיחה": המסך נבנה מחדש (אולי כבר
    יום אחר), תזכורות שנדחו ב"אחר כך" חוזרות, ונבדק אם הגיע זמן העותק היומי. */
 let hiddenAt=0;
@@ -2940,7 +3412,7 @@ syncSched();
 rollWeeks();
 try{const l=document.querySelector('link[rel="apple-touch-icon"]');
  if(l)document.documentElement.style.setProperty('--logo','url("'+l.href+'")')}catch(e){}
-draw();
+FX.enter=1;FX.boot=1;draw();
 autoSync();
 </script>
 </body>
